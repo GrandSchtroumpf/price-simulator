@@ -69,7 +69,7 @@ footer {
 
 .price {
   display: inline-block;
-  width: 200px; /* Needed for animation */
+  width: 150px; /* Needed for animation */
   view-transition-name: price;
 }
 
@@ -77,7 +77,6 @@ ol {
   place-self: center;
   display: grid;
   gap: 16px;
-  max-width: 100dvw;
   max-height: 100%;
   overflow: auto;
   align-content: start;
@@ -201,7 +200,7 @@ dialog[open]::backdrop {
     display: none;
   }
   ol {
-    min-width: 500px;
+    min-width: 550px;
   }
 }
 
@@ -221,8 +220,8 @@ dialog[open]::backdrop {
     font-size: 1.2rem;
   }
   ol {
-    padding-block: 16px;
-    width: 100%;
+    justify-self: stretch;
+    align-self: center;
   }
   .back {
     display: none;

@@ -40,8 +40,8 @@ const interior = {
     stairs: { price: 100, key: "stairs", label: "Escalier", next: "interiorStairsDimensions" },
     furnishings: { price: 100, key: "furnishings", label: "Ameublement", next: "furnishingType" },
     flooring: { price: 100, key: "flooring", label: "Sol", next: "floorDimensions" },
-    wall: { price: 100, key: "wall", label: "Murs" },
-    ceiling: { price: 100, key: "ceiling", label: "Plafond" },
+    // wall: { price: 100, key: "wall", label: "Murs" },
+    // ceiling: { price: 100, key: "ceiling", label: "Plafond" },
   }
 }
 

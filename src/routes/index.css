@@ -82,6 +82,7 @@ ol {
   overflow: auto;
   align-content: start;
   padding-block: 32px;
+  padding-inline: 16px;
 }
 
 ol li {
@@ -220,7 +221,7 @@ dialog[open]::backdrop {
     font-size: 1.2rem;
   }
   ol {
-    padding: 16px;
+    padding-block: 16px;
     width: 100%;
   }
   .back {

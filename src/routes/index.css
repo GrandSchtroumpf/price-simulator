@@ -1,0 +1,232 @@
+:root {
+  view-transition-name: none;
+  font-family: system-ui;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+  --hue: 45deg;
+  --chroma: 10%;
+}
+
+html {
+  background-color: oklch(100% 0.01 var(--hue));
+}
+
+main {
+  display: flex;
+  height: 100dvh;
+}
+
+aside {
+  display: grid;
+  padding: 24px;
+}
+.simulations {
+  background-color: oklch(98% 0.05 var(--hue));
+  border-radius: 16px;
+  padding: 16px;
+  margin-block: 0;
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  view-timeline-name: match-element;
+}
+.simulations li {
+  display: grid;
+  padding-inline: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  animation: entry 350ms var(--delay, 0s) var(--ease-out) backwards;
+}
+.simulations li span {
+  margin-right: auto;
+}
+aside:has(ul:empty) {
+  display: none;
+}
+
+section {
+  flex: 1;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  gap: 24px;
+  padding: 24px;
+}
+section h1 {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 1.5rem;
+}
+
+footer {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background-color: oklch(100% 0.01 var(--hue));
+}
+
+.price {
+  display: inline-block;
+  width: 200px; /* Needed for animation */
+  view-transition-name: price;
+}
+
+ol {
+  place-self: center;
+  display: grid;
+  gap: 16px;
+  max-width: 100dvw;
+  max-height: 100%;
+  overflow: auto;
+  align-content: start;
+  padding-block: 32px;
+}
+
+ol li {
+  --background: oklch(40% 0.1 var(--hue));
+  color: black;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+ol li:nth-child(odd) {
+  --lightness: 95%;
+  justify-self: start;
+}
+ol li:nth-child(even) {
+  --lightness: 80%;
+  justify-self: end;
+}
+
+.back {
+  opacity: 0;
+  transition: opacity 300ms var(--ease-out);
+}
+
+ol li:hover .back {
+  opacity: 1;
+}
+
+menu {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+ol li span, menu button {
+  background-color: oklch(var(--lightness) var(--chroma) var(--hue));
+  padding: 8px 16px;
+  border-radius: 16px;
+  text-wrap: nowrap;
+}
+
+.logo {
+  view-transition-name: logo;
+}
+
+button {
+  cursor: pointer;
+}
+
+menu button {
+  --delay: calc(sibling-index() * 50ms);
+  animation: entry 350ms calc(50ms + var(--delay, 0s)) var(--ease-out) backwards;
+  view-transition-class: option;
+
+}
+
+dialog {
+  max-height: unset;
+  height: 100%;
+  width: 250px;
+  background-color: oklch(98% 0.05 var(--hue));
+  transition-behavior: allow-discrete;
+  transition-property: display, overlay, transform;
+  transition-duration: 400ms;
+  transition-timing-function: var(--ease-out);
+}
+dialog[open] {
+  transform: translateX(0);
+}
+dialog:not([open]) {
+  transform: translateX(-100%);
+}
+@starting-style {
+  dialog[open] {
+    transform: translateX(-100%);
+  }
+}
+dialog[open]::backdrop {
+  background-color: oklch(20% 0.05 var(--hue) / 0.2);
+}
+
+
+::view-transition-new(price) {
+  animation: entry 300ms var(--ease-out) backwards;
+}
+::view-transition-old(price) {
+  animation: price-leave 300ms var(--ease-out) forwards;
+}
+::view-transition-old(.option) {
+  animation: option-leave 150ms var(--ease-in) forwards;
+}
+
+@keyframes entry {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+}
+@keyframes option-leave {
+  to {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+}
+
+@keyframes price-leave {
+  to {
+    transform: translateY(-30px);
+    opacity: 0;
+  }
+}
+
+@media (width > 800px) {
+  .menu {
+    display: none;
+  }
+  ol {
+    min-width: 500px;
+  }
+}
+
+@media (width <= 800px) {
+  main {
+    display: grid;
+  }
+  section {
+    padding: 0px;
+  }
+  footer {
+    position: sticky;
+    bottom: 0;
+    padding: 16px;
+  }
+  footer h1 {
+    font-size: 1.2rem;
+  }
+  ol {
+    padding: 16px;
+    width: 100%;
+  }
+  .back {
+    display: none;
+  }
+  aside {
+    display: none;
+  }
+}

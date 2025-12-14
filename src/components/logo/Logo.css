@@ -8,8 +8,6 @@
 }
 
 .logo {
-  --transform-out: scale(0.1);
-  transform: scale(1);
   transform-origin: center top;
   width: 300px;
   height: 300px;

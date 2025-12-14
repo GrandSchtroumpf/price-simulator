@@ -1,16 +1,6 @@
-:root {
-  --ease-in: cubic-bezier(0.5, 0, 1, 0.5);
-  --ease-out: cubic-bezier(0, 0.5, 0.5, 1);
-}
-
-body {
-  font-family: system-ui;
-  background-color: black;
-}
-
 h1 {
   font-size: 3rem;
-  color: white;
+  text-transform: uppercase;
 }
 
 #map {
@@ -38,19 +28,20 @@ h1 {
 }
 
 .presentation {
+  --opacity-in: 1;
   --opacity-out: 0;
+  --transform-in: translateY(0);
   --transform-out: translateY(-200px);
   place-self: center;
   display: grid;
   gap: 32px;
   animation-name: transform, fade;
   animation-fill-mode: forwards;
-  animation-timeline: view(100%);
+  animation-timeline: view();
   animation-timing-function: var(--ease-in);
   & hgroup {
     display: grid;
     justify-items: center;
-    gap: 8px;
   }
 }
 
@@ -72,10 +63,10 @@ h1 {
 
 
 .imgs .img-filter {
+  background-color: oklch(var(--lightness-0) var(--neutral-chroma) var(--hue) / 80%);
   --opacity-out: 0;
   position: absolute;
   inset: 0;
-  background-color: oklch(20% 0 0 / 0.8);
   animation-name: fade;
   animation-fill-mode: forwards;
   animation-timeline: view(100%);
@@ -83,22 +74,22 @@ h1 {
 }
 
 #map img {
-  --transform-in: scale(2);
-  grid-area: stack;
+  --transform-in: scale(1.5);
+  --transform-out: scale(1);
   border-radius: 24px;
   height: 100%;
   width: 100%;
   object-fit: cover;
   animation-name: transform;
-  animation-fill-mode: forwards;
-  animation-timeline: view(100% 0%);
+  animation-fill-mode: both;
+  animation-timeline: view(100%);
   animation-timing-function: var(--ease-out);
 }
 
 .location {
   position: absolute;
   font-size: 1.5rem;
-  color: red;
+  color: var(--color-on-contrast);
   overflow: clip;
   isolation: isolate;
   padding: 8px 16px;
@@ -117,19 +108,17 @@ h1 {
   grid-area: stack;
   aspect-ratio: 1/1;
   border-radius: 100dvh;
-  border: dotted 3px oklch(60% 0.2 var(--hue));
+  border: dotted 3px var(--color-outline);
 }
 .location .circle:nth-child(1) {
   width: 75dvh;
   border-style: dashed;
   --index: 1;
-  --hue: 80deg;
 }
 .location .circle:nth-child(2) {
-  width: 50dvh;
   --index: 2;
-  --hue: 40deg;
-  background-color: oklch(60% 0.2 var(--hue) / 10%);
+  width: 50dvh;
+  background-color: oklch(var(--lightness-2) var(--neutral-chroma) var(--hue) / 10%);
 }
 
 #welcome.is-visible + .imgs .location {

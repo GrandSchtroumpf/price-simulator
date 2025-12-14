@@ -37,6 +37,7 @@ export default component$(() => {
         </div>
       </article>
       <article class="imgs">
+        {/* eslint-disable-next-line qwik/jsx-img */}
         <img src="/imgs/map.svg" width="1920" height="1080" />
         <div class="img-filter"></div>
         <div class="location" style="--w:0.5;--h:0.5">

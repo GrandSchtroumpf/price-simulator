@@ -1,5 +1,6 @@
 @import "tailwindcss";
-
+@import './theme/index.css';
+@import './theme/button.css';
 
 @font-face {
   font-family: 'Josefin Sans';
@@ -32,10 +33,17 @@
   --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
 }
 
-@theme {
-  --spacing: 1px;
-  --font-sans: Josefin Sans;
+@media (prefers-color-scheme: dark) {
+  html {
+    @apply dark-scheme;
+  }
 }
+@media (prefers-color-scheme: light) {
+  html {
+    @apply light-scheme;
+  }
+}
+
 
 @keyframes transform {
   from {

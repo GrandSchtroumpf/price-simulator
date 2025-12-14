@@ -1,9 +1,10 @@
-import { $, component$, unwrapStore, useComputed$, useStore, useStyles$, useVisibleTask$ } from "@builder.io/qwik";
-import { useSignal } from "@builder.io/qwik";
+import { $, component$, useComputed$, useStore, useStyles$, useVisibleTask$ } from "@qwik.dev/core";
+import { unwrapStore } from "@qwik.dev/core/internal";
+import { useSignal } from "@qwik.dev/core";
 import { transition$ } from "~/components/transition";
 import { Option, steps } from './steps';
-import { DocumentHead } from "@builder.io/qwik-city";
-import styles from './index.css?raw';
+import { DocumentHead } from "@qwik.dev/router";
+import styles from './index.css?inline';
 
 type StepKey = keyof typeof steps;
 
@@ -170,6 +171,7 @@ export default component$(() => {
             </li>
           </ol>
         <footer>
+          {/* @ts-expect-error exist */}
           <button class="menu" commandFor="simulations-dialog" command="show-modal">
             <svg height="24px" viewBox="0 -960 960 960" width="24px" fill="black">
               <path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"/>
@@ -179,6 +181,7 @@ export default component$(() => {
         </footer>
       </section>
       <a id="mailto" hidden href=""></a>
+      {/* @ts-expect-error exist */}
       <dialog id="simulations-dialog" closedBy="any">
         <ul class="simulations">
           {simulations.map((simulation, i) => (

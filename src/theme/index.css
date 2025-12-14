@@ -1,0 +1,44 @@
+@theme {
+  --spacing: 0.0625rem; /* 1/16rem -> 1px */
+  --font-sans: Josefin Sans;
+  --color-black: oklch(5% var(--neutral-chroma) var(--hue));
+  --color-white: oklch(100% var(--neutral-chroma) var(--hue));
+}
+
+@utility accent {
+  --chroma: var(--accent-chroma);
+}
+@utility neutral {
+  --chroma: var(--neutral-chroma);
+}
+
+
+/* Color Scheme */
+@utility light-scheme {
+  --lightness-0: 93%;
+  --lightness-1: 96%;
+  --lightness-2: 98%;
+  --lightness-3: 100%;
+  --lightness-outline: 40%;
+  --lightness-btn: 60%;
+  
+  --accent-chroma: 0.2;
+  --neutral-chroma: 0.01;
+
+  color: var(--color-black);
+  color-scheme: light;
+}
+@utility dark-scheme {
+  --lightness-0: 5%;
+  --lightness-1: 15%;
+  --lightness-2: 20%;
+  --lightness-3: 25%;
+  --lightness-outline: 60%;
+  --lightness-btn: 60%;
+  
+  --accent-chroma: 0.15;
+  --neutral-chroma: 0.03;
+
+  color: var(--color-white);
+  color-scheme: dark;
+}

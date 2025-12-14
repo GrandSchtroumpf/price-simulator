@@ -1,4 +1,4 @@
-import { $, implicit$FirstArg, type QRL } from '@builder.io/qwik';
+import { $, implicit$FirstArg, type QRL } from '@qwik.dev/core';
 
 export interface ViewTransitionOptions {
   update?: () => any;

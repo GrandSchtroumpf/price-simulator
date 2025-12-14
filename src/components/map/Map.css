@@ -42,12 +42,16 @@ h1 {
   --transform-out: translateY(-200px);
   place-self: center;
   display: grid;
-  justify-items: center;
   gap: 32px;
   animation-name: transform, fade;
   animation-fill-mode: forwards;
   animation-timeline: view(100%);
   animation-timing-function: var(--ease-in);
+  & hgroup {
+    display: grid;
+    justify-items: center;
+    gap: 8px;
+  }
 }
 
 .imgs {

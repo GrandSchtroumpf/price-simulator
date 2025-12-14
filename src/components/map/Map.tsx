@@ -1,6 +1,6 @@
-import { component$, useStyles$, useOn, $ } from "@builder.io/qwik";
-import style from './index.css?raw';
+import { component$, useStyles$, useOn, $ } from "@qwik.dev/core";
 import { Logo } from "../logo/Logo";
+import style from './Map.css?inline';
 
 export default component$(() => {
   useStyles$(style);
@@ -22,16 +22,16 @@ export default component$(() => {
     <section id="map">
       <article id="welcome" class="is-visible">
         <div class="presentation">
-          <Logo />
+          <Logo class="logo animated" />
           <hgroup>
             <p>Erwan Richard</p>
             <h1>Le P'tit Menuisier</h1>
           </hgroup>
-          <div>
+          <div class="grid grid-cols-2 place-items-center">
             <p>Intérieur</p>
             <p>Extérieur</p>
           </div>
-          <a class="btn" href="/simulateur">
+          <a class="btn-fill" href="/simulateur">
             Simuler un Devis
           </a>
         </div>

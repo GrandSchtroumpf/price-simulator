@@ -1,0 +1,11 @@
+@utility btn {
+  padding: 8px 16px;
+  border-radius: 24px;
+  background-color: oklch(var(--lightness-btn) var(--chroma) var(--hue));
+  text-align: center;
+  color: var(--color-white);
+}
+
+@utility btn-fill {
+  @apply btn accent;
+}

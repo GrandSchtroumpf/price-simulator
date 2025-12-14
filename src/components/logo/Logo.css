@@ -1,3 +1,11 @@
+.logo {
+  color: black;
+}
+@media (prefers-color-scheme: dark) {
+  .logo {
+    color: white;
+  }
+}
 
 .logo {
   --transform-out: scale(0.1);
@@ -5,33 +13,36 @@
   transform-origin: center top;
   width: 500px;
   height: 500px;
-  animation: transform 0.5s 2s cubic-bezier(1, 0, 0, 1) forwards;
 }
 
-.hammer {
-  --opacity-in: 0;
-  animation-name: hammer-entry, fade;
-  animation-duration: 2s;
-  transform-box: fill-box;
-  transform-origin: 50% 60%;
-}
-.border {
-  animation: draw 500ms 1.3s ease-out backwards;
-}
-.border {
-  --size: 255;
-  stroke-dashoffset: 0;
-  stroke-dasharray: var(--size);
-}
-.hammer.right {
-  --transform-0: translate(-30px, 40px) rotate(-60deg);
-  --transform-1: translate(20px, -10px) rotate(45deg);
-  --transform-2: translate(0) rotate(0);
-}
-.hammer.left {
-  --transform-0: translate(30px, 40px) rotate(60deg);
-  --transform-1: translate(-20px, -10px) rotate(-45deg);
-  --transform-2: translate(0) rotate(0);
+.logo.animated {
+  /* animation: transform 0.5s 2s cubic-bezier(1, 0, 0, 1) forwards; */
+  & .hammer {
+    --opacity-in: 0;
+    animation-name: hammer-entry, fade;
+    animation-duration: 2s;
+    transform-box: fill-box;
+    transform-origin: 50% 60%;
+  }
+  & .border {
+    animation: draw 500ms 1.3s ease-out backwards;
+  }
+  & .border {
+    --size: 255;
+    stroke-dashoffset: 0;
+    stroke-dasharray: var(--size);
+  }
+  & .hammer.right {
+    --transform-0: translate(-30px, 40px) rotate(-60deg);
+    --transform-1: translate(20px, -10px) rotate(45deg);
+    --transform-2: translate(0) rotate(0);
+  }
+  & .hammer.left {
+    --transform-0: translate(30px, 40px) rotate(60deg);
+    --transform-1: translate(-20px, -10px) rotate(-45deg);
+    --transform-2: translate(0) rotate(0);
+  }
+
 }
 
 

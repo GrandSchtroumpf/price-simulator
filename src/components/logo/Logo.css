@@ -11,14 +11,15 @@
   --transform-out: scale(0.1);
   transform: scale(1);
   transform-origin: center top;
-  width: 500px;
-  height: 500px;
+  width: 300px;
+  height: 300px;
 }
 
 .logo.animated {
   /* animation: transform 0.5s 2s cubic-bezier(1, 0, 0, 1) forwards; */
   & .hammer {
     --opacity-in: 0;
+    --opacity-out: 1;
     animation-name: hammer-entry, fade;
     animation-duration: 2s;
     transform-box: fill-box;
@@ -28,7 +29,7 @@
     animation: draw 500ms 1.3s ease-out backwards;
   }
   & .border {
-    --size: 255;
+    --size: 256;
     stroke-dashoffset: 0;
     stroke-dasharray: var(--size);
   }

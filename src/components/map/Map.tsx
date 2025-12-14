@@ -22,7 +22,7 @@ export default component$(() => {
     <section id="map">
       <article id="welcome" class="is-visible">
         <div class="presentation">
-          <Logo class="logo animated" />
+          <Logo class="place-self-center logo animated" />
           <hgroup>
             <p>Erwan Richard</p>
             <h1>Le P'tit Menuisier</h1>

@@ -20,6 +20,7 @@ const transitionName = (value: string | number) => ({ viewTransitionName: `_${va
 
 const getDescription = (question: StepKey) => steps[question].description;
 const getOption = (answer: Answer) => steps[answer.question].options[answer.option];
+const getProps = (answer: Answer) => steps[answer.question].props
 const getOptions = (question: StepKey) => Object.entries(steps[question].options);
 const getSimulationName = (simulation: Answer[]) => {
   const answer = simulation[0];

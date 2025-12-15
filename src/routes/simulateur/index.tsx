@@ -67,7 +67,7 @@ export default component$(() => {
     answers.splice(index, Infinity);
   })
 
-  const add = transition$((option: Option) => {
+  const add = transition$((optionKey: string, option: Option) => {
     const next = option.next ?? steps[current.value].next;
     if (!next) {
       const mailto = document.getElementById('mailto') as HTMLAnchorElement;
@@ -80,7 +80,7 @@ export default component$(() => {
     } else {
       const answer: Answer = {
         question: current.value,
-        option: option.key,
+        option: optionKey,
       };
       answers.push(answer);
       if (next === 'task') {
@@ -163,7 +163,7 @@ export default component$(() => {
             <li>
               <menu id="menu">
                 {getOptions(current.value).map(([key, option]) => (
-                  <button key={key} style={transitionName(key)} onClick$={() => add(option)} role="menuitem">
+                  <button key={key} style={transitionName(key)} onClick$={() => add(key, option)} role="menuitem">
                     {option.label}
                   </button>
                 ))}

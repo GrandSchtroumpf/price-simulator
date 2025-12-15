@@ -108,12 +108,12 @@ export default component$(() => {
             <li key={i}>
               <span>{getSimulationName(simulation)}</span>
               <button onClick$={() => edit(simulation)}>
-                <svg height="24px" viewBox="0 -960 960 960" width="24px" stroke="black">
+                <svg height="24px" viewBox="0 -960 960 960" width="24px" stroke="currentColor">
                   <path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z"/>
                 </svg>
               </button>
               <button onClick$={() => remove(i)}>
-                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="black">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor">
                   <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/>
                 </svg>
               </button>
@@ -135,7 +135,7 @@ export default component$(() => {
                     {getOption(answer).label}
                   </span>
                   <button class="back" onClick$={() => back(index)} aria-label="back to this step">
-                    <svg height="24px" viewBox="0 -960 960 960" width="24px" fill="black">
+                    <svg height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor">
                       <path d="M680-160v-400H313l144 144-56 57-241-241 240-240 57 57-144 143h447v480h-80Z"/>
                     </svg>
                   </button>
@@ -143,7 +143,7 @@ export default component$(() => {
               </>
             ))}
             <li>
-              <svg class="logo" viewBox="0 0 100 100" fill="none" stroke="black" width="40" height="40">
+              <svg class="logo" viewBox="0 0 100 100" fill="none" stroke="currentColor" width="40" height="40">
                 <g>
                   <path d="M29.21,66.17c-.24.24-.24.63,0,.86l1.2,1.2c1.33,1.33,3.48,1.33,4.8,0l31.61-31.61-4.04-4.04-33.58,33.58ZM33.04,66.05c-.27.98-1.37,1.46-2.28,1.02-.62-.3-.76-1.13-.27-1.62l10.2-10.15c-5.35,5.35-7.11,8.79-7.65,10.75ZM52.05,43.81l10.7-10.58,3.45,3.43c-8.09,1.18-14.15,7.15-14.15,7.15Z"/>
                   <path d="M81.38,35.51l-2.39-2.39c-.09-.09-.23-.11-.34-.06-1.96.77-3.09-1.55-3.49-2.61-.34.39-1.05,1.09-1.8,1.79-.55.72-1.04,1.57-.69,1.99.67.81,1.66,2.33,1.42,3.25.01.03-.39-1.7-2.64-3.25-.09-.09-.19-.1-.27-.08.79.63,2.53,2.17,2.77,3.71l2.54,2.54c.16.16.42.16.58,0l4.31-4.31c.16-.16.16-.42,0-.58ZM76.44,40.17l-2.28-2.37,1.9-1.76c-1.76,1.58-.1,3.6.37,4.12l.12.13s-.05-.05-.12-.13Z"/>
@@ -173,7 +173,7 @@ export default component$(() => {
         <footer>
           {/* @ts-expect-error exist */}
           <button class="menu" commandFor="simulations-dialog" command="show-modal">
-            <svg height="24px" viewBox="0 -960 960 960" width="24px" fill="black">
+            <svg height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor">
               <path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"/>
             </svg>
           </button>
@@ -188,12 +188,12 @@ export default component$(() => {
             <li key={i}>
               <span>{getSimulationName(simulation)}</span>
               <button onClick$={() => edit(simulation)}>
-                <svg height="24px" viewBox="0 -960 960 960" width="24px" stroke="black">
+                <svg height="24px" viewBox="0 -960 960 960" width="24px" stroke="currentColor">
                   <path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z"/>
                 </svg>
               </button>
               <button onClick$={() => remove(i)}>
-                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="black">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor">
                   <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/>
                 </svg>
               </button>

@@ -8,7 +8,7 @@ aside {
   padding: 24px;
 }
 .simulations {
-  background-color: oklch(98% 0.05 var(--hue));
+  background-color: var(--color-surface-2);
   border-radius: 16px;
   padding: 16px;
   margin-block: 0;
@@ -51,7 +51,7 @@ footer {
   display: flex;
   align-items: center;
   gap: 16px;
-  background-color: oklch(100% 0.01 var(--hue));
+  background-color: var(--color-surface-0);
 }
 
 .price {
@@ -72,19 +72,17 @@ ol {
 }
 
 ol li {
-  --background: oklch(40% 0.1 var(--hue));
-  color: black;
   display: flex;
   gap: 16px;
   align-items: center;
 }
 
 ol li:nth-child(odd) {
-  --lightness: 95%;
+  --lightness: var(--lightness-1);
   justify-self: start;
 }
 ol li:nth-child(even) {
-  --lightness: 80%;
+  --lightness: var(--lightness-3);
   justify-self: end;
 }
 
@@ -105,7 +103,7 @@ menu {
 }
 
 ol li span, menu button {
-  background-color: oklch(var(--lightness) var(--chroma) var(--hue));
+  background-color: oklch(var(--lightness) var(--neutral-chroma) var(--hue));
   padding: 8px 16px;
   border-radius: 16px;
   text-wrap: nowrap;

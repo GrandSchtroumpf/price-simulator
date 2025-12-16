@@ -25,7 +25,7 @@ interface BaseStep {
   type: FormType;
 }
 
-interface MenuStep extends BaseStep {
+export interface MenuStep extends BaseStep {
   type: 'menu';
   props: {
     options: Record<string, Option>;
@@ -35,7 +35,7 @@ interface MenuStep extends BaseStep {
 interface NumberStep extends BaseStep {
   type: 'number';
   props: {
-    fields: FormField
+    fields: Record<string, FormField>
   }
 }
 
@@ -224,15 +224,27 @@ const furnishingMaterials: MenuStep = {
   }
 }
 
-const floorDimensions: MenuStep = {
-  description: "Taille de la pièce",
-  type: 'menu',
+// const floorDimensions: MenuStep = {
+//   description: "Taille de la pièce",
+//   type: 'menu',
+//   next: "floorType",
+//   props: {
+//     options: {
+//       small: { price: 100, key: "small", label: "Petite" },
+//       medium: { price: 100, key: "medium", label: "Moyenne" },
+//       big: { price: 100, key: "big", label: "Grande" },
+//     }
+//   }
+// }
+
+const floorDimensions: NumberStep = {
+  description: "Surface de la pièce",
+  type: 'number',
   next: "floorType",
   props: {
-    options: {
-      small: { price: 100, key: "small", label: "Petite" },
-      medium: { price: 100, key: "medium", label: "Moyenne" },
-      big: { price: 100, key: "big", label: "Grande" },
+    fields: {
+      width: { key: "width", label: "largeur", min: 0, max: 100 },
+      length: { key: "length", label: "longueur", min: 0, max: 100 },
     }
   }
 }

@@ -1,10 +1,9 @@
-import { $, component$, QRL, useStyles$, type Signal } from '@qwik.dev/core';
+import { $, component$, QRL, type Signal } from '@qwik.dev/core';
 import { Answer } from '..';
 import { steps } from '../steps';
 import { Option } from '../steps';
 import { StepKey } from '..';
 import { transitionName } from '..';
-import styles from '../index.css?inline';
 
 interface MenuProps {
   add: QRL<(answer: Answer, nextOption?: string) => any>;
@@ -18,7 +17,6 @@ const getOptions = (question: StepKey) => {
 }
 
 export default component$<MenuProps>(({ add, current }) => {
-  useStyles$(styles);
 
   const addAnswer = $((option: Option) => {
     const answer: Answer = {

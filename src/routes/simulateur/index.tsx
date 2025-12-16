@@ -2,7 +2,7 @@ import { $, component$, useComputed$, useStore, useStyles$, useVisibleTask$ } fr
 import { JSXOutput, unwrapStore } from "@qwik.dev/core/internal";
 import { useSignal } from "@qwik.dev/core";
 import { transition$ } from "~/components/transition";
-import { Option, steps } from './steps';
+import { steps } from './steps';
 import { DocumentHead } from "@qwik.dev/router";
 import styles from './index.css?inline';
 import MenuForm from "./Forms/MenuForm";
@@ -13,6 +13,7 @@ export type StepKey = keyof typeof steps;
 export interface Answer {
   question: StepKey;
   option: string;
+  formValue?: Record<string, string>;
 }
 
 type Simulation = Answer[];
@@ -21,20 +22,27 @@ type Simulation = Answer[];
 export const transitionName = (value: string | number) => ({ viewTransitionName: `_${value}_` });
 
 const getDescription = (question: StepKey) => steps[question].description;
-const getProps = (answer: Answer) => steps[answer.question].props;
 const getOption = (answer: Answer) => {
   const step = steps[answer.question];
   if (step.type === 'menu') return step.props.options[answer.option];
 }
-const getOptions = (question: StepKey) => {
-  const step = steps[question];
-  if (step.type === 'menu') return Object.entries(step.props.options);
-}
 const getSimulationName = (simulation: Answer[]) => {
   const answer = simulation[0];
   const option = getOption(answer);
-  return option?.label ?? '';
+  return option?.label ?? `Estimation n°${simulation.length + 1}`;
 }
+
+const getFieldsOrOption = (answer: Answer) => {
+  if (answer.formValue) {
+    let finalAnswer = '';
+    for (const values of Object.values(answer.formValue)) {
+      finalAnswer += `${values}`;
+    }
+    return finalAnswer;
+  } else {
+    return getOption(answer)?.label;
+  }
+};
 
 const formatter = Intl.NumberFormat('fr-FR', { style: "currency", currency: 'EUR' });
 
@@ -77,8 +85,8 @@ export default component$(() => {
     answers.splice(index, Infinity);
   })
 
-  const add = transition$((option: Option) => {
-    const next = option.next ?? steps[current.value].next;
+  const add = transition$((answer: Answer, nextOption?: string) => {
+    const next = nextOption ?? steps[current.value].next;
     if (!next) {
       const mailto = document.getElementById('mailto') as HTMLAnchorElement;
       const subject = encodeURIComponent('Simulation - Devis');
@@ -91,10 +99,6 @@ export default component$(() => {
       mailto.href = `mailto:erwanrichard.lpm@gmail.com?subject=${subject}&body=${encodeURIComponent(body)}`;
       mailto.click();
     } else {
-      const answer: Answer = {
-        question: current.value,
-        option: option.key,
-      };
       answers.push(answer);
       if (next === 'task') {
         simulations.push([...answers]);
@@ -118,10 +122,10 @@ export default component$(() => {
     const currentType = steps[current.value].type;
     const formComponents: Record<string, JSXOutput> = {
       menu: <MenuForm add={add} current={current} />,
-      number: <NumberForm current={current} />,
+      number: <NumberForm add={add} current={current} />,
     };
     return formComponents[currentType] ?? null;
-  })
+  });
 
 
   return (
@@ -156,7 +160,7 @@ export default component$(() => {
               </li>
               <li key={answer.option}>
                 <span style={transitionName(answer.option)}>
-                  {getOption(answer)?.label}
+                  {getFieldsOrOption(answer)}
                 </span>
                 <button class="back" onClick$={() => back(index)} aria-label="back to this step">
                   <svg height="24px" viewBox="0 -960 960 960" width="24px" fill="black">

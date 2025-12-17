@@ -24,7 +24,7 @@ export interface Option {
 interface BaseStep {
   id?: number;
   description: string;
-  next: QRL<(value: string) => string>;
+  next: QRL<(this: Step, value: string) => string>;
   display: QRL<(value: AnswerResponse) => string>;
   type: FormType;
 }
@@ -40,11 +40,9 @@ interface NumberStep extends BaseStep {
 }
 const FALLBACK_STEP = 'task';
 
-const getNextStep = (stepKey: StepKey, nextStep?: StepKey) => {
-  return $((value: string) => {
-    const step = steps[stepKey];
-    const nextOption = step.options[value]?.next;
-    const next = nextOption ?? nextStep;
+function getNextStep(nextStep?: StepKey) {
+  return $(function (this: Step, value: string) {
+    const next = this.options[value]?.next ?? nextStep;
     return next ?? FALLBACK_STEP;
   });
 }
@@ -52,7 +50,7 @@ const getNextStep = (stepKey: StepKey, nextStep?: StepKey) => {
 const task: MenuStep = {
   type: 'menu',
   description: "Type de travaux",
-  next: getNextStep('task', 'intervention'),
+  next: getNextStep('intervention'),
   display: $((value: AnswerResponse) => {
     if (typeof value !== 'string') throw new Error('Wrong answer type for Menu Step');
     return task.options[value].label;
@@ -69,7 +67,7 @@ const task: MenuStep = {
 const intervention: MenuStep = {
   type: 'menu',
   description: "Type d'intervention",
-  next: getNextStep('intervention'),
+  next: getNextStep(),
   display: $((value: AnswerResponse) => {
     if (typeof value !== 'string') throw new Error('Wrong answer type for Menu Step');
     return intervention.options[value].label;
@@ -83,7 +81,7 @@ const intervention: MenuStep = {
 const interior: MenuStep = {
   description: "Ouvrage",
   type: 'menu',
-  next: getNextStep('interior'),
+  next: getNextStep(),
   display: $((value: AnswerResponse) => {
     if (typeof value !== 'string') throw new Error('Wrong answer type for Menu Step');
     return interior.options[value].label;
@@ -118,7 +116,7 @@ const exterior: MenuStep = {
 const interiorDoorDimensions: MenuStep = {
   description: "Dimensions",
   type: 'menu',
-  next: getNextStep('interiorDoorDimensions', 'interiorDoorMaterials'),
+  next: getNextStep('interiorDoorMaterials'),
   display: $((value: AnswerResponse) => {
     if (typeof value !== 'string') throw new Error('Wrong answer type for Menu Step');
     return interiorDoorDimensions.options[value].label;
@@ -133,7 +131,7 @@ const interiorDoorDimensions: MenuStep = {
 const interiorDoorMaterials: MenuStep = {
   description: "Type de matériaux",
   type: 'menu',
-  next: getNextStep('interiorDoorMaterials', 'interiorDoorType'),
+  next: getNextStep('interiorDoorType'),
   display: $((value: AnswerResponse) => {
     if (typeof value !== 'string') throw new Error('Wrong answer type for Menu Step');
     return interiorDoorMaterials.options[value].label;
@@ -148,7 +146,7 @@ const interiorDoorMaterials: MenuStep = {
 const interiorDoorType: MenuStep = {
   description: "Type de porte",
   type: 'menu',
-  next: getNextStep('interiorDoorType', 'interiorDoorFinitions'),
+  next: getNextStep('interiorDoorFinitions'),
   display: $((value: AnswerResponse) => {
     if (typeof value !== 'string') throw new Error('Wrong answer type for Menu Step');
     return interiorDoorType.options[value].label;
@@ -163,7 +161,7 @@ const interiorDoorType: MenuStep = {
 const interiorDoorFinitions: MenuStep = {
   description: "Finitions",
   type: 'menu',
-  next: getNextStep('interiorDoorFinitions', 'confirmation'),
+  next: getNextStep('confirmation'),
   display: $((value: AnswerResponse) => {
     if (typeof value !== 'string') throw new Error('Wrong answer type for Menu Step');
     return interiorDoorFinitions.options[value].label;
@@ -178,7 +176,7 @@ const interiorDoorFinitions: MenuStep = {
 const interiorStairsDimensions: MenuStep = {
   description: "Hauteur sous plafond",
   type: 'menu',
-  next: getNextStep('interiorStairsDimensions', 'interiorStairsMaterials'),
+  next: getNextStep('interiorStairsMaterials'),
   display: $((value: AnswerResponse) => {
     if (typeof value !== 'string') throw new Error('Wrong answer type for Menu Step');
     return interiorStairsDimensions.options[value].label;
@@ -193,7 +191,7 @@ const interiorStairsDimensions: MenuStep = {
 const interiorStairsMaterials: MenuStep = {
   description: "Type de matériaux",
   type: 'menu',
-  next: getNextStep('interiorStairsMaterials', 'interiorStairsFinitions'),
+  next: getNextStep('interiorStairsFinitions'),
   display: $((value: AnswerResponse) => {
     if (typeof value !== 'string') throw new Error('Wrong answer type for Menu Step');
     return interiorStairsMaterials.options[value].label;
@@ -208,7 +206,7 @@ const interiorStairsMaterials: MenuStep = {
 const interiorStairsFinitions: MenuStep = {
   description: "Type de finition",
   type: 'menu',
-  next: getNextStep('interiorStairsFinitions', 'confirmation'),
+  next: getNextStep('confirmation'),
   display: $((value: AnswerResponse) => {
     if (typeof value !== 'string') throw new Error('Wrong answer type for Menu Step');
     return interiorStairsFinitions.options[value].label;
@@ -223,7 +221,7 @@ const interiorStairsFinitions: MenuStep = {
 const furnishingType: MenuStep = {
   description: "Type de meuble",
   type: 'menu',
-  next: getNextStep('furnishingType', 'furnishingDimensions'),
+  next: getNextStep('furnishingDimensions'),
   display: $((value: AnswerResponse) => {
     if (typeof value !== 'string') throw new Error('Wrong answer type for Menu Step');
     return furnishingType.options[value].label;
@@ -239,7 +237,7 @@ const furnishingType: MenuStep = {
 const furnishingDimensions: MenuStep = {
   description: "Dimensions du meuble",
   type: 'menu',
-  next: getNextStep('furnishingDimensions', 'furnishingMaterials'),
+  next: getNextStep('furnishingMaterials'),
   display: $((value: AnswerResponse) => {
     if (typeof value !== 'string') throw new Error('Wrong answer type for Menu Step');
     return furnishingDimensions.options[value].label;
@@ -254,7 +252,7 @@ const furnishingDimensions: MenuStep = {
 const furnishingMaterials: MenuStep = {
   description: "Type de matériaux",
   type: 'menu',
-  next: getNextStep('furnishingMaterials', 'confirmation'),
+  next: getNextStep('confirmation'),
   display: $((value: AnswerResponse) => {
     if (typeof value !== 'string') throw new Error('Wrong answer type for Menu Step');
     return furnishingMaterials.options[value].label;
@@ -269,7 +267,7 @@ const furnishingMaterials: MenuStep = {
 const floorDimensions: NumberStep = {
   description: "Surface de la pièce",
   type: 'number',
-  next: getNextStep('floorDimensions', 'floorType'),
+  next: getNextStep('floorType'),
   display: $((value: AnswerResponse) => {
     if (typeof value === 'string') throw new Error('Wrong answer type for Number Step');
     let res = '';
@@ -287,7 +285,7 @@ const floorDimensions: NumberStep = {
 const floorType: MenuStep = {
   description: "Type de parquet",
   type: 'menu',
-  next: getNextStep('floorType', 'confirmation'),
+  next: getNextStep('confirmation'),
   display: $((value: AnswerResponse) => {
     if (typeof value !== 'string') throw new Error('Wrong answer type for Menu Step');
     return floorType.options[value].label;
@@ -302,7 +300,7 @@ const floorType: MenuStep = {
 const confirmation: MenuStep = {
   description: "Validation",
   type: 'menu',
-  next: getNextStep('confirmation'),
+  next: getNextStep(),
   display: $((value: AnswerResponse) => {
     if (typeof value !== 'string') throw new Error('Wrong answer type for Menu Step');
     return confirmation.options[value].label;

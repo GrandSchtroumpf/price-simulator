@@ -21,6 +21,9 @@ export const transitionName = (value: string | number) => ({ viewTransitionName:
 
 const getDescription = (question: StepKey) => steps[question].description;
 const getSimulationName = (simulation: Answer[]) => `Estimation n°${simulation.length + 1}`;
+const getDisplay = (answer: Answer) => {
+  return steps[answer.question].display(answer.response);
+}
 
 const formatter = Intl.NumberFormat('fr-FR', { style: "currency", currency: 'EUR' });
 
@@ -99,11 +102,11 @@ export default component$(() => {
   });
 
 
-  const DynamicForm = component$(() => {
+  const DynamicForm = component$((props: { current: any, onChange: any }) => {
     const currentType = steps[current.value].type;
     const formComponents = {
-      menu: <MenuForm onChange={add} current={current} />,
-      number: <NumberForm onChange={add} current={current} />,
+      menu: <MenuForm {...props} />,
+      number: <NumberForm  {...props} />,
     };
     return formComponents[currentType];
   });
@@ -132,28 +135,26 @@ export default component$(() => {
       </aside>
       <section>
         <ol>
-          {answers.map(async (answer, index) => {
-            const value = await steps[answer.question].display(answer.response);
-            return (
-              <>
-                <li key={answer.question}>
-                  <span style={transitionName(answer.question)}>
-                    {getDescription(answer.question)}
-                  </span>
-                </li>
-                <li key={value}>
-                  <span style={transitionName(value)}>
-                    {value}
-                  </span>
-                  <button class="back" onClick$={() => back(index)} aria-label="back to this step">
-                    <svg height="24px" viewBox="0 -960 960 960" width="24px" fill="black">
-                      <path d="M680-160v-400H313l144 144-56 57-241-241 240-240 57 57-144 143h447v480h-80Z" />
-                    </svg>
-                  </button>
-                </li>
-              </>
-            )
-          })}
+          {answers.map((answer, index) => (
+            <>
+              <li key={answer.question}>
+                <span style={transitionName(answer.question)}>
+                  {getDescription(answer.question)}
+                </span>
+              </li>
+              <li key={answer.response.toString()}>
+                <span style={transitionName(String(answer.response))}>
+                  {getDisplay(answer)}
+                </span>
+                <button class="back" onClick$={() => back(index)} aria-label="back to this step">
+                  <svg height="24px" viewBox="0 -960 960 960" width="24px" fill="black">
+                    <path d="M680-160v-400H313l144 144-56 57-241-241 240-240 57 57-144 143h447v480h-80Z" />
+                  </svg>
+                </button>
+              </li>
+            </>
+          )
+          )}
           <li>
             <svg class="logo" viewBox="0 0 100 100" fill="none" stroke="black" width="40" height="40">
               <g>
@@ -173,7 +174,7 @@ export default component$(() => {
             </h3>
           </li>
           <li>
-            <DynamicForm />
+            <DynamicForm current={current} onChange={add} />
           </li>
         </ol>
         <footer>

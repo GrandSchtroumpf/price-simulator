@@ -1,18 +1,21 @@
+import { $, QRL } from "@qwik.dev/core";
+import { AnswerResponse } from ".";
+
 type FormType = 'menu' | 'number';
 type Step = MenuStep | NumberStep;
+export type StepKey = keyof typeof steps;
 
 export interface FormField {
-  key: string;
   label: string;
   min?: number;
   max?: number;
   placeholder?: string;
   value?: number;
+  next?: string;
 }
 
 
 export interface Option {
-  key: string;
   label: string;
   next?: string;
   price: number;
@@ -21,255 +24,292 @@ export interface Option {
 interface BaseStep {
   id?: number;
   description: string;
-  next?: string;
+  next: QRL<(value: string) => string>;
+  display: QRL<(value: AnswerResponse) => string>;
   type: FormType;
 }
 
 export interface MenuStep extends BaseStep {
   type: 'menu';
-  props: {
-    options: Record<string, Option>;
-  };
+  options: Record<string, Option>;
 }
 
 interface NumberStep extends BaseStep {
   type: 'number';
-  props: {
-    fields: Record<string, FormField>
-  }
+  options: Record<string, FormField>
+}
+const FALLBACK_STEP = 'task';
+
+const getNextStep = (stepKey: StepKey, nextStep?: StepKey) => {
+  return $((value: string) => {
+    const step = steps[stepKey];
+    const nextOption = step.options[value]?.next;
+    const next = nextOption ?? nextStep;
+    return next ?? FALLBACK_STEP;
+  });
 }
 
 const task: MenuStep = {
-  next: "intervention",
   type: 'menu',
   description: "Type de travaux",
-  props: {
-    options: {
-      supply: { price: 100, key: "supply", label: "Fourniture" },
-      installation: { price: 100, key: "installation", label: "Pose" },
-      complete: { price: 100, key: "complete", label: "Fourniture & Pose" },
-      repairs: { price: 100, key: "repairs", label: "Réparation" },
-      replacement: { price: 100, key: "replacement", label: "Remplacement" },
-    }
+  next: getNextStep('task', 'intervention'),
+  display: $((value: AnswerResponse) => {
+    if (typeof value !== 'string') throw new Error('Wrong answer type for Menu Step');
+    return task.options[value].label;
+  }),
+  options: {
+    supply: { price: 100, label: "Fourniture" },
+    installation: { price: 100, label: "Pose" },
+    complete: { price: 100, label: "Fourniture & Pose" },
+    repairs: { price: 100, label: "Réparation" },
+    replacement: { price: 100, label: "Remplacement" },
   }
 }
 
 const intervention: MenuStep = {
-  description: "Type d'intervention",
   type: 'menu',
-  props: {
-    options: {
-      inner: { price: 100, key: "inner", label: "Intérieur", next: "interior" },
-      outer: { price: 100, key: "outer", label: "Extérieur", next: "exterior" },
-    }
+  description: "Type d'intervention",
+  next: getNextStep('intervention'),
+  display: $((value: AnswerResponse) => {
+    if (typeof value !== 'string') throw new Error('Wrong answer type for Menu Step');
+    return intervention.options[value].label;
+  }),
+  options: {
+    inner: { price: 100, label: "Intérieur", next: "interior" },
+    outer: { price: 100, label: "Extérieur", next: "exterior" },
   }
 }
 
 const interior: MenuStep = {
   description: "Ouvrage",
   type: 'menu',
-  props: {
-    options: {
-      door: { price: 100, key: "door", label: "Porte", next: "interiorDoorDimensions" },
-      stairs: { price: 100, key: "stairs", label: "Escalier", next: "interiorStairsDimensions" },
-      furnishings: { price: 100, key: "furnishings", label: "Ameublement", next: "furnishingType" },
-      flooring: { price: 100, key: "flooring", label: "Sol", next: "floorDimensions" },
-      // wall: { price: 100, key: "wall", label: "Murs" },
-      // ceiling: { price: 100, key: "ceiling", label: "Plafond" },
-    }
+  next: getNextStep('interior'),
+  display: $((value: AnswerResponse) => {
+    if (typeof value !== 'string') throw new Error('Wrong answer type for Menu Step');
+    return interior.options[value].label;
+  }),
+  options: {
+    door: { price: 100, label: "Porte", next: "interiorDoorDimensions" },
+    stairs: { price: 100, label: "Escalier", next: "interiorStairsDimensions" },
+    furnishings: { price: 100, label: "Ameublement", next: "furnishingType" },
+    flooring: { price: 100, label: "Sol", next: "floorDimensions" },
+    // wall: { price: 100, label: "Murs" },
+    // ceiling: { price: 100, label: "Plafond" },
   }
 }
 
 const exterior: MenuStep = {
   description: "Type d'intervention",
   type: 'menu',
-  props: {
-    options: {
-      window: { price: 100, key: "window", label: "Fenêtre" },
-      fence: { price: 100, key: "fence", label: "Cloture" },
-      blinds: { price: 100, key: "blinds", label: "Volets" },
-      door: { price: 100, key: "door", label: "Porte" },
-      deck: { price: 100, key: "deck", label: "Terrasse" },
-    }
+  next: getNextStep('exterior'),
+  display: $((value: AnswerResponse) => {
+    if (typeof value !== 'string') throw new Error('Wrong answer type for Menu Step');
+    return exterior.options[value].label;
+  }),
+  options: {
+    window: { price: 100, label: "Fenêtre" },
+    fence: { price: 100, label: "Cloture" },
+    blinds: { price: 100, label: "Volets" },
+    door: { price: 100, label: "Porte" },
+    deck: { price: 100, label: "Terrasse" },
   }
 }
 
 const interiorDoorDimensions: MenuStep = {
   description: "Dimensions",
   type: 'menu',
-  next: "interiorDoorMaterials",
-  props: {
-    options: {
-      classic: { price: 100, key: "classic", label: "Standard" },
-      custom: { price: 100, key: "custom", label: "Sur-mesure" },
-    }
+  next: getNextStep('interiorDoorDimensions', 'interiorDoorMaterials'),
+  display: $((value: AnswerResponse) => {
+    if (typeof value !== 'string') throw new Error('Wrong answer type for Menu Step');
+    return interiorDoorDimensions.options[value].label;
+  }),
+  options: {
+    classic: { price: 100, label: "Standard" },
+    custom: { price: 100, label: "Sur-mesure" },
   }
+
 }
 
 const interiorDoorMaterials: MenuStep = {
   description: "Type de matériaux",
   type: 'menu',
-  next: "interiorDoorType",
-  props: {
-    options: {
-      low: { price: 100, key: "low", label: "Entrée de gamme" },
-      mid: { price: 100, key: "mid", label: "Moyenne gamme" },
-      high: { price: 100, key: "high", label: "Haut de gamme" },
-    }
+  next: getNextStep('interiorDoorMaterials', 'interiorDoorType'),
+  display: $((value: AnswerResponse) => {
+    if (typeof value !== 'string') throw new Error('Wrong answer type for Menu Step');
+    return interiorDoorMaterials.options[value].label;
+  }),
+  options: {
+    low: { price: 100, label: "Entrée de gamme" },
+    mid: { price: 100, label: "Moyenne gamme" },
+    high: { price: 100, label: "Haut de gamme" },
   }
 }
 
 const interiorDoorType: MenuStep = {
   description: "Type de porte",
   type: 'menu',
-  next: "interiorDoorFinitions",
-  props: {
-    options: {
-      battant: { price: 100, key: "battant", label: "Battante" },
-      sliding: { price: 100, key: "sliding", label: "Coulissante" },
-      other: { price: 100, key: "other", label: "Autre" },
-    }
+  next: getNextStep('interiorDoorType', 'interiorDoorFinitions'),
+  display: $((value: AnswerResponse) => {
+    if (typeof value !== 'string') throw new Error('Wrong answer type for Menu Step');
+    return interiorDoorType.options[value].label;
+  }),
+  options: {
+    battant: { price: 100, label: "Battante" },
+    sliding: { price: 100, label: "Coulissante" },
+    other: { price: 100, label: "Autre" },
   }
 }
 
 const interiorDoorFinitions: MenuStep = {
   description: "Finitions",
   type: 'menu',
-  next: "confirmation",
-  props: {
-    options: {
-      varnish: { price: 100, key: "varnish", label: "Vernis" },
-      paint: { price: 100, key: "paint", label: "Peinture" },
-      raw: { price: 100, key: "raw", label: "Brut" },
-    }
+  next: getNextStep('interiorDoorFinitions', 'confirmation'),
+  display: $((value: AnswerResponse) => {
+    if (typeof value !== 'string') throw new Error('Wrong answer type for Menu Step');
+    return interiorDoorFinitions.options[value].label;
+  }),
+  options: {
+    varnish: { price: 100, label: "Vernis" },
+    paint: { price: 100, label: "Peinture" },
+    raw: { price: 100, label: "Brut" },
   }
 }
 
 const interiorStairsDimensions: MenuStep = {
   description: "Hauteur sous plafond",
   type: 'menu',
-  next: "interiorStairsMaterials",
-  props: {
-    options: {
-      little: { price: 100, key: "little", label: "Petite" },
-      standard: { price: 100, key: "standard", label: "Standard" },
-      high: { price: 100, key: "high", label: "Haute" },
-    }
+  next: getNextStep('interiorStairsDimensions', 'interiorStairsMaterials'),
+  display: $((value: AnswerResponse) => {
+    if (typeof value !== 'string') throw new Error('Wrong answer type for Menu Step');
+    return interiorStairsDimensions.options[value].label;
+  }),
+  options: {
+    little: { price: 100, label: "Petite" },
+    standard: { price: 100, label: "Standard" },
+    high: { price: 100, label: "Haute" },
   }
 }
 
 const interiorStairsMaterials: MenuStep = {
   description: "Type de matériaux",
   type: 'menu',
-  next: "interiorStairsFinitions",
-  props: {
-    options: {
-      low: { price: 100, key: "low", label: "Entrée de gamme" },
-      mid: { price: 100, key: "mid", label: "Moyenne gamme" },
-      high: { price: 100, key: "high", label: "Haut de gamme" },
-    }
+  next: getNextStep('interiorStairsMaterials', 'interiorStairsFinitions'),
+  display: $((value: AnswerResponse) => {
+    if (typeof value !== 'string') throw new Error('Wrong answer type for Menu Step');
+    return interiorStairsMaterials.options[value].label;
+  }),
+  options: {
+    low: { price: 100, label: "Entrée de gamme" },
+    mid: { price: 100, label: "Moyenne gamme" },
+    high: { price: 100, label: "Haut de gamme" },
   }
 }
 
 const interiorStairsFinitions: MenuStep = {
   description: "Type de finition",
   type: 'menu',
-  next: "confirmation",
-  props: {
-    options: {
-      varnish: { price: 100, key: "varnish", label: "Vernis" },
-      paint: { price: 100, key: "paint", label: "Peinture" },
-      raw: { price: 100, key: "raw", label: "Brut" },
-    }
+  next: getNextStep('interiorStairsFinitions', 'confirmation'),
+  display: $((value: AnswerResponse) => {
+    if (typeof value !== 'string') throw new Error('Wrong answer type for Menu Step');
+    return interiorStairsFinitions.options[value].label;
+  }),
+  options: {
+    varnish: { price: 100, label: "Vernis" },
+    paint: { price: 100, label: "Peinture" },
+    raw: { price: 100, label: "Brut" },
   }
 }
 
 const furnishingType: MenuStep = {
   description: "Type de meuble",
   type: 'menu',
-  next: "furnishingDimensions",
-  props: {
-    options: {
-      table: { price: 100, key: "table", label: "Table" },
-      chair: { price: 100, key: "chair", label: "Chaise" },
-      storage: { price: 100, key: "storage", label: "Rangement" },
-      kitchen: { price: 100, key: "kitchen", label: "Cuisine" },
-    }
+  next: getNextStep('furnishingType', 'furnishingDimensions'),
+  display: $((value: AnswerResponse) => {
+    if (typeof value !== 'string') throw new Error('Wrong answer type for Menu Step');
+    return furnishingType.options[value].label;
+  }),
+  options: {
+    table: { price: 100, label: "Table" },
+    chair: { price: 100, label: "Chaise" },
+    storage: { price: 100, label: "Rangement" },
+    kitchen: { price: 100, label: "Cuisine" },
   }
 }
 
 const furnishingDimensions: MenuStep = {
   description: "Dimensions du meuble",
   type: 'menu',
-  next: "furnishingMaterials",
-  props: {
-    options: {
-      small: { price: 100, key: "small", label: "Petite" },
-      medium: { price: 100, key: "medium", label: "Moyenne" },
-      big: { price: 100, key: "big", label: "Grande" },
-    }
+  next: getNextStep('furnishingDimensions', 'furnishingMaterials'),
+  display: $((value: AnswerResponse) => {
+    if (typeof value !== 'string') throw new Error('Wrong answer type for Menu Step');
+    return furnishingDimensions.options[value].label;
+  }),
+  options: {
+    small: { price: 100, label: "Petite" },
+    medium: { price: 100, label: "Moyenne" },
+    big: { price: 100, label: "Grande" },
   }
 }
 
 const furnishingMaterials: MenuStep = {
   description: "Type de matériaux",
   type: 'menu',
-  next: "confirmation",
-  props: {
-    options: {
-      low: { price: 100, key: "low", label: "Entrée de gamme" },
-      mid: { price: 100, key: "mid", label: "Moyenne gamme" },
-      high: { price: 100, key: "high", label: "Haut de gamme" },
-    }
+  next: getNextStep('furnishingMaterials', 'confirmation'),
+  display: $((value: AnswerResponse) => {
+    if (typeof value !== 'string') throw new Error('Wrong answer type for Menu Step');
+    return furnishingMaterials.options[value].label;
+  }),
+  options: {
+    low: { price: 100, label: "Entrée de gamme" },
+    mid: { price: 100, label: "Moyenne gamme" },
+    high: { price: 100, label: "Haut de gamme" },
   }
 }
-
-// const floorDimensions: MenuStep = {
-//   description: "Taille de la pièce",
-//   type: 'menu',
-//   next: "floorType",
-//   props: {
-//     options: {
-//       small: { price: 100, key: "small", label: "Petite" },
-//       medium: { price: 100, key: "medium", label: "Moyenne" },
-//       big: { price: 100, key: "big", label: "Grande" },
-//     }
-//   }
-// }
 
 const floorDimensions: NumberStep = {
   description: "Surface de la pièce",
   type: 'number',
-  next: "floorType",
-  props: {
-    fields: {
-      width: { key: "width", label: "largeur", min: 0, max: 100 },
-      length: { key: "length", label: "longueur", min: 0, max: 100 },
-    }
+  next: getNextStep('floorDimensions', 'floorType'),
+  display: $((value: AnswerResponse) => {
+    if (typeof value === 'string') throw new Error('Wrong answer type for Number Step');
+    let res = '';
+    for (const [key, number] of Object.entries(value)) {
+      res += `${floorDimensions.options[key].label}: ${number}m `
+    };
+    return res;
+  }),
+  options: {
+    width: { label: "largeur", min: 0, max: 100 },
+    length: { label: "longueur", min: 0, max: 100 },
   }
 }
 
 const floorType: MenuStep = {
   description: "Type de parquet",
   type: 'menu',
-  next: "confirmation",
-  props: {
-    options: {
-      solid: { price: 100, key: "solid", label: "Massif" },
-      laminated: { price: 100, key: "laminated", label: "Stratifié" },
-      floating: { price: 100, key: "floating", label: "Flottant" },
-    }
+  next: getNextStep('floorType', 'confirmation'),
+  display: $((value: AnswerResponse) => {
+    if (typeof value !== 'string') throw new Error('Wrong answer type for Menu Step');
+    return floorType.options[value].label;
+  }),
+  options: {
+    solid: { price: 100, label: "Massif" },
+    laminated: { price: 100, label: "Stratifié" },
+    floating: { price: 100, label: "Flottant" },
   }
 }
 
 const confirmation: MenuStep = {
   description: "Validation",
   type: 'menu',
-  props: {
-    options: {
-      confirm: { price: 100, key: "confirm", label: "Contacter Erwan" },
-      more: { price: 100, key: "more", label: "Ajouter d'autres éléments au devis", next: "task" },
-    }
+  next: getNextStep('confirmation'),
+  display: $((value: AnswerResponse) => {
+    if (typeof value !== 'string') throw new Error('Wrong answer type for Menu Step');
+    return confirmation.options[value].label;
+  }),
+  options: {
+    confirm: { price: 100, label: "Contacter Erwan", next: 'mail' },
+    more: { price: 100, label: "Ajouter d'autres éléments au devis", next: "task" },
   }
 }
 

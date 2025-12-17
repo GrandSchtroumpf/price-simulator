@@ -1,19 +1,17 @@
-import { $, component$, useComputed$, useStore, useStyles$, useVisibleTask$ } from "@qwik.dev/core";
-import { JSXOutput, unwrapStore } from "@qwik.dev/core/internal";
-import { useSignal } from "@qwik.dev/core";
+import { $, component$, useComputed$, useStore, useStyles$, useVisibleTask$, useSignal } from "@qwik.dev/core";
+import { unwrapStore } from "@qwik.dev/core/internal";
 import { transition$ } from "~/components/transition";
-import { steps } from './steps';
+import { steps, type StepKey } from './steps';
 import { DocumentHead } from "@qwik.dev/router";
 import styles from './index.css?inline';
 import MenuForm from "./Forms/MenuForm";
 import NumberForm from "./Forms/NumberForm";
 
-export type StepKey = keyof typeof steps;
+export type AnswerResponse = string | Record<string, number>;
 
 export interface Answer {
   question: StepKey;
-  option: string;
-  formValue?: Record<string, string>;
+  response: AnswerResponse;
 }
 
 type Simulation = Answer[];
@@ -22,27 +20,7 @@ type Simulation = Answer[];
 export const transitionName = (value: string | number) => ({ viewTransitionName: `_${value}_` });
 
 const getDescription = (question: StepKey) => steps[question].description;
-const getOption = (answer: Answer) => {
-  const step = steps[answer.question];
-  if (step.type === 'menu') return step.props.options[answer.option];
-}
-const getSimulationName = (simulation: Answer[]) => {
-  const answer = simulation[0];
-  const option = getOption(answer);
-  return option?.label ?? `Estimation n°${simulation.length + 1}`;
-}
-
-const getFieldsOrOption = (answer: Answer) => {
-  if (answer.formValue) {
-    let finalAnswer = '';
-    for (const values of Object.values(answer.formValue)) {
-      finalAnswer += `${values}`;
-    }
-    return finalAnswer;
-  } else {
-    return getOption(answer)?.label;
-  }
-};
+const getSimulationName = (simulation: Answer[]) => `Estimation n°${simulation.length + 1}`;
 
 const formatter = Intl.NumberFormat('fr-FR', { style: "currency", currency: 'EUR' });
 
@@ -72,11 +50,12 @@ export default component$(() => {
   })
 
   const price = useComputed$(() => {
-    const total = answers.reduce((acc, answer) => {
-      const option = getOption(answer);
-      return acc + (option ? option.price : 0);
-    }, 0);
-    return formatter.format(total);
+    return 0;
+    // const total = answers.reduce((acc, answer) => {
+    //   const option = getOption(answer);
+    //   return acc + (option ? option.price : 0);
+    // }, 0);
+    // return formatter.format(total);
   });
 
   const back = transition$((index: number) => {
@@ -85,21 +64,23 @@ export default component$(() => {
     answers.splice(index, Infinity);
   })
 
-  const add = transition$((answer: Answer, nextOption?: string) => {
-    const next = nextOption ?? steps[current.value].next;
-    if (!next) {
+  const add = transition$(async (value: any) => {
+    const next = await steps[current.value].next(value);
+    if (next === 'mail') {
       const mailto = document.getElementById('mailto') as HTMLAnchorElement;
       const subject = encodeURIComponent('Simulation - Devis');
-      const body = answers
-        .map(answer => {
-          const label = getOption(answer)?.label ?? '';
-          `${getDescription(answer.question)}: ${label}`
-        })
-        .join('\n');
-      mailto.href = `mailto:erwanrichard.lpm@gmail.com?subject=${subject}&body=${encodeURIComponent(body)}`;
+      const body = [];
+      for (const answer of answers) {
+        const label = await steps[answer.question].display(answer.response);
+        body.push(`${getDescription(answer.question)}: ${label}`);
+      };
+      mailto.href = `mailto:erwanrichard.lpm@gmail.com?subject=${subject}&body=${encodeURIComponent(body.join('\n'))}`;
       mailto.click();
     } else {
-      answers.push(answer);
+      answers.push({
+        question: current.value,
+        response: value
+      });
       if (next === 'task') {
         simulations.push([...answers]);
         answers.splice(0, Infinity);
@@ -118,13 +99,13 @@ export default component$(() => {
   });
 
 
-  const currentForm = useComputed$(() => {
+  const DynamicForm = component$(() => {
     const currentType = steps[current.value].type;
-    const formComponents: Record<string, JSXOutput> = {
-      menu: <MenuForm add={add} current={current} />,
-      number: <NumberForm add={add} current={current} />,
+    const formComponents = {
+      menu: <MenuForm onChange={add} current={current} />,
+      number: <NumberForm onChange={add} current={current} />,
     };
-    return formComponents[currentType] ?? null;
+    return formComponents[currentType];
   });
 
 
@@ -151,25 +132,28 @@ export default component$(() => {
       </aside>
       <section>
         <ol>
-          {answers.map((answer, index) => (
-            <>
-              <li key={answer.question}>
-                <span style={transitionName(answer.question)}>
-                  {getDescription(answer.question)}
-                </span>
-              </li>
-              <li key={answer.option}>
-                <span style={transitionName(answer.option)}>
-                  {getFieldsOrOption(answer)}
-                </span>
-                <button class="back" onClick$={() => back(index)} aria-label="back to this step">
-                  <svg height="24px" viewBox="0 -960 960 960" width="24px" fill="black">
-                    <path d="M680-160v-400H313l144 144-56 57-241-241 240-240 57 57-144 143h447v480h-80Z" />
-                  </svg>
-                </button>
-              </li>
-            </>
-          ))}
+          {answers.map(async (answer, index) => {
+            const value = await steps[answer.question].display(answer.response);
+            return (
+              <>
+                <li key={answer.question}>
+                  <span style={transitionName(answer.question)}>
+                    {getDescription(answer.question)}
+                  </span>
+                </li>
+                <li key={value}>
+                  <span style={transitionName(value)}>
+                    {value}
+                  </span>
+                  <button class="back" onClick$={() => back(index)} aria-label="back to this step">
+                    <svg height="24px" viewBox="0 -960 960 960" width="24px" fill="black">
+                      <path d="M680-160v-400H313l144 144-56 57-241-241 240-240 57 57-144 143h447v480h-80Z" />
+                    </svg>
+                  </button>
+                </li>
+              </>
+            )
+          })}
           <li>
             <svg class="logo" viewBox="0 0 100 100" fill="none" stroke="black" width="40" height="40">
               <g>
@@ -189,7 +173,7 @@ export default component$(() => {
             </h3>
           </li>
           <li>
-            {currentForm.value}
+            <DynamicForm />
           </li>
         </ol>
         <footer>

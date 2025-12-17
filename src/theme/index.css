@@ -37,10 +37,10 @@
   color-scheme: light;
 }
 @utility dark-scheme {
-  --lightness-0: 5%;
-  --lightness-1: 15%;
-  --lightness-2: 20%;
-  --lightness-3: 25%;
+  --lightness-0: 10%;
+  --lightness-1: 25%;
+  --lightness-2: 30%;
+  --lightness-3: 35%;
   --lightness-outline: 60%;
   --lightness-btn: 60%;
   --lightness-contrast: 90%;

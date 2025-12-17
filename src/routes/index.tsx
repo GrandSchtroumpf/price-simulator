@@ -1,10 +1,14 @@
 import { component$ } from "@qwik.dev/core";
 import { DocumentHead } from "@qwik.dev/router";
 import Map from "~/components/map/Map";
+import { Testimonies } from "~/components/testimonies/testimonies";
 
 export default component$(() => {
   return (
-    <Map />
+    <main>
+      <Map />
+      <Testimonies />
+    </main>
   )
 })
 

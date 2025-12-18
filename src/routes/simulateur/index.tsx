@@ -23,7 +23,12 @@ const getDescription = (question: StepKey) => steps[question].description;
 const getSimulationName = (simulation: Answer[]) => `Estimation n°${simulation.length + 1}`;
 const getDisplay = (answer: Answer) => {
   return steps[answer.question].display(answer.response);
-}
+};
+const getSerializedResponse = (response: AnswerResponse) => {
+  if (typeof response === 'string') return response;
+  const alphaResponse = JSON.stringify(response).replace(/[^a-zA-Z]/g, "");
+  return alphaResponse
+};
 
 const formatter = Intl.NumberFormat('fr-FR', { style: "currency", currency: 'EUR' });
 
@@ -142,8 +147,8 @@ export default component$(() => {
                   {getDescription(answer.question)}
                 </span>
               </li>
-              <li key={answer.response.toString()}>
-                <span style={transitionName(String(answer.response))}>
+              <li key={getSerializedResponse(answer.response)}>
+                <span style={transitionName(getSerializedResponse(answer.response))}>
                   {getDisplay(answer)}
                 </span>
                 <button class="back" onClick$={() => back(index)} aria-label="back to this step">

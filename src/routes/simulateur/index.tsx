@@ -107,7 +107,7 @@ export default component$(() => {
   });
 
 
-  const DynamicForm = component$((props: { step: Step, onChange: QRL<(value: AnswerResponse) => any> }) => {
+  const DynamicForm = component$((props: { step: Step, onChange: QRL<(value: AnswerResponse) => void> }) => {
     const formComponents = {
       menu: <MenuForm {...props} />,
       number: <NumberForm  {...props} />,

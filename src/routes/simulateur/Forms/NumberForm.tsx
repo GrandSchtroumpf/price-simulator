@@ -1,16 +1,15 @@
-import { component$, Signal, useComputed$, QRL, $ } from "@qwik.dev/core";
-import { steps } from "../steps";
+import { component$, QRL, $ } from "@qwik.dev/core";
+import type { Step } from "../steps";
 
 interface NumberProps {
   onChange: QRL<(value: Record<string, number>) => void>;
-  current: Signal<string>;
+  step: Step;
 }
 
-export default component$<NumberProps>(({ current, onChange }) => {
-  const step = useComputed$(() => steps[current.value]);
+export default component$<NumberProps>(({ step, onChange }) => {
 
   const onSubmit = $((form: HTMLFormElement) => {
-    if (step.value.type !== 'number') return;
+    if (step.type !== 'number') return;
     const formData = new FormData(form);
     const formValue: Record<string, number> = {}
     for (const [key, value] of formData.entries()) {
@@ -19,11 +18,11 @@ export default component$<NumberProps>(({ current, onChange }) => {
     onChange(formValue);
   });
 
-  if (step.value.type !== 'number') return null;
+  if (step.type !== 'number') return null;
 
   return (
     <form preventdefault:submit onsubmit$={(_, form) => onSubmit(form)}>
-      {Object.entries(step.value.options).map(([key, option]) => {
+      {Object.entries(step.options).map(([key, option]) => {
         return (
           <>
             <label for={key}>{option.label}</label>

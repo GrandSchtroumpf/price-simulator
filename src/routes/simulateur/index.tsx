@@ -1,7 +1,7 @@
 import { $, component$, useComputed$, useStore, useStyles$, useVisibleTask$, useSignal, QRL } from "@qwik.dev/core";
 import { Signal, unwrapStore } from "@qwik.dev/core/internal";
 import { transition$ } from "~/components/transition";
-import { steps, type StepKey } from './steps';
+import { Step, steps, type StepKey } from './steps';
 import { DocumentHead } from "@qwik.dev/router";
 import styles from './index.css?inline';
 import MenuForm from "./Forms/MenuForm";
@@ -107,13 +107,12 @@ export default component$(() => {
   });
 
 
-  const DynamicForm = component$((props: { current: Signal<string>, onChange: QRL<(value: AnswerResponse) => any> }) => {
-    const currentType = steps[current.value].type;
+  const DynamicForm = component$((props: { step: Step, onChange: QRL<(value: AnswerResponse) => any> }) => {
     const formComponents = {
       menu: <MenuForm {...props} />,
       number: <NumberForm  {...props} />,
     };
-    return formComponents[currentType];
+    return formComponents[props.step.type];
   });
 
 
@@ -179,7 +178,7 @@ export default component$(() => {
             </h3>
           </li>
           <li>
-            <DynamicForm current={current} onChange={add} />
+            <DynamicForm step={steps[current.value]} onChange={add} />
           </li>
         </ol>
         <footer>

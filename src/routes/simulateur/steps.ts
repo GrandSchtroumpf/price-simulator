@@ -34,7 +34,7 @@ export interface MenuStep extends BaseStep {
   options: Record<string, Option>;
 }
 
-interface NumberStep extends BaseStep {
+export interface NumberStep extends BaseStep {
   type: 'number';
   options: Record<string, FormField>
 }

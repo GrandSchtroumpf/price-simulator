@@ -3,7 +3,7 @@ import { steps, type StepKey } from '../steps';
 import { transitionName } from '..';
 
 interface MenuProps {
-  onChange: QRL<(key: string) => any>;
+  onChange: QRL<(value: string) => void>;
   current: Signal<string>;
 }
 

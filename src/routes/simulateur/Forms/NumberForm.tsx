@@ -2,7 +2,7 @@ import { component$, Signal, useComputed$, QRL, $ } from "@qwik.dev/core";
 import { steps } from "../steps";
 
 interface NumberProps {
-  onChange: QRL<(value: Record<string, number>) => any>;
+  onChange: QRL<(value: Record<string, number>) => void>;
   current: Signal<string>;
 }
 

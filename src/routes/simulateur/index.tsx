@@ -1,5 +1,5 @@
-import { $, component$, useComputed$, useStore, useStyles$, useVisibleTask$, useSignal } from "@qwik.dev/core";
-import { unwrapStore } from "@qwik.dev/core/internal";
+import { $, component$, useComputed$, useStore, useStyles$, useVisibleTask$, useSignal, QRL } from "@qwik.dev/core";
+import { Signal, unwrapStore } from "@qwik.dev/core/internal";
 import { transition$ } from "~/components/transition";
 import { steps, type StepKey } from './steps';
 import { DocumentHead } from "@qwik.dev/router";
@@ -107,7 +107,7 @@ export default component$(() => {
   });
 
 
-  const DynamicForm = component$((props: { current: any, onChange: any }) => {
+  const DynamicForm = component$((props: { current: Signal<string>, onChange: QRL<(value: AnswerResponse) => any> }) => {
     const currentType = steps[current.value].type;
     const formComponents = {
       menu: <MenuForm {...props} />,

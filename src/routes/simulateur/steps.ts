@@ -2,7 +2,7 @@ import { $, QRL } from "@qwik.dev/core";
 import { AnswerResponse } from ".";
 
 type FormType = 'menu' | 'number';
-type Step = MenuStep | NumberStep;
+export type Step = MenuStep | NumberStep;
 export type StepKey = keyof typeof steps;
 
 export interface FormField {

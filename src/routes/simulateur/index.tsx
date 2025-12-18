@@ -1,5 +1,5 @@
 import { $, component$, useComputed$, useStore, useStyles$, useVisibleTask$, useSignal, QRL } from "@qwik.dev/core";
-import { Signal, unwrapStore } from "@qwik.dev/core/internal";
+import { unwrapStore } from "@qwik.dev/core/internal";
 import { transition$ } from "~/components/transition";
 import { Step, steps, type StepKey } from './steps';
 import { DocumentHead } from "@qwik.dev/router";

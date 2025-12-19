@@ -1,0 +1,136 @@
+.banner {
+  display: grid;
+  grid-template-areas: "stack";
+  height: 100dvh;
+
+  & .visiting-card {
+    place-self: center;
+    display: grid;
+    grid-area: stack;
+    text-align: center;
+    gap: 32px;
+    color: black;
+    transform: translate3d(0, 0, 0) translateY(-50px);
+  }
+
+  & hgroup,
+  & hr {
+    --transform: translateY(100px);
+
+    animation-name: transform-in;
+    animation-duration: 250ms;
+    animation-delay: 1s;
+    animation-fill-mode: backwards;
+    animation-timing-function: ease-out;
+  }
+
+  & hgroup {
+    display: grid;
+    gap: 32px;
+  }
+
+  & h1 {
+    display: flex;
+    gap: 2px;
+    overflow: clip;
+    font-size: clamp(1.8rem, 6vw, 4rem);
+  }
+
+  & h1 span {
+    --transform: translateY(100%);
+
+    animation-name: transform-in, fade-in;
+    animation-duration: 400ms;
+    animation-fill-mode: backwards;
+    animation-timing-function: cubic-bezier(0, 0.75, 0, 1);
+    animation-delay: calc(100ms + var(--index) * 40ms);
+  }
+
+  & h2 {
+    animation: fade-in 300ms;
+    font-weight: 200;
+    font-size: clamp(1.1rem, 4vw, 1.3rem);
+    padding-block: 8px;
+  }
+
+  & .estimate-button {
+    padding: 24px 48px;
+    justify-self: center;
+    cursor: pointer;
+    color: black;
+    background-color: var(--accent);
+    font-size: 1.5rem;
+    position: relative;
+    isolation: isolate;
+    border-top-left-radius: 30px;
+
+    --transform: translateY(150px);
+    transform-origin: bottom left;
+
+    animation-name: transform-in, fade-in, shake;
+    animation-fill-mode: backwards;
+    animation-iteration-count: 1, 1, infinite;
+    animation-timing-function: ease-in-out;
+    animation-duration: 200ms, 200ms, 8s;
+    animation-delay:
+      calc(1s + var(--index) * 100ms), calc(1s + var(--index) * 100ms),
+      calc(1s + var(--index) * 500ms);
+  }
+
+  & .estimate-button::after {
+    content: "";
+    position: absolute;
+    background-color: var(--accent);
+    width: 30px;
+    height: 30px;
+    left: 0;
+    top: 0;
+    z-index: -1;
+    transition: transform 400ms ease-in-out;
+    transform-origin: bottom right;
+    transform: scale(1);
+  }
+
+  & .estimate-button:hover::after {
+    transform: scale(0);
+  }
+}
+
+@keyframes transform-in {
+  from {
+    transform: var(--transform);
+  }
+}
+
+@keyframes transform-out {
+  to {
+    transform: var(--transform);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes shake {
+  0% {
+    rotate: 0deg;
+  }
+  10% {
+    rotate: 0deg;
+  }
+  12% {
+    rotate: -2deg;
+  }
+  14% {
+    rotate: 0deg;
+  }
+  16% {
+    rotate: -1deg;
+  }
+  18% {
+    rotate: 0deg;
+  }
+}

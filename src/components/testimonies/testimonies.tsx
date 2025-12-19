@@ -1,25 +1,11 @@
-import { $, component$, useOn, useStyles$ } from "@qwik.dev/core";
+import { component$, useStyles$ } from "@qwik.dev/core";
 import style from './testimonies.css?inline';
 
 const testimonies = [{}, {}, {}, {}, {}, {}, {}, {}];
 
 export const Testimonies = component$(() => {
   useStyles$(style);
-  useOn('qvisible', $(() => {
-    const observer = new IntersectionObserver((entries) => {
-      for (const entry of entries) {
-        if (entry.intersectionRatio > 0.1) entry.target.classList.add('is-visible');
-        else entry.target.classList.remove('is-visible');
-      }
-    }, {
-      threshold: [0.1]
-    });
-    const sections = document.querySelectorAll('section')!;
-    for (const section of sections) {
-      observer.observe(section);
-    }
-  }));
-  
+
   return (
     <section id="testimonies">
       <article class="identity">

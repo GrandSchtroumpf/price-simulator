@@ -18,142 +18,141 @@ h1 {
   @media (width < 600px) {
     --padding: 0;
   }
-}
-
-#map article {
-  height: 100dvh;
-  scroll-snap-align: center;
-}
-
-#welcome {
-  z-index: 1;
-  display: grid;
-  grid-area: welcome;
-}
-
-.presentation {
-  --opacity-in: 1;
-  --opacity-out: 0;
-  --transform-in: translateY(0);
-  --transform-out: translateY(-200px);
-  place-self: center;
-  display: grid;
-  gap: 32px;
-  animation-name: transform, fade;
-  animation-fill-mode: forwards;
-  animation-timeline: view();
-  animation-timing-function: var(--ease-in);
-  & hgroup {
-    display: grid;
-    justify-items: center;
+  & article {
+    height: 100dvh;
+    scroll-snap-align: center;
   }
-}
-
-.imgs {
-  --transform-in: scale(1.2);
-  grid-area: welcome;
-  position: relative;
-  padding: var(--padding);
-  position: sticky;
-  top: 0;
-  animation-name: transform, fade-in;
-  animation-duration: 500ms;
-  animation-fill-mode: forwards;
-  animation-timing-function: var(--ease-out);
   
-  view-timeline: --progress;
-  view-timeline-inset: 20% auto;
-}
-
-
-.imgs .img-filter {
-  background-color: oklch(var(--lightness-0) var(--neutral-chroma) var(--hue) / 80%);
-  --opacity-out: 0;
-  position: absolute;
-  inset: 0;
-  animation-name: fade;
-  animation-fill-mode: forwards;
-  animation-timeline: view(100%);
-  animation-timing-function: var(--ease-out);
-}
-
-#map img {
-  --transform-in: scale(1.5);
-  --transform-out: scale(1);
-  border-radius: var(--padding);
-  height: 100%;
-  width: 100%;
-  object-fit: cover;
-  animation-name: transform;
-  animation-fill-mode: both;
-  animation-timeline: view(100%);
-  animation-timing-function: var(--ease-out);
-}
-
-.location {
-  position: absolute;
-  font-size: 1.5rem;
-  color: var(--color-on-contrast);
-  overflow: clip;
-  isolation: isolate;
-  padding: 8px 16px;
-  top: calc(var(--h) * 100dvh);
-  left: calc(var(--w) * var(--img-width) - var(--delta));
-  translate: -50% -50%;
-  display: grid;
-  grid-template-areas: 'stack';
-  place-items: center;
-}
-.location p {
-  grid-area: stack;
-  display: flex;
-}
-.location .circle {
-  grid-area: stack;
-  aspect-ratio: 1/1;
-  border-radius: 100dvh;
-  border: dotted 3px var(--color-outline);
-}
-.location .circle:nth-child(1) {
-  width: 75dvh;
-  border-style: dashed;
-  --index: 1;
-}
-.location .circle:nth-child(2) {
-  --index: 2;
-  width: 50dvh;
-  background-color: oklch(var(--lightness-2) var(--neutral-chroma) var(--hue) / 10%);
-}
-
-#welcome.is-visible + .imgs .location {
-  transform: translateY(10px);
-  opacity: 0;
-  transition: all 0.1s var(--ease-in);
-}
-#welcome:not(.is-visible) + .imgs .location {
-  transform: translateY(0);
-  opacity: 1;
-  transition: all 300ms var(--ease-out) var(--delay);
-  & .circle {
-    --transform-in: scale(0);
-    animation-name: transform, rotate;
-    animation-duration: 400ms, 60s;
-    animation-delay: calc(var(--delay, 0ms) + var(--index) * 100ms);
-    animation-fill-mode: backwards, none;
-    animation-timing-function: var(--ease-out), linear;
-    animation-iteration-count: none, infinite;
+  & #welcome {
+    z-index: 1;
+    display: grid;
+    grid-area: welcome;
   }
-  & span {
-    --opacity-in: 0;
-    --transform-in: translateX(30px);
+  
+  & .presentation {
+    --opacity-in: 1;
+    --opacity-out: 0;
+    --transform-in: translateY(0);
+    --transform-out: translateY(-200px);
+    place-self: center;
+    display: grid;
+    gap: 32px;
     animation-name: transform, fade;
-    animation-duration: 200ms;
-    animation-delay: calc( var(--delay, 0ms) + var(--index) * 10ms);
-    animation-fill-mode: backwards;
+    animation-fill-mode: forwards;
+    animation-timeline: view();
+    animation-timing-function: var(--ease-in);
+    & hgroup {
+      display: grid;
+      justify-items: center;
+    }
+  }
+  
+  & .imgs {
+    --transform-in: scale(1.2);
+    grid-area: welcome;
+    position: relative;
+    padding: var(--padding);
+    position: sticky;
+    top: 0;
+    animation-name: transform, fade-in;
+    animation-duration: 500ms;
+    animation-fill-mode: forwards;
+    animation-timing-function: var(--ease-out);
+    
+    view-timeline: --progress;
+    view-timeline-inset: 20% auto;
+  }
+  
+  
+  & .imgs .img-filter {
+    background-color: oklch(var(--lightness-0) var(--neutral-chroma) var(--hue) / 80%);
+    --opacity-out: 0;
+    position: absolute;
+    inset: 0;
+    animation-name: fade;
+    animation-fill-mode: forwards;
+    animation-timeline: view(100%);
     animation-timing-function: var(--ease-out);
   }
+  
+  & img {
+    --transform-in: scale(1.5);
+    --transform-out: scale(1);
+    border-radius: var(--padding);
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    animation-name: transform;
+    animation-fill-mode: both;
+    animation-timeline: view(100%);
+    animation-timing-function: var(--ease-out);
+  }
+  
+  & .location {
+    position: absolute;
+    font-size: 1.5rem;
+    color: var(--color-on-contrast);
+    overflow: clip;
+    isolation: isolate;
+    padding: 8px 16px;
+    top: calc(var(--h) * 100dvh);
+    left: calc(var(--w) * var(--img-width) - var(--delta));
+    translate: -50% -50%;
+    display: grid;
+    grid-template-areas: 'stack';
+    place-items: center;
+  }
+  & .location p {
+    grid-area: stack;
+    display: flex;
+  }
+  & .location .circle {
+    grid-area: stack;
+    aspect-ratio: 1/1;
+    border-radius: 100dvh;
+    border: dotted 3px var(--color-outline);
+  }
+  & .location .circle:nth-child(1) {
+    width: 75dvh;
+    border-style: dashed;
+    --index: 1;
+  }
+  & .location .circle:nth-child(2) {
+    --index: 2;
+    width: 50dvh;
+    background-color: oklch(var(--lightness-2) var(--neutral-chroma) var(--hue) / 10%);
+  }
+  
+  & #welcome.is-visible + .imgs .location {
+    transform: translateY(10px);
+    opacity: 0;
+    transition: all 0.1s var(--ease-in);
+  }
+  & #welcome:not(.is-visible) + .imgs .location {
+    transform: translateY(0);
+    opacity: 1;
+    transition: all 300ms var(--ease-out) var(--delay);
+    & .circle {
+      --transform-in: scale(0);
+      animation-name: transform, rotate;
+      animation-duration: 400ms, 60s;
+      animation-delay: calc(var(--delay, 0ms) + var(--index) * 100ms);
+      animation-fill-mode: backwards, none;
+      animation-timing-function: var(--ease-out), linear;
+      animation-iteration-count: none, infinite;
+    }
+    & span {
+      --opacity-in: 0;
+      --transform-in: translateX(30px);
+      animation-name: transform, fade;
+      animation-duration: 200ms;
+      animation-delay: calc( var(--delay, 0ms) + var(--index) * 10ms);
+      animation-fill-mode: backwards;
+      animation-timing-function: var(--ease-out);
+    }
+  }
+  
 }
-
 @keyframes rotate {
   from {
     rotate: 0deg;
@@ -162,3 +161,4 @@ h1 {
     rotate: 360deg;
   }
 }
+

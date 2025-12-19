@@ -1,22 +1,10 @@
-import { component$, useStyles$, useOn, $ } from "@qwik.dev/core";
+import { component$, useStyles$} from "@qwik.dev/core";
 import { Logo } from "../logo/Logo";
 import style from './Map.css?inline';
 
 export default component$(() => {
   useStyles$(style);
 
-  useOn('qvisible', $(() => {
-    const observer = new IntersectionObserver((entries) => {
-      for (const entry of entries) {
-        if (entry.intersectionRatio > 0.1) entry.target.classList.add('is-visible');
-        else entry.target.classList.remove('is-visible');
-      }
-    }, {
-      threshold: [0.1]
-    });
-    const welcome = document.getElementById('welcome')!;
-    observer.observe(welcome);
-  }));
 
   return (
     <section id="map">

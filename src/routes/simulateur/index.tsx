@@ -37,7 +37,6 @@ export default component$(() => {
   // Store previous simulations
   const simulations = useStore<Simulation[]>([]);
 
-
   useVisibleTask$(() => {
     const local = localStorage.getItem('simulations');
     if (local) simulations.splice(0, Infinity, ...JSON.parse(local));

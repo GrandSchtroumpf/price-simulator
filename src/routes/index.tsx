@@ -4,7 +4,6 @@ import { Testimonies } from "~/components/testimonies/testimonies";
 import Map from "~/components/map/Map";
 
 export default component$(() => {
-  
   useOn('qvisible', $(() => {
     const observer = new IntersectionObserver((entries) => {
       for (const entry of entries) {
@@ -33,6 +32,6 @@ export const head: DocumentHead = {
   title: "Le P'tit Menuisier",
   meta: [],
   links: [
-    { rel: 'preload', href: '/fonts/Josefin Sans.woff2', as:'font', type:'font/woff2' }
+    { rel: 'preload', href: '/fonts/Josefin Sans.woff2', as: 'font', type: 'font/woff2' }
   ]
 };

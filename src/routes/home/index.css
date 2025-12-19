@@ -1,0 +1,80 @@
+@property --hue {
+  syntax: "<angle>";
+  inherits: true;
+  initial-value: 60deg;
+}
+
+:root {
+  --accent: oklch(90% 0.2 var(--hue));
+  --accent-gradient: oklch(90% 0.35 var(--hue));
+
+  --background: oklch(100% 0.02 var(--hue));
+
+  --color-outline: oklch(10% 0.02 var(--hue));
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: "Josefin Sans", sans-serif;
+}
+
+body {
+  margin: 0;
+  min-height: 400vh;
+  color: white;
+  background: var(--background);
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.95)),
+    url("/imgs/home/motif_bois.svg");
+}
+
+ul {
+  list-style: none;
+  padding: 32px 64px;
+}
+
+a {
+  text-decoration: none;
+  color: white;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin-block: unset;
+}
+
+footer {
+  display: grid;
+  margin: 0 8px;
+  min-height: 30vh;
+  border-radius: 16px 16px 0 0;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+footer nav {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+}
+
+.wooden-board {
+  position: absolute;
+  inset: 0;
+  width: 250px;
+  transform: translateX(-10px) translateY(-50px) rotate(-10deg);
+}
+
+@media (max-width: 768px) {
+  .wooden-board {
+    top: -200px;
+    left: -200px;
+  }
+}

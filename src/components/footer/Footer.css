@@ -1,0 +1,61 @@
+.footer-top {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  padding-right: 48px;
+
+  & figure {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+  }
+
+  & figcaption {
+    width: 19ch;
+    font-size: 1rem;
+  }
+
+  & address {
+    font-size: 1.2rem;
+    line-height: 1.8;
+    justify-self: right;
+  }
+
+  & + hr {
+    background-color: white;
+    opacity: 0.2;
+    width: 75%;
+    height: 1px;
+  }
+
+  & > img {
+    justify-self: end;
+  }
+}
+
+@media (max-width: 768px) {
+  .footer-top {
+    grid-template-columns: 1fr;
+    padding: 0;
+    height: 30vh;
+    padding-bottom: 48px;
+
+    & address {
+      justify-self: left;
+      padding: 0 0 0 48px;
+    }
+
+    & figure {
+      margin: 0;
+      padding-inline: 24px;
+    }
+
+    & + hr {
+      display: none;
+    }
+
+    & + hr + nav {
+      padding: 24px 0 48px 0;
+    }
+  }
+}

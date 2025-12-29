@@ -2,7 +2,7 @@ import { component$, useOn, $, useStyles$ } from "@qwik.dev/core";
 import { DocumentHead } from "@qwik.dev/router";
 import { Testimonies } from "~/components/testimonies/testimonies";
 import { Map } from "~/components/map/Map";
-import { Welcome } from "~/components/welcome/welcome";
+import { Welcome } from "~/components/welcome/Welcome";
 import { Logo } from "~/components/logo/Logo";
 import style from './index.css?inline';
 

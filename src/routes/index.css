@@ -1,6 +1,29 @@
 body {
   --logo-duration: 2s;
   display: grid;
+  position: relative;
+}
+body::before, body::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+body::before {
+  z-index: -2;
+  background-image: radial-gradient(at top center, currentColor, transparent);
+  opacity: 0.2;
+  --transform-in: translateY(-100%);
+  animation-name: transform;
+  animation-duration: 1000ms;
+  animation-delay: calc(var(--logo-duration) + 800ms);
+  animation-timing-function: var(--ease-out);
+  animation-fill-mode: backwards;
+}
+body::after {
+  z-index: -1;
+  mask-image: url('/imgs/wood-veins.svg');
+  mask-mode: luminance;
+  background-color: var(--color-surface-0);
 }
 
 .logo {

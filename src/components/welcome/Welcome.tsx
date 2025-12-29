@@ -1,11 +1,14 @@
 import { component$, useStyles$ } from "@qwik.dev/core";
+import ImgWoodenBoard from './wood-board.svg?jsx';
 import style from './Welcome.css?inline';
+  
 
 export const Welcome = component$(() => {
   useStyles$(style);
 
   return (
     <section id="welcome">
+      <ImgWoodenBoard class="wood-board" />
       <hgroup>
         <h2 style="--index: 0">ERWAN RICHARD</h2>
         <h1 style="--index: 2">

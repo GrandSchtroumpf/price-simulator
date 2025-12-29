@@ -8,7 +8,7 @@
   --color-surface-2: oklch(var(--lightness-2) var(--neutral-chroma) var(--hue));
   --color-surface-3: oklch(var(--lightness-3) var(--neutral-chroma) var(--hue));
   --color-outline: oklch(var(--lightness-outline) var(--neutral-chroma) var(--hue));
-  --color-contrast: oklch(var(--lightness-contrast) var(--neutral-chroma) var(--hue));;
+  --color-contrast: oklch(var(--lightness-contrast) var(--neutral-chroma) var(--hue));
   --color-on-contrast: var(--color-surface-3);
 }
 

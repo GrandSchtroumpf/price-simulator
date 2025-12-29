@@ -1,0 +1,50 @@
+#welcome {
+  display: grid;
+  gap: 40px;
+  place-items: center;
+  place-content: center;
+  min-height: 100dvh;
+
+  & hgroup {
+    --transform-in: translateY(200px);
+    display: grid;
+    justify-items: center;
+    animation-name: transform;
+    animation-duration: 500ms;
+    animation-delay: calc(var(--logo-duration) + 500ms);
+    animation-fill-mode: backwards;
+    animation-timing-function: var(--ease-in-out);
+  }
+  & h1 {
+    font-size: clamp(1.5rem, 2.5vw, 4rem);
+    display: flex;
+  }
+  & h1 span {
+    --transform-in: translateY(100%); 
+    --opacity-in: 0;
+    animation-name: transform, fade;
+    animation-duration: 300ms;
+    animation-fill-mode: backwards;
+    animation-timing-function: var(--ease-in-out);
+    animation-delay: calc(var(--logo-duration) + var(--index) * 10ms);
+  }
+  & h2 {
+    --opacity-in: 0;
+    animation-name: fade;
+    animation-fill-mode: backwards;
+    animation-duration: 300ms;
+    animation-delay: calc(var(--logo-duration) + 50ms);
+    font-weight: 200;
+    font-size: clamp(1.3rem, 2vw, 3rem);
+  }
+  & a {
+    --opacity-in: 0;
+    animation-name: fade;
+    animation-fill-mode: backwards;
+    animation-duration: 300ms;
+    animation-delay: calc(var(--logo-duration) + 500ms + 300ms);
+  }
+}
+
+
+

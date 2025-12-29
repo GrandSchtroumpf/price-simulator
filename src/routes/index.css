@@ -1,25 +1,31 @@
-.logo {
-  color: black;
+body {
+  --logo-duration: 2s;
+  display: grid;
 }
-@media (prefers-color-scheme: dark) {
-  .logo {
-    color: white;
+
+.logo {
+  --transform-in: translateY(30dvh) scale(1);
+  --transform-out: translateY(0) scale(calc(50 / 300));
+  animation-name: transform;
+  animation-duration: 400ms;
+  animation-delay: calc(var(--logo-duration) + 500ms);
+  animation-fill-mode: both;
+  animation-timing-function: var(--ease-in-out);
+  transform-origin: top center;
+  justify-self: center;
+  position: fixed;
+  top: 16px;
+  z-index: 1;
+
+  @media (height < 800px) {
+    --transform-in: translateY(20dvh) scale(1); 
   }
-}
 
-.logo {
-  transform-origin: center top;
-  width: 300px;
-  height: 300px;
-}
-
-.logo.animated {
-  /* animation: transform 0.5s 2s cubic-bezier(1, 0, 0, 1) forwards; */
   & .hammer {
     --opacity-in: 0;
     --opacity-out: 1;
     animation-name: hammer-entry, fade;
-    animation-duration: 2s;
+    animation-duration: var(--logo-duration);
     transform-box: fill-box;
     transform-origin: 50% 60%;
   }
@@ -41,9 +47,12 @@
     --transform-1: translate(-20px, -10px) rotate(-45deg);
     --transform-2: translate(0) rotate(0);
   }
-
 }
 
+main {
+  display: grid;
+  scroll-snap-align: center;
+}
 
 @keyframes draw {
   from {

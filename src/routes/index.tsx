@@ -1,10 +1,13 @@
-import { component$, useOn, $ } from "@qwik.dev/core";
+import { component$, useOn, $, useStyles$ } from "@qwik.dev/core";
 import { DocumentHead } from "@qwik.dev/router";
 import { Testimonies } from "~/components/testimonies/testimonies";
-import Map from "~/components/map/Map";
+import { Map } from "~/components/map/Map";
+import { Welcome } from "~/components/welcome/welcome";
+import { Logo } from "~/components/logo/Logo";
+import style from './index.css?inline';
 
 export default component$(() => {
-  
+  useStyles$(style);
   useOn('qvisible', $(() => {
     const observer = new IntersectionObserver((entries) => {
       for (const entry of entries) {
@@ -21,10 +24,14 @@ export default component$(() => {
   }));
 
   return (
-    <main>
-      <Map />
-      <Testimonies />
-    </main>
+    <>
+      <Logo width="300" height="300" class="logo" />
+      <main>
+        <Welcome />
+        <Map />
+        <Testimonies />
+      </main>
+    </>
   )
 })
 

@@ -11,7 +11,7 @@ export default component$(() => {
             <img class="worker-img" src="/imgs/home/worker.webp" />
 
             <ul style="--index: 0">
-                <li>
+                <li class="review">
                     <p>J'ai demandé à Erwan de venir poser un madrier, il a pris l'initiative de repreindre mes murs. Je suis vraiment déçu. Du coup, je vais m'ouvrir une quille.</p>
                     <hr />
                     <img src="/imgs/home/pnj.webp" width="56" height="56" alt="Photo de profil" />
@@ -20,7 +20,7 @@ export default component$(() => {
                         <p>Travaux effectués le 13 octobre 2012</p>
                     </hgroup>
                 </li>
-                <li style="--index: 10">
+                <li class="review" style="--index: 1">
                     <p>J'ai deux problèmes de la vie    : TON et mes enfants</p>
                     <hr />
                     <img src="/imgs/home/pnj.webp" width="56" height="56" alt="Photo de profil" />
@@ -29,7 +29,7 @@ export default component$(() => {
                         <p>Travaux non effectués en janvier 2026</p>
                     </hgroup>
                 </li>
-                <li style="--index: 20">
+                <li class="review" style="--index: 2">
                     <p>Je connais maintenant une personne dans ma vie qui a vraiment la fibre artistique. Cheh.</p>
                     <hr />
                     <img src="/imgs/home/pnj.webp" width="56" height="56" alt="Photo de profil" />
@@ -38,7 +38,7 @@ export default component$(() => {
                         <p>Travaux effectués en janvier 2025</p>
                     </hgroup>
                 </li>
-                <li style="--index: 30">
+                <li class="review" style="--index: 3">
                     <p>Mon grand-père était menuisier. Néanmoins, je préfère Erwan à mon grand-père</p>
                     <hr />
                     <img src="/imgs/home/pnj.webp" width="56" height="56" alt="Photo de profil" />
@@ -47,7 +47,7 @@ export default component$(() => {
                         <p>Travaux effectués en février 1994</p>
                     </hgroup>
                 </li>
-                <li style="--index: 40">
+                <li class="review" style="--index: 4">
                     <p>Travail impeccable, nonobstant, un travail en bois de palette aurait été un meilleur choix</p>
                     <hr />
                     <img src="/imgs/home/pnj.webp" width="56" height="56" alt="Photo de profil" />
@@ -56,7 +56,7 @@ export default component$(() => {
                         <p>Travaux réalisés sous réserve de benchmarks</p>
                     </hgroup>
                 </li>
-                <li style="--index: 80">
+                <li class="review" style="--index: 8">
                     <img src="/imgs/home/pnj.webp" width="56" height="56" alt="Photo de profil" />
                     <hgroup>
                         <h3>François DOUAISI</h3>

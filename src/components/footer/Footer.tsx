@@ -12,7 +12,7 @@ export default component$(() => {
                         src="/favicon.svg"
                         width="80"
                         height="80"
-                        alt="Représentation d'un blason contenant deux marteaux"
+                        alt="blason de Erwan, deux marteaux entrecroisés"
                     />
                     <figcaption>Erwan RICHARD Menuisier</figcaption>
                 </figure>

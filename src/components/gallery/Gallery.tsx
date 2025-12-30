@@ -6,7 +6,7 @@ export default component$(() => {
     useStyles$(style);
 
     return (
-        <section class="gallery">
+        <section id="gallery">
             <figure>
                 <figcaption>Nantes</figcaption>
                 <img src="/imgs/home/stroumpf.webp" alt="Sculpture de Stroumpf" />

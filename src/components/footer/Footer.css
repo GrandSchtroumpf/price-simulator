@@ -22,7 +22,7 @@
   }
 
   & + hr {
-    background-color: white;
+    background-color: var(--color-outline);
     opacity: 0.2;
     width: 75%;
     height: 1px;
@@ -42,7 +42,7 @@
 
     & address {
       justify-self: left;
-      padding: 0 0 0 48px;
+      padding-left: 48px;
     }
 
     & figure {
@@ -55,7 +55,8 @@
     }
 
     & + hr + nav {
-      padding: 24px 0 48px 0;
+      padding-block-start: 24px;
+      padding-block-end: 48px;
     }
   }
 }

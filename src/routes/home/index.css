@@ -33,7 +33,6 @@ body {
 
 ul {
   list-style: none;
-  padding: 32px 64px;
 }
 
 a {
@@ -69,7 +68,7 @@ footer nav {
   position: absolute;
   inset: 0;
   width: 250px;
-  transform: translateX(-10px) translateY(-50px) rotate(-10deg);
+  transform: translate(-10px, -50px) rotate(-10deg);
 }
 
 @media (max-width: 768px) {

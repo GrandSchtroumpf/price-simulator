@@ -1,6 +1,6 @@
 /* Gallery */
 
-.gallery {
+#gallery {
   min-height: 100dvh;
   padding: 64px 100px 32px 100px;
   display: grid;
@@ -58,7 +58,7 @@
 }
 
 @media (max-width: 768px) {
-  .gallery {
+  #gallery {
     width: calc(100dvw - 16px);
 
     & figure {

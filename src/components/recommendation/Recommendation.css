@@ -1,6 +1,8 @@
 .recommendation {
   display: grid;
   place-items: center;
+  min-height: 150dvh;
+  align-content: start;
   grid-template-columns: 1fr 1fr;
   gap: 32px;
   padding: 24px;
@@ -13,6 +15,7 @@
 
   & .worker-img {
     position: sticky;
+    top: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -22,16 +25,17 @@
   & > ul {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 1rem;
+    gap: 2rem;
+    padding-block: 2rem;
   }
 
   & > ul > li {
-    --header-height: 4.5px;
+    --header-height: 8px;
 
     display: grid;
     grid-template-columns: min-content 1fr;
     grid-template-rows: min-content min-content auto;
-    gap: 0.4rem;
+    gap: 16px;
     background-color: var(--color-surface-3);
 
     position: sticky;
@@ -40,7 +44,7 @@
     padding: 16px 16px 12px 16px;
     width: clamp(100%, 2vw, 80%);
     height: 200px;
-    border-radius: 10px;
+    border-top-left-radius: 24px;
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
   }
 
@@ -62,7 +66,7 @@
     grid-row: 1;
     max-width: none; /* Propriété nécessaire pour faire apparaître l'image 🤔 */
     object-fit: cover;
-    border-top-left-radius: calc(1rem - 10px);
+    border-top-left-radius: 16px;
     border-bottom-right-radius: 3px;
   }
 
@@ -72,6 +76,8 @@
     justify-self: start;
     align-self: center;
     line-height: 1.2;
+    display: grid;
+    gap: 8px;
   }
 
   & > ul > li > hgroup > p {
@@ -87,6 +93,7 @@
       grid-column: auto;
     }
     & .worker-img {
+      position: unset;
       max-height: 300px;
     }
 

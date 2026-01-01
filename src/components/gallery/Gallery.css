@@ -26,7 +26,6 @@
 
   & figure figcaption {
     font-size: 2rem;
-    color: black;
     position: relative;
     display: flex;
     align-items: center;
@@ -40,7 +39,7 @@
     content: "";
     flex-grow: 1;
     height: 2px;
-    background-color: black;
+    background-color: currentColor;
     margin-left: 10px;
   }
 

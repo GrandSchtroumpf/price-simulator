@@ -11,8 +11,9 @@
   height: 100dvh;
   position: relative;
   padding: var(--padding);
+  overflow: clip;
   @media (width < 600px) {
-    --padding: 0;
+    --padding: 0px;
   }
 
   & img {

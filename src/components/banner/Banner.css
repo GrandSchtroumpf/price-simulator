@@ -9,7 +9,6 @@
     grid-area: stack;
     text-align: center;
     gap: 32px;
-    color: black;
     transform: translate3d(0, 0, 0) translateY(-50px);
   }
 
@@ -57,7 +56,7 @@
     padding: 24px 48px;
     justify-self: center;
     cursor: pointer;
-    color: black;
+    color: var(--color-black);
     background-color: var(--accent);
     font-size: 1.5rem;
     position: relative;

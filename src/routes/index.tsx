@@ -1,9 +1,12 @@
 import { component$, useOn, $, useStyles$ } from "@qwik.dev/core";
 import { DocumentHead } from "@qwik.dev/router";
-import { Testimonies } from "~/components/testimonies/testimonies";
 import { Map } from "~/components/map/Map";
 import { Welcome } from "~/components/welcome/Welcome";
-import { Logo } from "~/components/logo/Logo";
+import Gallery from "~/components/gallery/Gallery";
+import Recommendation from "~/components/recommendation/Recommendation";
+import Estimate from "~/components/estimate/Estimate";
+import Footer from "~/components/footer/Footer";
+import WoodVeins from '~/media/wood-veins.svg?jsx';
 import style from './index.css?inline';
 
 export default component$(() => {
@@ -25,12 +28,17 @@ export default component$(() => {
 
   return (
     <>
-      <Logo width="300" height="300" class="logo" />
+      <div class="wood-background">
+        <WoodVeins class="wood-veins" />
+      </div>
       <main>
         <Welcome />
         <Map />
-        <Testimonies />
+        <Gallery />
+        <Recommendation />
+        <Estimate />
       </main>
+      <Footer />
     </>
   )
 })

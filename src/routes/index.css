@@ -3,96 +3,19 @@ body {
   display: grid;
   position: relative;
 }
-body::before, body::after {
-  content: "";
+
+.wood-background {
   position: absolute;
   inset: 0;
+  overflow: clip;
+  display: grid;
+  justify-items: center;
 }
-body::before {
-  z-index: -2;
-  background-image: radial-gradient(at top center, currentColor, transparent);
-  opacity: 0.2;
-  --transform-in: translateY(-100%);
-  animation-name: transform;
-  animation-duration: 1000ms;
-  animation-delay: calc(var(--logo-duration) + 800ms);
-  animation-timing-function: var(--ease-out);
-  animation-fill-mode: backwards;
-}
-body::after {
-  z-index: -1;
-  mask-image: url('/imgs/wood-veins.svg');
-  mask-mode: luminance;
-  background-color: var(--color-surface-0);
-}
-
-.logo {
-  --transform-in: translateY(30dvh) scale(1);
-  --transform-out: translateY(0) scale(calc(50 / 300));
-  animation-name: transform;
-  animation-duration: 400ms;
-  animation-delay: calc(var(--logo-duration) + 500ms);
-  animation-fill-mode: both;
-  animation-timing-function: var(--ease-in-out);
-  transform-origin: top center;
-  justify-self: center;
-  position: fixed;
-  top: 16px;
-  z-index: 1;
-
-  @media (height < 800px) {
-    --transform-in: translateY(20dvh) scale(1); 
-  }
-
-  & .hammer {
-    --opacity-in: 0;
-    --opacity-out: 1;
-    animation-name: hammer-entry, fade;
-    animation-duration: var(--logo-duration);
-    transform-box: fill-box;
-    transform-origin: 50% 60%;
-  }
-  & .border {
-    animation: draw 500ms 1.3s ease-out backwards;
-  }
-  & .border {
-    --size: 256;
-    stroke-dashoffset: 0;
-    stroke-dasharray: var(--size);
-  }
-  & .hammer.right {
-    --transform-0: translate(-30px, 40px) rotate(-60deg);
-    --transform-1: translate(20px, -10px) rotate(45deg);
-    --transform-2: translate(0) rotate(0);
-  }
-  & .hammer.left {
-    --transform-0: translate(30px, 40px) rotate(60deg);
-    --transform-1: translate(-20px, -10px) rotate(-45deg);
-    --transform-2: translate(0) rotate(0);
-  }
+.wood-veins {
+  height: 2100px;
 }
 
 main {
   display: grid;
   scroll-snap-align: center;
-}
-
-@keyframes draw {
-  from {
-    stroke-dashoffset: var(--size);
-  }
-}
-
-@keyframes hammer-entry {
-  0% {
-    transform: var(--transform-0);
-    animation-timing-function: cubic-bezier(0,1.3,1,1.3);
-  }
-  50% {
-    transform: var(--transform-1);
-    animation-timing-function: cubic-bezier(0,.4,0,1);
-  }
-  80% {
-    transform: var(--transform-2);
-  }
 }

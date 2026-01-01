@@ -1,5 +1,4 @@
 .estimate {
-  color: black;
   display: grid;
   gap: 48px;
   place-content: center;
@@ -30,7 +29,7 @@
     padding: 24px 48px;
     justify-self: center;
     cursor: pointer;
-    color: black;
+    color: var(--color-black);
     background-color: var(--accent);
     font-size: 1.5rem;
     position: relative;

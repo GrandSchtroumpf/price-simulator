@@ -1,8 +1,16 @@
+.main-footer {
+  display: grid;
+  gap: 16px;
+  margin-inline: 24px;
+  padding: 24px;
+  background-color: var(--color-surface-2);
+  border-top-left-radius: 24px;
+  border-top-right-radius: 24px;
+}
 .footer-top {
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: center;
-  padding-right: 48px;
 
   & figure {
     display: flex;
@@ -16,13 +24,16 @@
   }
 
   & address {
+    display: grid;
+    font-style: normal;
+    gap: 8px;
     font-size: 1.2rem;
     line-height: 1.8;
     justify-self: right;
   }
 
   & + hr {
-    background-color: white;
+    background-color: var(--color-outline);
     opacity: 0.2;
     width: 75%;
     height: 1px;

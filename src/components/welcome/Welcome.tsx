@@ -1,6 +1,7 @@
 import { component$, useStyles$ } from "@qwik.dev/core";
-import ImgWoodenBoard from './wood-board.svg?jsx';
+import ImgWoodenBoard from '~/media/wood-board.svg?jsx';
 import style from './Welcome.css?inline';
+import { Logo } from "../logo/Logo";
   
 
 export const Welcome = component$(() => {
@@ -9,6 +10,7 @@ export const Welcome = component$(() => {
   return (
     <section id="welcome">
       <ImgWoodenBoard class="wood-board" />
+      <Logo width="250" height="250" class="logo" />
       <hgroup>
         <h2 style="--index: 0">ERWAN RICHARD</h2>
         <h1 style="--index: 2">

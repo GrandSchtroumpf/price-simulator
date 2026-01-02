@@ -538,8 +538,9 @@ const floorDimensions: NumberStep = {
     return res;
   }),
   options: {
-    width: { label: "largeur", min: 0, max: 100 },
-    length: { label: "longueur", min: 0, max: 100 },
+    small: { label: "Petite" },
+    medium: { label: "Moyenne" },
+    big: { label: "Grande" },
   }
 }
 
@@ -567,7 +568,7 @@ const confirmation: MenuStep = {
     return confirmation.options[value].label;
   }),
   options: {
-    confirm: { price: 100, label: "Contacter Erwan", next: 'mail' },
+    confirm: { price: 100, label: "Contacter Erwan" },
     more: { price: 100, label: "Ajouter d'autres éléments au devis", next: "task" },
   }
 }

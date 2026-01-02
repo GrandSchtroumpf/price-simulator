@@ -14,7 +14,7 @@
 @property --hue {
   syntax: "<angle>";
   inherits: true;
-  initial-value: 45deg;
+  initial-value: 90deg;
 }
 @property --neutral-chroma {
   syntax: "<number>";
@@ -29,8 +29,12 @@
 
 :root {
   view-transition-name: none;
+  --ease-in-out: cubic-bezier(0.7, 0, 0.3, 1);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+}
+html {
+  background-color: var(--color-surface-0);
 }
 
 @media (prefers-color-scheme: dark) {

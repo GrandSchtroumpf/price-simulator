@@ -1,0 +1,108 @@
+.recommendation {
+  display: grid;
+  place-items: center;
+  min-height: 150dvh;
+  align-content: start;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  padding: 24px;
+  position: relative;
+
+  & > h2 {
+    font-size: 3rem;
+    grid-column: 1 / 3;
+  }
+
+  & .worker-img {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-top-left-radius: 120px;
+  }
+
+  & > ul {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding-block: 2rem;
+  }
+
+  & > ul > li {
+    --header-height: 8px;
+
+    display: grid;
+    grid-template-columns: min-content 1fr;
+    grid-template-rows: min-content min-content auto;
+    gap: 16px;
+    background-color: var(--color-surface-3);
+
+    position: sticky;
+    top: calc(var(--header-height) * var(--index));
+
+    padding: 16px 16px 12px 16px;
+    width: clamp(100%, 2vw, 80%);
+    height: 200px;
+    border-top-left-radius: 24px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  }
+
+  & > ul > li > p {
+    grid-column: 1 / 3;
+    grid-row: 3;
+    line-height: 1.2;
+  }
+
+  & > ul > li > hr {
+    grid-column: 1 / 3;
+    grid-row: 2;
+    opacity: 0.1;
+    padding-bottom: 8px;
+  }
+
+  & > ul > li > img {
+    grid-column: 1;
+    grid-row: 1;
+    max-width: none; /* Propriété nécessaire pour faire apparaître l'image 🤔 */
+    object-fit: cover;
+    border-top-left-radius: 16px;
+    border-bottom-right-radius: 3px;
+  }
+
+  & > ul > li > hgroup {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: start;
+    align-self: center;
+    line-height: 1.2;
+    display: grid;
+    gap: 8px;
+  }
+
+  & > ul > li > hgroup > p {
+    font-size: 0.8rem;
+    opacity: 0.5;
+  }
+}
+
+@media (max-width: 768px) {
+  .recommendation {
+    grid-template-columns: 1fr;
+    & h2 {
+      grid-column: auto;
+    }
+    & .worker-img {
+      position: unset;
+      max-height: 300px;
+    }
+
+    & ul {
+      padding-inline: 4px;
+    }
+
+    & ul li {
+      width: 95dvw !important;
+    }
+  }
+}

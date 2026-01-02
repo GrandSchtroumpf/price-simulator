@@ -21,6 +21,9 @@ errorOnDuplicatesPkgDeps(devDependencies, dependencies);
 
 export default defineConfig(({ command, mode }): UserConfig => {
   return {
+    build: {
+      cssMinify: 'lightningcss',
+    },
     plugins: [
       qwikRouter(),
       qwikVite(),

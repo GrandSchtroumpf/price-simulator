@@ -1,0 +1,21 @@
+body {
+  --logo-duration: 2s;
+  display: grid;
+  position: relative;
+}
+
+.wood-background {
+  position: absolute;
+  inset: 0;
+  overflow: clip;
+  display: grid;
+  justify-items: center;
+}
+.wood-veins {
+  height: 2100px;
+}
+
+main {
+  display: grid;
+  scroll-snap-align: center;
+}

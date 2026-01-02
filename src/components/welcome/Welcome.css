@@ -1,0 +1,148 @@
+#welcome {
+  display: grid;
+  gap: 40px;
+  place-items: center;
+  place-content: center;
+  min-height: 100dvh;
+  position: relative;
+
+  & .logo {
+    --transform-in: translateY(140px) scale(1.3);
+    --transform-out: translateY(0) scale(1);
+    animation-name: transform;
+    animation-duration: 400ms;
+    animation-delay: calc(var(--logo-duration) + 500ms);
+    animation-fill-mode: both;
+    animation-timing-function: var(--ease-in-out);
+    transform-origin: top center;
+    justify-self: center;
+
+    @media (height < 800px) {
+      --transform-in: translateY(20dvh) scale(1); 
+    }
+
+    & .hammer {
+      --opacity-in: 0;
+      --opacity-out: 1;
+      animation-name: hammer-entry, fade;
+      animation-duration: var(--logo-duration);
+      transform-box: fill-box;
+      transform-origin: 50% 60%;
+    }
+    & .border {
+      animation: draw 500ms 1.3s ease-out backwards;
+    }
+    & .border {
+      --size: 256;
+      stroke-dashoffset: 0;
+      stroke-dasharray: var(--size);
+    }
+    & .hammer.right {
+      --transform-0: translate(-30px, 40px) rotate(-60deg);
+      --transform-1: translate(20px, -10px) rotate(45deg);
+      --transform-2: translate(0) rotate(0);
+    }
+    & .hammer.left {
+      --transform-0: translate(30px, 40px) rotate(60deg);
+      --transform-1: translate(-20px, -10px) rotate(-45deg);
+      --transform-2: translate(0) rotate(0);
+    }
+  }
+
+
+
+  & .wood-board {
+    position: absolute;
+    inset: 0;
+    width: 250px;
+    transform: translateX(-10px) translateY(-50px) rotate(-10deg);
+    @media (width < 800px) {
+      display: none;
+    }
+  }
+
+
+  & hgroup {
+    --transform-in: translateY(160px);
+    display: grid;
+    justify-items: center;
+    animation-name: transform;
+    animation-duration: 500ms;
+    animation-delay: calc(var(--logo-duration) + 500ms);
+    animation-fill-mode: backwards;
+    animation-timing-function: var(--ease-in-out);
+  }
+  & h1 {
+    font-size: clamp(1.5rem, 2.5vw, 4rem);
+    display: flex;
+  }
+  & h1 span {
+    --transform-in: translateY(100%); 
+    --opacity-in: 0;
+    animation-name: transform, fade;
+    animation-duration: 300ms;
+    animation-fill-mode: backwards;
+    animation-timing-function: var(--ease-in-out);
+    animation-delay: calc(var(--logo-duration) + var(--index) * 10ms);
+  }
+  & h2 {
+    --opacity-in: 0;
+    animation-name: fade;
+    animation-fill-mode: backwards;
+    animation-duration: 300ms;
+    animation-delay: calc(var(--logo-duration) + 50ms);
+    font-weight: 200;
+    font-size: clamp(1.3rem, 2vw, 3rem);
+  }
+  & a {
+    --opacity-in: 0;
+    animation-name: fade;
+    animation-fill-mode: backwards;
+    animation-duration: 300ms;
+    animation-delay: calc(var(--logo-duration) + 500ms + 300ms);
+    border: solid 2px var(--color-accent);
+    border-top-left-radius: 24px;
+    padding: 16px 24px;
+    font-size: 1.3rem;
+    overflow: clip;
+    isolation: isolate;
+    position: relative;
+  }
+  & a::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    transform: translateX(-100%);
+    background-color: var(--color-accent);
+    opacity: 0.5;
+  }
+  & a:hover::before {
+    --transform-in: translateX(-100%) rotate(-45deg);
+    --transform-out: translateX(100%) rotate(-45deg);
+    animation: transform 500ms var(--ease-in-out);
+  }
+}
+
+
+
+
+@keyframes draw {
+  from {
+    stroke-dashoffset: var(--size);
+  }
+}
+
+@keyframes hammer-entry {
+  0% {
+    transform: var(--transform-0);
+    animation-timing-function: cubic-bezier(0,1.3,1,1.3);
+  }
+  50% {
+    transform: var(--transform-1);
+    animation-timing-function: cubic-bezier(0,.4,0,1);
+  }
+  80% {
+    transform: var(--transform-2);
+  }
+}

@@ -2,6 +2,64 @@ import { $, QRL } from "@qwik.dev/core";
 import { AnswerResponse } from ".";
 
 type FormType = 'menu' | 'number';
+interface Root {
+  price: QRL<(steps: Step[]) => number>;
+  nodes: Record<string, Step>;
+}
+
+interface Control<T> {
+  kind: T;
+  name: string;
+  class?: string;
+}
+
+
+interface Input extends Control<'input'> {
+  label?: string;
+  required?: boolean;
+  pattern?: string;
+  inputmode?: string;
+  readonly?: boolean
+  placeholder?: string;
+}
+
+interface CheckBoxControl extends Control<'checkbox'> {
+  label: string;
+  required: boolean;
+  checked?: boolean;
+}
+
+interface InputNumber extends Input {
+  type: 'number';
+  value?: number;
+  min?: number;
+  max?: number;
+  step?: number | 'any';
+}
+
+interface InputString extends Input {
+  value: string;
+  type: 'text' | 'search' | 'url' | 'email' | 'password';
+  maxlength?: number;
+  minlength?: number;
+}
+
+interface CheckList extends Control<'checklist'> {
+  legend: string;
+  options: {
+    label: string;
+    value: string
+  }[];
+}
+
+interface RadioGroup extends Control<'radiogroup'> {
+  legend: string;
+  options: {
+    label: string;
+    value: string
+  }[];
+}
+
 export type Step = MenuStep | NumberStep;
 export type StepKey = keyof typeof steps;
 
@@ -46,6 +104,209 @@ function getNextStep(nextStep?: StepKey) {
     return next ?? FALLBACK_STEP;
   });
 }
+
+type AnyControl = InputNumber | InputString | RadioGroup;
+
+const number = (p: Omit<InputNumber, 'kind' | 'type'>): InputNumber => ({
+  kind: 'input',
+  type: 'number',
+  ...p
+})
+
+const interiorDoorTest = {
+  amount: number({
+    name: 'amount',
+    value: 1,
+    min: 1,
+  }),
+}
+
+interiorDoorTest.amount
+
+
+const simulators = {
+  interiorDoor: {
+    title: "Porte intérieure",
+    price: $(() => { }),
+    schema: {
+      type: "object",
+      properties: {
+        removal: {
+          type: "boolean",
+          label: "Dépose"
+        },
+        dimensions: {
+          type: "string",
+          enum: ["classic", "custom"]
+        },
+        materials: {
+          type: "string",
+          enum: ["low", "mid", "high"]
+        },
+        type: {
+          type: "string",
+          enum: ["battant", "sliding", "other"]
+        },
+        finition: {
+          type: "string",
+          enum: ["varnish", "raw", "paint"]
+        }
+      },
+      required: ["dimensions", "materials", "type", "finition"]
+    },
+  },
+  exteriorDoor: {
+    label: "Porte extérieur",
+    price: $(() => { }),
+    form: {}
+  },
+  interiorSteps: {
+    label: "Escalier intérieur",
+    price: $(() => { }),
+    form: {}
+  },
+  exteriorSteps: {
+    label: "Escalier extérieur",
+    price: $(() => { }),
+    form: {}
+  },
+  floor: {
+    label: "Sol",
+    price: $(() => { }),
+    form: {}
+  },
+  furniture: {
+    label: "Ammeublement",
+    price: $(() => { }),
+    form: {}
+  },
+  window: {
+    label: "Fenêtre",
+    price: $(() => { }),
+    form: {}
+  },
+  fence: {
+    label: "Portail",
+    price: $(() => { }),
+    form: {}
+  },
+  blinds: {
+    label: "Volets",
+    price: $(() => { }),
+    form: {}
+  },
+  deck: {
+    label: "Terrasse",
+    price: $(() => { }),
+    form: {}
+  }
+}
+// const simulators = {
+//   interiorDoor: {
+//     title: "Porte intérieur",
+//     price: $(() => { }),
+//     form: {
+//         removal: {
+//           type: checkbox,
+//           label: "Dépose",
+//           props: {
+//             required: true,
+//           }
+//         },
+//       select: {
+//         dimensions: {
+//           label: "Dimensions de la porte",
+//           props: {
+//             multiple: false
+//           },
+//           options: [
+//             { key: "classic", label: "Standard" },
+//             { key: "custom", label: "Sur-mesure" },
+//           ]
+//         },
+//         materials: {
+//           label: "Types de matérieux",
+//           props: {
+//             multiple: false
+//           },
+//           options: [
+//             { key: "low", label: "Entrée de gamme" },
+//             { key: "mid", label: "Moyenne gamme" },
+//             { key: "high", label: "Haut de gamme" },
+//           ]
+//         },
+//         type: {
+//           label: "Types de porte",
+//           props: {
+//             multiple: false
+//           },
+//           options: [
+//             { key: "battant", label: "Battante" },
+//             { key: "sliding", label: "Coulissante" },
+//             { key: "other", label: "Autre" },
+//           ]
+//         },
+//         finition: {
+//           label: "Type de finitions",
+//           props: {
+//             multiple: false
+//           },
+//           options: [
+//             { key: "varnish", label: "vernis" },
+//             { key: "raw", label: "brut" },
+//             { key: "paint", label: "peinture" },
+//           ]
+//         }
+//       }
+//     }
+//   },
+//   exteriorDoor: {
+//     label: "Porte extérieur",
+//     price: $(() => { }),
+//     form: {}
+//   },
+//   interiorSteps: {
+//     label: "Escalier intérieur",
+//     price: $(() => { }),
+//     form: {}
+//   },
+//   exteriorSteps: {
+//     label: "Escalier extérieur",
+//     price: $(() => { }),
+//     form: {}
+//   },
+//   floor: {
+//     label: "Sol",
+//     price: $(() => { }),
+//     form: {}
+//   },
+//   furniture: {
+//     label: "Ammeublement",
+//     price: $(() => { }),
+//     form: {}
+//   },
+//   window: {
+//     label: "Fenêtre",
+//     price: $(() => { }),
+//     form: {}
+//   },
+//   fence: {
+//     label: "Portail",
+//     price: $(() => { }),
+//     form: {}
+//   },
+//   blinds: {
+//     label: "Volets",
+//     price: $(() => { }),
+//     form: {}
+//   },
+//   deck: {
+//     label: "Terrasse",
+//     price: $(() => { }),
+//     form: {}
+//   }
+// }
+
 
 const task: MenuStep = {
   type: 'menu',

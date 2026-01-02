@@ -41,5 +41,8 @@
     "undici": "*",
     "vite": "7.1.11",
     "vite-tsconfig-paths": "^4.2.1"
+  },
+  "imports": {
+    "#theme": "./src/theme/index.css"
   }
 }

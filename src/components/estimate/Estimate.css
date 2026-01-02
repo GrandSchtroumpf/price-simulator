@@ -1,58 +1,42 @@
+@reference '#theme';
+
 .estimate {
   display: grid;
   gap: 48px;
   place-content: center;
   height: 100dvh;
 
+  &.is-visible {
+    & h2 {
+      @apply splitted-text;
+    }
+    & p {
+      --opacity-in: 0;
+      animation: fade 500ms 500ms var(--ease-out) backwards;
+    }
+  }
+  
   & hgroup,
-  .estimate-button {
-    --transform: translateY(100px);
+  & a {
+    --transform-in: translateY(calc(300px + var(--index) * 50px));
+    --transform-out: translateY(calc(-300px - var(--index) * 50px));
 
-    padding-inline: 8px;
     font-size: clamp(1.2rem, 2vw, 2rem);
-    line-height: 1.5;
 
-    animation-name: transform-in, fade-in;
-    animation-timeline: view(20%);
-    animation-duration: 1s;
-    animation-fill-mode: backwards;
-    animation-timing-function: cubic-bezier(0, 0.75, 0, 1);
+    animation-name: transform;
+    animation-timeline: view();
+    animation-timing-function: var(--ease-middle);
   }
 
   & hgroup h2 {
+    display: flex;
     padding-block: 16px;
     font-size: clamp(2rem, 4vw, 4rem);
     font-weight: 700;
   }
 
-  & .estimate-button {
-    padding: 24px 48px;
-    justify-self: center;
-    cursor: pointer;
-    color: var(--color-black);
-    background-color: var(--accent);
-    font-size: 1.5rem;
-    position: relative;
-    isolation: isolate;
-    border-top-left-radius: 30px;
-  }
-
-  & .estimate-button::after {
-    content: "";
-    position: absolute;
-    background-color: var(--accent);
-    width: 30px;
-    height: 30px;
-    left: 0;
-    top: 0;
-    z-index: -1;
-    transition: transform 400ms ease-in-out;
-    transform-origin: bottom right;
-    transform: scale(1);
-  }
-
-  & .estimate-button:hover::after {
-    transform: scale(0);
+  & a {
+    place-self: center;
   }
 }
 

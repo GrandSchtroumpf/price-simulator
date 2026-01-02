@@ -1,7 +1,6 @@
 body {
   --logo-duration: 2s;
   display: grid;
-  position: relative;
 }
 
 .wood-background {
@@ -18,4 +17,30 @@ body {
 main {
   display: grid;
   scroll-snap-align: center;
+  gap: 80px;
+}
+
+.simulator-link {
+  border: solid 2px var(--color-accent);
+  border-top-left-radius: 24px;
+  padding: 16px 24px;
+  font-size: 1.3rem;
+  overflow: clip;
+  isolation: isolate;
+  position: relative;
+  
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    transform: translateX(-100%);
+    background-color: var(--color-accent);
+    opacity: 0.5;
+  }
+  &:hover::before {
+    --transform-in: translateX(-100%) rotate(-45deg);
+    --transform-out: translateX(100%) rotate(-45deg);
+    animation: transform 500ms var(--ease-in-out);
+  }
 }

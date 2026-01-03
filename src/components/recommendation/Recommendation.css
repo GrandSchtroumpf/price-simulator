@@ -1,7 +1,7 @@
 .recommendation {
   display: grid;
   place-items: center;
-  min-height: 150dvh;
+  min-height: 175dvh;
   align-content: start;
   grid-template-columns: 1fr 1fr;
   gap: 32px;
@@ -30,7 +30,7 @@
   }
 
   & > ul > li {
-    --header-height: 8px;
+    --header-height: 80px;
 
     display: grid;
     grid-template-columns: min-content 1fr;
@@ -43,9 +43,13 @@
 
     padding: 16px 16px 12px 16px;
     width: clamp(100%, 2vw, 80%);
-    height: 200px;
+    min-height: 200px;
     border-top-left-radius: 24px;
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  
+    --transform-in: translateY(calc(150px + var(--index) * 5px));
+    animation-name: transform;
+    animation-timeline: view();
   }
 
   & > ul > li > p {
@@ -88,6 +92,7 @@
 
 @media (max-width: 768px) {
   .recommendation {
+    min-height: unset;
     grid-template-columns: 1fr;
     & h2 {
       grid-column: auto;
@@ -98,6 +103,7 @@
     }
 
     & ul {
+      padding-block: 0px;
       padding-inline: 4px;
     }
   }

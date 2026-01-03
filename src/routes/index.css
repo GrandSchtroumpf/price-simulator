@@ -5,13 +5,18 @@ body {
 
 .wood-background {
   position: absolute;
-  inset: 0;
   overflow: clip;
   display: grid;
   justify-items: center;
+  height: 2100px;
+  z-index: -1;
+  @media (width < 768px) {
+    height: 1100px;
+  }
 }
 .wood-veins {
-  height: 2100px;
+  transform: translateY(-200px); /* Hidden big node at the top */
+  height: 100%;
 }
 
 main {

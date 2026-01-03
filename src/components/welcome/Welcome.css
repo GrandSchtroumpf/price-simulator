@@ -18,7 +18,9 @@
     transform-origin: top center;
     justify-self: center;
 
-    @media (height < 800px) {
+    @media (height < 768px) {
+      width: 150px;
+      height: 150px;
       --transform-in: translateY(20dvh) scale(1); 
     }
 

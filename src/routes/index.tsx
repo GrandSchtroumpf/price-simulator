@@ -28,9 +28,6 @@ export default component$(() => {
 
   return (
     <>
-      <div class="wood-background">
-        <WoodVeins class="wood-veins" />
-      </div>
       <main>
         <Welcome />
         <Map />
@@ -39,6 +36,9 @@ export default component$(() => {
         <Estimate />
       </main>
       <Footer />
+      <div class="wood-background" aria-hidden="true">
+        <WoodVeins class="wood-veins" />
+      </div>
     </>
   )
 })

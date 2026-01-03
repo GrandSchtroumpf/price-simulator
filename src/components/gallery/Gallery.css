@@ -15,8 +15,8 @@
     margin: 0;
     width: 100%;
     max-width: 450px;
-    --transform-in: translateY(calc(200px - var(--index) * 20px));
-    --transform-out: translateY(calc(-200px + var(--index) * 20px));
+    --transform-in: translateY(calc(150px - var(--index) * 20px));
+    --transform-out: translateY(calc(-150px + var(--index) * 20px));
     animation-name: transform;
     animation-timeline: view();
   }

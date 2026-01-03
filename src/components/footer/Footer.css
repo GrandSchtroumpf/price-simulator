@@ -6,6 +6,21 @@
   background-color: var(--color-surface-2);
   border-top-left-radius: 24px;
   border-top-right-radius: 24px;
+
+  & hr {
+    border-top-width: 1px;
+    border-color: var(--color-outline);
+    opacity: 0.2;
+    width: 75%;
+    place-self: center;
+  }
+
+
+  & nav {
+    display: flex;
+    gap: 24px;
+  }
+
 }
 .footer-top {
   display: grid;
@@ -15,7 +30,7 @@
   & figure {
     display: flex;
     align-items: center;
-    gap: 32px;
+    gap: 24px;
   }
 
   & figcaption {
@@ -32,24 +47,22 @@
     justify-self: right;
   }
 
-  & + hr {
-    background-color: var(--color-outline);
-    opacity: 0.2;
-    width: 75%;
-    height: 1px;
-  }
 
   & > img {
     justify-self: end;
   }
+  
+
 }
 
 @media (max-width: 768px) {
+  .main-footer {
+    margin-inline: 0;
+  }
   .footer-top {
     grid-template-columns: 1fr;
     padding: 0;
     height: 30vh;
-    padding-bottom: 48px;
 
     & address {
       justify-self: left;
@@ -58,15 +71,11 @@
 
     & figure {
       margin: 0;
-      padding-inline: 24px;
     }
 
-    & + hr {
+    & hr {
       display: none;
     }
 
-    & + hr + nav {
-      padding: 24px 0 48px 0;
-    }
   }
 }

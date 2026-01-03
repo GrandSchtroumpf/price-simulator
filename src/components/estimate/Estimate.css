@@ -2,7 +2,7 @@
 
 .estimate {
   display: grid;
-  gap: 48px;
+  gap: 24px;
   place-content: center;
   height: 100dvh;
 
@@ -18,43 +18,44 @@
   
   & hgroup,
   & a {
-    --transform-in: translateY(calc(300px + var(--index) * 50px));
-    --transform-out: translateY(calc(-300px - var(--index) * 50px));
-
-    font-size: clamp(1.2rem, 2vw, 2rem);
-
+    --transform-in: translateY(calc(250px + var(--index) * 50px));
     animation-name: transform;
-    animation-timeline: view();
-    animation-timing-function: var(--ease-middle);
+    animation-timeline: view(40% 20%);
+    animation-fill-mode: backwards;
   }
-
+  
   & hgroup h2 {
     display: flex;
     padding-block: 16px;
-    font-size: clamp(2rem, 4vw, 4rem);
+    font-size: clamp(1.5rem, 4vw, 4rem);
     font-weight: 700;
+  }
+  & hgroup p {
+    font-size: clamp(1.2rem, 2vw, 2rem);
   }
 
   & a {
+    font-size: clamp(1.3rem, 2vw, 2rem);
     place-self: center;
   }
 }
 
 @media (max-width: 768px) {
   .estimate {
-    padding-top: 200px;
-
     & hgroup {
-      padding-inline: 8px;
+      padding-inline: 16px;
     }
 
     & hgroup h2 {
       text-align: center;
     }
 
-    & .estimate hgroup p {
-      padding-inline: 16px;
+    & hgroup p {
       text-align: justify;
+    }
+
+    & a {
+      --transform-in: translateY(100px);    
     }
   }
 }

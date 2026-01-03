@@ -1,7 +1,6 @@
 import { component$, useStyles$ } from "@qwik.dev/core";
-import { Logo } from "../logo/Logo";
+import { AnimatedLogo } from "../logo/Logo";
 import { SplittedText } from "../SplittedText";
-import ImgWoodenBoard from '~/media/wood-board.svg?jsx';
 import style from './Welcome.css?inline';
   
 
@@ -10,9 +9,10 @@ export const Welcome = component$(() => {
 
   return (
     <section id="welcome">
-      <ImgWoodenBoard class="wood-board" />
+      {/*eslint-disable-next-line qwik/jsx-img*/}
+      <img src="/imgs/wood-board.svg" class="wood-board" />
       <div class="calling-card">
-        <Logo width="200" height="200" class="logo" />
+        <AnimatedLogo />
         <hgroup>
           <h2 style="--index: 0">
             <SplittedText text="ERWAN RICHARD" mode="letter" />

@@ -17,6 +17,8 @@
   }
 
   & .logo {
+    width: 200px;
+    height: 200px;
     --transform-in: translateY(-200px) scale(1.3);
     --transform-out: translateY(0) scale(1);
     animation-name: transform;
@@ -30,7 +32,7 @@
     @media (height < 768px) {
       width: 150px;
       height: 150px;
-      --transform-in: translateY(-100px) scale(1.2); 
+      --transform-in: translateY(-80px) scale(1.2); 
     }
 
     & .hammer {
@@ -38,16 +40,13 @@
       --opacity-out: 1;
       animation-name: hammer-entry, fade;
       animation-duration: var(--logo-duration);
-      transform-box: fill-box;
       transform-origin: 50% 60%;
     }
-    & .border {
-      animation: draw 500ms 1.3s ease-out backwards;
-    }
-    & .border {
+    & .logo-border path {
       --size: 256;
       stroke-dashoffset: 0;
       stroke-dasharray: var(--size);
+      animation: draw 500ms 1.3s ease-out backwards;
     }
     & .hammer.right {
       --transform-0: translate(-30px, 40px) rotate(-60deg);

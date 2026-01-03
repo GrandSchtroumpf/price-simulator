@@ -8,10 +8,11 @@ body {
   overflow: clip;
   display: grid;
   justify-items: center;
-  height: 2100px;
+  min-height: 2100px;
+  min-width: 100%;
   z-index: -1;
   @media (width < 768px) {
-    height: 1100px;
+    min-height: 1100px;
   }
 }
 .wood-veins {

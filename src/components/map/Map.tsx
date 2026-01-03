@@ -8,7 +8,7 @@ export const Map = component$(() => {
   return (
     <section id="map">
       {/* eslint-disable-next-line qwik/jsx-img */}
-      <img src="/imgs/map.svg" width="1920" height="1080" />
+      <img fetchPriority="high" src="/imgs/map.svg" width="1920" height="1080" />
       <div class="location" style="--w:0.5;--h:0.5">
         <div class="circle second"></div>
         <div class="circle"></div>

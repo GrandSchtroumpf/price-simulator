@@ -32,6 +32,7 @@
   --ease-in-out: cubic-bezier(0.7, 0, 0.3, 1);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+  --ease-out-back: cubic-bezier(0.30, 1.70, 0.70, 1);
 }
 html {
   background-color: var(--color-surface-0);

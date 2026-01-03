@@ -1,23 +1,27 @@
 @reference "#theme";
+
 #welcome {
   display: grid;
   gap: 40px;
-  place-items: center;
-  place-content: center;
-  min-height: 100dvh;
+  min-height: 90dvh;
   position: relative;
   --opacity-out:0;
   animation-name: fade;
   animation-fill-mode: both;
   animation-timeline: view(0% 100%);
 
+  & .calling-card {
+    display: grid;
+    align-content: end;
+    gap: 24px;
+  }
 
   & .logo {
-    --transform-in: translateY(140px) scale(1.3);
+    --transform-in: translateY(-200px) scale(1.3);
     --transform-out: translateY(0) scale(1);
     animation-name: transform;
     animation-duration: 400ms;
-    animation-delay: calc(var(--logo-duration) + 500ms);
+    animation-delay: var(--logo-duration);
     animation-fill-mode: both;
     animation-timing-function: var(--ease-in-out);
     transform-origin: top center;
@@ -26,7 +30,7 @@
     @media (height < 768px) {
       width: 150px;
       height: 150px;
-      --transform-in: translateY(20dvh) scale(1); 
+      --transform-in: translateY(-100px) scale(1.2); 
     }
 
     & .hammer {
@@ -71,39 +75,34 @@
 
 
   & hgroup {
-    --transform-in: translateY(160px);
     display: grid;
     justify-items: center;
-    animation-name: transform;
-    animation-duration: 500ms;
-    animation-delay: calc(var(--logo-duration) + 500ms);
-    animation-fill-mode: backwards;
-    animation-timing-function: var(--ease-in-out);
+    text-transform: uppercase;
   }
   & h1 {
     display: flex;
-    font-size: clamp(1.5rem, 2.5vw, 4rem);
-    text-transform: uppercase;
-    --base-delay: var(--logo-duration);
+    font-size: clamp(2rem, 4vw, 5rem);
+    --base-delay: 200ms;
     @apply splitted-text;
   }
   & h2 {
-    --opacity-in: 0;
-    animation-name: fade;
-    animation-fill-mode: backwards;
-    animation-duration: 300ms;
-    animation-delay: calc(var(--logo-duration) + 50ms);
+    display: flex;
+    font-size: clamp(1.4rem, 2.5vw, 4rem);
     font-weight: 200;
-    font-size: clamp(1.3rem, 2vw, 3rem);
+    @apply splitted-text;
   }
 
   & a {
+    place-self: center;
     --transform-in: scale(0.9);
     --opacity-in: 0;
+    --opacity-out: 1;
     animation-name: transform, fade;
     animation-fill-mode: backwards;
-    animation-duration: 300ms;
-    animation-delay: calc(var(--logo-duration) + 500ms + 300ms);
+    animation-duration: 400ms;
+    animation-timing-function: var(--ease-in-out);
+    animation-delay: var(--logo-duration);
+    
   }
 }
 

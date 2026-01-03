@@ -31,7 +31,7 @@
     padding: var(--padding);
     position: sticky;
     top: 0;
-    animation-name: transform, fade-in;
+    animation-name: transform, fade;
     animation-duration: 500ms;
     animation-fill-mode: forwards;
     animation-timing-function: var(--ease-out);

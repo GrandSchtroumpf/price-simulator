@@ -1,12 +1,13 @@
 @utility splitted-text {
   & span {
-    --transform-in: translateY(100%); 
+    --transform-in: translateX(200%) scale(1.2); 
     --opacity-in: 0;
+    --opacity-out: 1;
     animation-name: transform, fade;
     animation-duration: 300ms;
     animation-fill-mode: backwards;
-    animation-timing-function: var(--ease-in-out);
-    animation-delay: calc(var(--base-delay, 0ms) + var(--index) * 10ms);
+    animation-timing-function: var(--ease-out);
+    animation-delay: calc(var(--base-delay, 0ms) + var(--index) * 30ms);
     animation-play-state: var(--playing);
   }
 }

@@ -59,15 +59,3 @@
     }
   }
 }
-
-@keyframes transform-in {
-  from {
-    transform: var(--transform);
-  }
-}
-
-@keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-}

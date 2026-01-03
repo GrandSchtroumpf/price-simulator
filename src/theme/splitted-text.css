@@ -1,6 +1,6 @@
 @utility splitted-text {
   & span {
-    --transform-in: translateX(200%) scale(1.2); 
+    --transform-in: translateX(150%) scale(0.8); 
     --opacity-in: 0;
     --opacity-out: 1;
     animation-name: transform, fade;

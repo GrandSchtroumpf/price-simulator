@@ -51,7 +51,6 @@
       --size: 256;
       stroke-dashoffset: 0;
       stroke-dasharray: var(--size);
-      will-change: stroke-dashoffset;
       animation: draw 500ms 1.3s ease-out backwards;
     }
     & .hammer.right {

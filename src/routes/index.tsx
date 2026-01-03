@@ -19,11 +19,6 @@ import style from './index.css?inline';
 
 export default component$(() => {
   useStyles$(style);
-  useOn('qidle', sync$(() => {
-    for (const link of document.querySelectorAll('preload-stylesheet')) {
-      (link as HTMLLinkElement).rel = 'stylesheet';
-    }
-  }));
   useOn('qvisible', sync$(() => {
     const observer = new IntersectionObserver((entries) => {
       for (const entry of entries) {
@@ -62,10 +57,10 @@ export const head: DocumentHead = {
   meta: [],
   links: [
     { rel: 'preload', href: '/fonts/Josefin Sans.woff2', as: 'font', type: 'font/woff2', crossOrigin: '' },
-    { rel: 'preload', href: MapLink, as: "style", class: "preload-stylesheet" },
-    { rel: 'preload', href: GalleryLink, as: "style", class: "preload-stylesheet" },
-    { rel: 'preload', href: RecommendationLink, as: "style", class: "preload-stylesheet" },
-    { rel: 'preload', href: EstimateLink, as: "style", class: "preload-stylesheet" },
-    { rel: 'preload', href: FooterLink, as: "style", class: "preload-stylesheet" },
+    { rel: 'preload', href: MapLink, as: "style", onload: "this.onload=null;this.rel='stylesheet'" } as any,
+    { rel: 'preload', href: GalleryLink, as: "style", onload: "this.onload=null;this.rel='stylesheet'" } as any,
+    { rel: 'preload', href: RecommendationLink, as: "style", onload: "this.onload=null;this.rel='stylesheet'" } as any,
+    { rel: 'preload', href: EstimateLink, as: "style", onload: "this.onload=null;this.rel='stylesheet'" } as any,
+    { rel: 'preload', href: FooterLink, as: "style", onload: "this.onload=null;this.rel='stylesheet'" } as any,
   ]
 };

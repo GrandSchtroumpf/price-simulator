@@ -94,6 +94,7 @@
 
   & a {
     place-self: center;
+    font-size: clamp(1.2rem, 1.5vw, 2rem);
     --transform-in: scale(0.9);
     --opacity-in: 0;
     --opacity-out: 1;

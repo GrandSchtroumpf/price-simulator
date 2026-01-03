@@ -26,13 +26,22 @@ main {
 }
 
 .simulator-link {
-  border: solid 2px var(--color-accent);
+  border-width: 2px;
+  border-color: transparent;
   border-top-left-radius: 24px;
   padding: 16px 24px;
   font-size: 1.3rem;
   overflow: clip;
   isolation: isolate;
   position: relative;
+  background:
+    linear-gradient(var(--color-surface-0), var(--color-surface-0)) padding-box,
+    linear-gradient(
+      200deg,
+      oklch(var(--lightness-outline) var(--accent-chroma) var(--hue)),
+      oklch(calc(var(--lightness-outline) + 20%) var(--accent-chroma) var(--hue)),
+      oklch(var(--lightness-outline) var(--accent-chroma) var(--hue))
+    ) border-box;
   
   &::before {
     content: "";

@@ -20,7 +20,7 @@ export default component$(() => {
     }, {
       threshold: [0.5]
     });
-    const sections = document.querySelectorAll('section,article');
+    const sections = document.querySelectorAll('section');
     for (const section of sections) {
       observer.observe(section);
     }

@@ -6,6 +6,11 @@
   place-content: center;
   min-height: 100dvh;
   position: relative;
+  --opacity-out:0;
+  animation-name: fade;
+  animation-fill-mode: both;
+  animation-timeline: view(0% 100%);
+
 
   & .logo {
     --transform-in: translateY(140px) scale(1.3);
@@ -93,8 +98,9 @@
   }
 
   & a {
+    --transform-in: scale(0.9);
     --opacity-in: 0;
-    animation-name: fade;
+    animation-name: transform, fade;
     animation-fill-mode: backwards;
     animation-duration: 300ms;
     animation-delay: calc(var(--logo-duration) + 500ms + 300ms);

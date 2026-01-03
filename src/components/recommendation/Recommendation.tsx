@@ -1,14 +1,19 @@
 import { component$, useStyles$ } from "@qwik.dev/core";
 import style from './Recommendation.css?inline';
+import { SplittedText } from "../SplittedText";
 
 export default component$(() => {
 	useStyles$(style);
 
 	return (
 		<section class="recommendation">
-			<h2>Avis clients</h2>
+			<h2>
+				<SplittedText text="Avis clients" mode="letter" />
+			</h2>
 
-			<img class="worker-img" src="/imgs/home/worker.webp" />
+			<div class="worker-img">
+				<img src="/imgs/home/worker.webp" />
+			</div>
 
 			<ul style="--index: 0">
 				<li>

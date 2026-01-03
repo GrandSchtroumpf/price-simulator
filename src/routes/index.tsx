@@ -6,11 +6,24 @@ import Gallery from "~/components/gallery/Gallery";
 import Recommendation from "~/components/recommendation/Recommendation";
 import Estimate from "~/components/estimate/Estimate";
 import Footer from "~/components/footer/Footer";
+
+import MapLink from "~/components/map/Map.css?url";
+
+import GalleryLink from "~/components/gallery/Gallery.css?url";
+import RecommendationLink from "~/components/recommendation/Recommendation.css?url";
+import EstimateLink from "~/components/estimate/Estimate.css?url";
+import FooterLink from "~/components/footer/Footer.css?url";
+
 import WoodVeins from '~/media/wood-veins.svg?jsx';
 import style from './index.css?inline';
 
 export default component$(() => {
   useStyles$(style);
+  useOn('qidle', sync$(() => {
+    for (const link of document.querySelectorAll('preload-stylesheet')) {
+      (link as HTMLLinkElement).rel = 'stylesheet';
+    }
+  }));
   useOn('qvisible', sync$(() => {
     const observer = new IntersectionObserver((entries) => {
       for (const entry of entries) {
@@ -48,6 +61,11 @@ export const head: DocumentHead = {
   title: "Le P'tit Menuisier",
   meta: [],
   links: [
-    { rel: 'preload', href: '/fonts/Josefin Sans.woff2', as: 'font', type: 'font/woff2', crossOrigin: '' }
+    { rel: 'preload', href: '/fonts/Josefin Sans.woff2', as: 'font', type: 'font/woff2', crossOrigin: '' },
+    { rel: 'preload', href: MapLink, as: "style", class: "preload-stylesheet" },
+    { rel: 'preload', href: GalleryLink, as: "style", class: "preload-stylesheet" },
+    { rel: 'preload', href: RecommendationLink, as: "style", class: "preload-stylesheet" },
+    { rel: 'preload', href: EstimateLink, as: "style", class: "preload-stylesheet" },
+    { rel: 'preload', href: FooterLink, as: "style", class: "preload-stylesheet" },
   ]
 };

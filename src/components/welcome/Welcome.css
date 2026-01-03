@@ -15,8 +15,9 @@
     align-content: end;
     gap: 24px;
   }
-
   & .logo {
+    display: grid;
+    grid-template-areas: 'stack';
     width: 200px;
     height: 200px;
     --transform-in: translateY(-200px) scale(1.3);
@@ -28,6 +29,10 @@
     animation-timing-function: var(--ease-in-out);
     transform-origin: top center;
     justify-self: center;
+
+    & > * {
+      grid-area: stack;
+    }
 
     @media (height < 768px) {
       width: 150px;

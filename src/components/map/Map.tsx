@@ -1,10 +1,6 @@
-import { component$, useStyles$} from "@qwik.dev/core";
-import style from './Map.css?inline';
+import { component$ } from "@qwik.dev/core";
 
 export const Map = component$(() => {
-  useStyles$(style);
-
-
   return (
     <section id="map">
       {/* eslint-disable-next-line qwik/jsx-img */}

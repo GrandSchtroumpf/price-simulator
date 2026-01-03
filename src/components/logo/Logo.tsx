@@ -1,16 +1,7 @@
-import { component$, PropsOf, useStyles$ } from "@qwik.dev/core";
+import { component$, PropsOf } from "@qwik.dev/core";
 
 // Note: We need to wrap the svg inside the div to use accelerated animation
 export const AnimatedLogo = component$(() => {
-  useStyles$(`
-    .logo {
-      display: grid;
-      grid-template-areas: 'stack';
-    }
-    .logo > * {
-      grid-area: stack;
-    }
-  `)
   return (
     <div class="logo">
       <div class="hammer left">

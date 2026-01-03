@@ -1,8 +1,6 @@
-import { component$, useStyles$ } from "@qwik.dev/core";
-import style from './Footer.css?inline';
+import { component$ } from "@qwik.dev/core";
 
 export default component$(() => {
-	useStyles$(style);
 
 	return (
 		<footer class="main-footer">

@@ -1,6 +1,9 @@
-import { component$ } from "@qwik.dev/core";
+import { component$, useStyles$ } from "@qwik.dev/core";
+import style from './Recommendation.css?inline';
 
 export default component$(() => {
+	useStyles$(style);
+
 	return (
 		<section class="recommendation">
 			<h2>Avis clients</h2>

@@ -7,13 +7,6 @@ import Recommendation from "~/components/recommendation/Recommendation";
 import Estimate from "~/components/estimate/Estimate";
 import Footer from "~/components/footer/Footer";
 
-import MapLink from "~/components/map/Map.css?url";
-
-import GalleryLink from "~/components/gallery/Gallery.css?url";
-import RecommendationLink from "~/components/recommendation/Recommendation.css?url";
-import EstimateLink from "~/components/estimate/Estimate.css?url";
-import FooterLink from "~/components/footer/Footer.css?url";
-
 import WoodVeins from '~/media/wood-veins.svg?jsx';
 import style from './index.css?inline';
 
@@ -57,10 +50,5 @@ export const head: DocumentHead = {
   meta: [],
   links: [
     { rel: 'preload', href: '/fonts/Josefin Sans.woff2', as: 'font', type: 'font/woff2', crossOrigin: '' },
-    { rel: 'preload', href: MapLink, as: "style", onload: "this.onload=null;this.rel='stylesheet'" } as any,
-    { rel: 'preload', href: GalleryLink, as: "style", onload: "this.onload=null;this.rel='stylesheet'" } as any,
-    { rel: 'preload', href: RecommendationLink, as: "style", onload: "this.onload=null;this.rel='stylesheet'" } as any,
-    { rel: 'preload', href: EstimateLink, as: "style", onload: "this.onload=null;this.rel='stylesheet'" } as any,
-    { rel: 'preload', href: FooterLink, as: "style", onload: "this.onload=null;this.rel='stylesheet'" } as any,
   ]
 };

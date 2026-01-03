@@ -1,7 +1,9 @@
-import { component$ } from "@qwik.dev/core";
+import { component$, useStyles$ } from "@qwik.dev/core";
 import { SplittedText } from "../SplittedText";
+import style from './Estimate.css?inline';
 
 export default component$(() => {
+	useStyles$(style);
 	return (
 		<section class="estimate">
 			<hgroup style="--index: 1">

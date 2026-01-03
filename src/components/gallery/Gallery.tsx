@@ -1,8 +1,8 @@
-import { component$ } from "@qwik.dev/core";
-
+import { component$, useStyles$ } from "@qwik.dev/core";
+import style from './Gallery.css?inline';
 
 export default component$(() => {
-
+	useStyles$(style);
 	return (
 		<section class="gallery">
 			<figure style="--index:1">

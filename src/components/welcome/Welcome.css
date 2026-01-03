@@ -51,6 +51,7 @@
       --size: 256;
       stroke-dashoffset: 0;
       stroke-dasharray: var(--size);
+      will-change: stroke-dashoffset;
       animation: draw 500ms 1.3s ease-out backwards;
     }
     & .hammer.right {
@@ -85,7 +86,7 @@
   }
   & h1 {
     display: flex;
-    font-size: clamp(2rem, 4vw, 5rem);
+    font-size: clamp(1.9rem, 4vw, 5rem);
     --base-delay: 200ms;
     @apply splitted-text;
   }

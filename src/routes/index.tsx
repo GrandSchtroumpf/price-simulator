@@ -1,4 +1,4 @@
-import { component$, useOn, $, useStyles$ } from "@qwik.dev/core";
+import { component$, useOn, useStyles$, sync$ } from "@qwik.dev/core";
 import { DocumentHead } from "@qwik.dev/router";
 import { Map } from "~/components/map/Map";
 import { Welcome } from "~/components/welcome/Welcome";
@@ -11,7 +11,7 @@ import style from './index.css?inline';
 
 export default component$(() => {
   useStyles$(style);
-  useOn('qvisible', $(() => {
+  useOn('qvisible', sync$(() => {
     const observer = new IntersectionObserver((entries) => {
       for (const entry of entries) {
         if (entry.intersectionRatio > 0.5) entry.target.classList.add('is-visible');

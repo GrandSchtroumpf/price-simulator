@@ -1,0 +1,32 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "headers": [
+    {
+      "source": "/build/q-*.js",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "Cache-Control: public, max-age=43800, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/assets/*-bundle-graph.json",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "Cache-Control: public, max-age=43800, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/assets/*-style.css",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "Cache-Control: public, max-age=43800, immutable"
+        }
+      ]
+    }
+  ]
+}

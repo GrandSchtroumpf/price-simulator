@@ -2,7 +2,7 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "headers": [
     {
-      "source": "/build/q-*.js",
+      "source": "/build/*.js",
       "headers": [
         {
           "key": "Cache-Control",
@@ -11,16 +11,7 @@
       ]
     },
     {
-      "source": "/assets/*-bundle-graph.json",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "Cache-Control: public, max-age=43800, immutable"
-        }
-      ]
-    },
-    {
-      "source": "/assets/*-style.css",
+      "source": "/assets/*",
       "headers": [
         {
           "key": "Cache-Control",

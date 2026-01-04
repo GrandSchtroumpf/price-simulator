@@ -22,6 +22,8 @@ export default component$(() => {
             href={`${import.meta.env.BASE_URL}manifest.json`}
           />
         )}
+        <meta name="theme-color" content="#e4e1da" media="(prefers-color-scheme: light)" />
+        <meta name="theme-color" content="#080501" media="(prefers-color-scheme: dark)" />
         <RouterHead />
       </head>
       <body lang="en">

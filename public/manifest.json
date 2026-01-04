@@ -1,9 +1,14 @@
 {
   "$schema": "https://json.schemastore.org/web-manifest-combined.json",
-  "name": "qwik-project-name",
-  "short_name": "Welcome to Qwik",
+  "name": "Le P'tit Menuisier",
+  "short_name": "Le P'tit Menuisier",
   "start_url": ".",
   "display": "standalone",
-  "background_color": "#fff",
-  "description": "A Qwik project app."
+  "background_color": "#e4e1da",
+  "theme_color": "#e4e1da",
+  "description": "Site web de Erwan Richard, menuisier",
+  "icons": [{
+    "src": "/favicon.svg",
+    "sizes": "any"
+  }]
 }

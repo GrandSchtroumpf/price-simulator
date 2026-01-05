@@ -18,6 +18,15 @@
           "value": "public, max-age=43800, immutable"
         }
       ]
+    },
+    {
+      "source": "/fonts/Josefin Sans.woff2",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=43800, immutable"
+        }
+      ]
     }
   ]
 }

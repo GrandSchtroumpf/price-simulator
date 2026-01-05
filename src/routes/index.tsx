@@ -49,6 +49,6 @@ export const head: DocumentHead = {
   title: "Le P'tit Menuisier",
   meta: [],
   links: [
-    { rel: 'preload', href: '/fonts/Josefin Sans.woff2', as: 'font', type: 'font/woff2', crossOrigin: '' },
+    { rel: 'preload', href: '/fonts/JosefinSans.woff2', as: 'font', type: 'font/woff2', crossOrigin: '' },
   ]
 };

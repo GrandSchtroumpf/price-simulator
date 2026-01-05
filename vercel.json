@@ -20,7 +20,7 @@
       ]
     },
     {
-      "source": "/fonts/Josefin Sans.woff2",
+      "source": "/fonts/JosefinSans.woff2",
       "headers": [
         {
           "key": "Cache-Control",

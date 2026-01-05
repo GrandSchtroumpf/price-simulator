@@ -9,7 +9,7 @@ export default component$(() => {
 			<h2>Avis clients</h2>
 
 			<div class="worker-img">
-				<img loading="lazy" src="/imgs/home/worker.webp" />
+				<img loading="lazy" src="/imgs/home/worker.webp" alt="Artisan travaillant le bois" />
 			</div>
 
 			<ul style="--index: 0">

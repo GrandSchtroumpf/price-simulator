@@ -31,7 +31,7 @@ export default component$(() => {
                     </h1>
                 </hgroup>
 
-                <a class="estimate-button" href="#" style="--index: 4">Simuler un devis</a>
+                <a class="estimate-button" href="/simulateur" style="--index: 4">Simuler un devis</a>
             </div>
         </section>
     )

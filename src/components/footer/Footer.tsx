@@ -8,10 +8,10 @@ export default component$(() => {
 			<section class="footer-top">
 				<figure>
 					<img
-							src="/favicon.svg"
-							width="80"
-							height="80"
-							alt="Représentation d'un blason contenant deux marteaux"
+						src="/favicon.svg"
+						width="80"
+						height="80"
+						alt="Représentation d'un blason contenant deux marteaux"
 					/>
 					<figcaption>Erwan RICHARD Menuisier</figcaption>
 				</figure>
@@ -26,7 +26,7 @@ export default component$(() => {
 
 			<nav>
 				<a href="#">Mes réalisations</a>
-				<a href="#">Simuler un devis</a>
+				<a href="/simulateur">Simuler un devis</a>
 			</nav>
 		</footer>
 	)

@@ -1,7 +1,12 @@
-import { component$, PropsOf } from "@qwik.dev/core";
+import { component$, PropsOf, useStyles$ } from "@qwik.dev/core";
 
 // Note: We need to wrap the svg inside the div to use accelerated animation
 export const AnimatedLogo = component$(() => {
+  useStyles$(`
+    .logo-border path {
+      will-change: stroke-dashoffset;
+    }
+  `);
   return (
     <div class="logo">
       <div class="hammer left">
@@ -16,7 +21,7 @@ export const AnimatedLogo = component$(() => {
       </div>
       <div class="logo-border">
         <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 100 100">
-          <path fill="none" stroke="currentColor" d="M50 97 3 50 35 20C45 10 55 10 65 20L97 50Z" />
+          <path fill="none" stroke="currentColor" d="M50 97 3 50 35 20C45 10 55 10 65 20L97 50Z" onAnimationEnd$={(_, el) => el.style.setProperty('will-change', 'auto')} />
         </svg>
       </div>
     </div>

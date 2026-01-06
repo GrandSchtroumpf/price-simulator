@@ -56,7 +56,7 @@
     & .footer-top {
       grid-template-columns: 1fr;
       padding: 0;
-      height: 30vh;
+      min-height: 30vh;
 
       & address {
         justify-self: center;

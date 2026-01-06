@@ -9,7 +9,7 @@ import Footer from "~/components/footer/Footer";
 
 import WoodVeins from '~/media/wood-veins.svg?jsx';
 import style from './index.css?inline';
-import { homeSchema } from "~/schemas/home-schemas";
+import homeSchema from "~/schemas/home-schemas.json";
 
 export default component$(() => {
   useStyles$(style);

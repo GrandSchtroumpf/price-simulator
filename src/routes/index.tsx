@@ -9,6 +9,7 @@ import Footer from "~/components/footer/Footer";
 
 import WoodVeins from '~/media/wood-veins.svg?jsx';
 import style from './index.css?inline';
+import { homeSchema } from "~/schemas/home-schemas";
 
 export default component$(() => {
   useStyles$(style);
@@ -29,6 +30,10 @@ export default component$(() => {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={JSON.stringify(homeSchema)}
+      />
       <main>
         <Welcome />
         <Map />

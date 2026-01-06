@@ -6,11 +6,7 @@ interface InputNumberProps {
 }
 
 export default component$<InputNumberProps>(({ control }) => {
-  if (control.kind !== 'input' || control.type !== 'number') return;
-
-  const onSubmit = $((form: HTMLFormElement) => {
-    const formData = new FormData(form);
-  });
+  if (control.kind !== 'input' || control.type !== 'number') return null;
 
   return (
     <>

@@ -6,7 +6,7 @@ interface CheckListProps {
 }
 
 export default component$<CheckListProps>(({ control }) => {
-  if (control.kind !== 'checklist') return;
+  if (control.kind !== 'checklist') return null;
 
   const onSubmit = $((form: HTMLFormElement) => {
     const formData = new FormData(form);
@@ -18,7 +18,7 @@ export default component$<CheckListProps>(({ control }) => {
       <p>{control.legend}</p>
       {control.options.map((option) => (
         <div>
-          <input type="checkbox" id={option.value} name={control.name} value={option.value}/>
+          <input type="checkbox" id={option.value} name={control.name} value={option.value} />
           <label for={option.value}>{option.label}</label>
         </div>
       ))}

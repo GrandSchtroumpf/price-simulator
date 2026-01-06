@@ -1,8 +1,10 @@
 export type ControlTypes = CheckList | CheckBox | RadioGroup | InputNumber | InputString;
 export type ControlKind = ControlTypes['kind'];
+export type StepKey = keyof typeof stepsRecord;
 
 export type Step = {
   controls: ControlTypes[];
+  label: string;
 };
 
 export interface Control<T> {
@@ -96,6 +98,7 @@ const interiorDoorTest = {
 // };
 
 export const window: Step = {
+  label: 'Fenêtre',
   controls: [
     number({
       label: 'Combien de fenêtres avez-vous à déposer ?',
@@ -113,6 +116,7 @@ export const window: Step = {
 }
 
 export const door: Step = {
+  label: 'Porte',
   controls: [
     number({
       label: 'Combien de portes avez-vous à déposer ?',
@@ -133,5 +137,3 @@ export const stepsRecord = {
   window,
   door
 }
-
-export const stepKeys = Object.keys(stepsRecord);

@@ -34,7 +34,7 @@ export const Welcome = component$(() => {
           <span style="--index: 16">R</span>
         </h1>
       </hgroup>
-      <a href="#" style="--index: 3">Simuler un devis</a>
+      <a href="sim" style="--index: 3">Simuler un devis</a>
     </section>
   )
 })

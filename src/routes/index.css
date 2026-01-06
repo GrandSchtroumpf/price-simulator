@@ -38,12 +38,15 @@ main {
   background:
     linear-gradient(var(--color-surface-0), var(--color-surface-0)) padding-box,
     linear-gradient(
-      200deg,
-      oklch(var(--lightness-outline) var(--accent-chroma) var(--hue)),
-      oklch(calc(var(--lightness-outline) + 20%) var(--accent-chroma) var(--hue)),
-      oklch(var(--lightness-outline) var(--accent-chroma) var(--hue))
-    ) border-box;
-  
+        200deg,
+        oklch(var(--lightness-outline) var(--accent-chroma) var(--hue)),
+        oklch(
+          calc(var(--lightness-outline) + 20%) var(--accent-chroma) var(--hue)
+        ),
+        oklch(var(--lightness-outline) var(--accent-chroma) var(--hue))
+      )
+      border-box;
+
   &::before {
     content: "";
     position: absolute;
@@ -57,5 +60,17 @@ main {
     --transform-in: translateX(-100%) rotate(-45deg);
     --transform-out: translateX(100%) rotate(-45deg);
     animation: transform 500ms var(--ease-in-out);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .simulator-link {
+    transition: background 150ms ease;
+
+    &:hover {
+      background: oklch(
+        var(--lightness-outline) var(--accent-chroma) var(--hue) / 0.95
+      );
+    }
   }
 }

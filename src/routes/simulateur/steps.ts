@@ -105,8 +105,6 @@ function getNextStep(nextStep?: StepKey) {
   });
 }
 
-type AnyControl = InputNumber | InputString | RadioGroup;
-
 const number = (p: Omit<InputNumber, 'kind' | 'type'>): InputNumber => ({
   kind: 'input',
   type: 'number',
@@ -119,9 +117,7 @@ const interiorDoorTest = {
     value: 1,
     min: 1,
   }),
-}
-
-interiorDoorTest.amount
+};
 
 
 const simulators = {

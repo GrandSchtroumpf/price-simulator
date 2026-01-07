@@ -52,6 +52,6 @@ export const head: DocumentHead = {
     { rel: 'preload', href: '/fonts/JosefinSans.woff2', as: 'font', type: 'font/woff2', crossOrigin: '' },
   ],
   scripts: [
-    { props: { type: "application/ld+json" }, script: homeSchema }
+    { type: "application/ld+json", script: homeSchema }
   ]
 };

@@ -9,6 +9,7 @@ import Footer from "~/components/footer/Footer";
 
 import WoodVeins from '~/media/wood-veins.svg?jsx';
 import style from './index.css?inline';
+import homeSchema from "~/schemas/home-schemas.json?raw";
 
 export default component$(() => {
   useStyles$(style);
@@ -44,11 +45,13 @@ export default component$(() => {
   )
 })
 
-
 export const head: DocumentHead = {
   title: "Le P'tit Menuisier",
   meta: [],
   links: [
     { rel: 'preload', href: '/fonts/JosefinSans.woff2', as: 'font', type: 'font/woff2', crossOrigin: '' },
+  ],
+  scripts: [
+    { type: "application/ld+json", script: homeSchema }
   ]
 };

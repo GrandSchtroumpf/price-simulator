@@ -47,11 +47,25 @@ export default component$(() => {
 
 export const head: DocumentHead = {
   title: "Le P'tit Menuisier",
-  meta: [],
+  meta: [
+    {
+      name: 'description',
+      content: 'Le P\'tit Menuisier : menuiserie artisanale de qualité en Ille-et-Vilaine. Erwan Richard réalise vos projets sur-mesure : meubles, aménagements intérieurs et extérieurs, rénovation. Devis gratuit.',
+    },
+    {
+      name: 'keywords',
+      content: 'menuisier, menuiserie artisanale, meubles sur-mesure, aménagement intérieur, aménagement extérieur, Redon, Ille-et-Vilaine, Erwan Richard',
+    }
+  ],
   links: [
     { rel: 'preload', href: '/fonts/JosefinSans.woff2', as: 'font', type: 'font/woff2', crossOrigin: '' },
   ],
   scripts: [
-    { type: "application/ld+json", script: homeSchema }
-  ]
+    {
+      props: {
+        type: "application/ld+json"
+      },
+      script: homeSchema
+    }
+  ],
 };

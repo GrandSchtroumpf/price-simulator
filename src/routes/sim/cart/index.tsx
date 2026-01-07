@@ -1,4 +1,4 @@
-import { component$, useContext } from "@qwik.dev/core";
+import { component$, useContext, $ } from "@qwik.dev/core";
 import { cartContext } from "../layout";
 import { type Item, type Step, stepsRecord } from "../steps";
 
@@ -19,23 +19,24 @@ const getStepLabelList = (stepKey: string, step: Step) => {
   return labelList;
 }
 
-const ItemCard = component$((props: { item: Item, index: number }) => {
-  const { item, index } = props;
-  const { stepKey, data } = item;
+const ItemCard = component$((props: { index: number, cart: Item[] }) => {
+  const { index, cart } = props;
+  const { stepKey, data } = cart[index]
   const step = stepsRecord[stepKey];
   const labelList = getStepLabelList(stepKey, step);
+
   return (
     <section>
       <div>
         <h3>{step.label}</h3>
         <a href={`../${stepKey}?index=${index}`}>Edit</a>
+        <button onClick$={() => { cart.splice(index, 1) }}>Delete</button>
       </div>
       <ul>
         {Object.entries(data).map(([key, value]) => {
-          const v = value;
-          const displayValue = v instanceof Array
-            ? v.map((answer) => labelList[answer]).join(' / ')
-            : v;
+          const displayValue = value instanceof Array
+            ? value.map((answer) => labelList[answer]).join(' / ')
+            : value;
           return <li>{labelList[key]} {displayValue}</li>
         })}
       </ul>
@@ -48,8 +49,8 @@ export default component$(() => {
   return (
     <>
       <h1>Validation devis</h1>
-      {cart.map((item: Item, i) => {
-        return <ItemCard item={item} index={i} />
+      {cart.map((_, i) => {
+        return <ItemCard index={i} cart={cart} />
       })}
     </>
   )

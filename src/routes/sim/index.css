@@ -1,0 +1,16 @@
+ul {
+  display: flex;
+  justify-content: space-between;
+  width: 50%;
+  margin: 16px auto;
+
+  a {
+    border: solid 1px black;
+    cursor: pointer;
+    padding: 8px 16px;
+  }
+
+  a:hover{
+    background-color: rgb(165, 210, 210);
+  }
+}

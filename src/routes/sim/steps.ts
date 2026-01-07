@@ -1,6 +1,12 @@
 export type ControlTypes = CheckList | CheckBox | RadioGroup | InputNumber | InputString;
 export type ControlKind = ControlTypes['kind'];
 export type StepKey = keyof typeof stepsRecord;
+type InputTypes = string | string[] | number | number[];
+
+export interface Item {
+  stepKey: StepKey;
+  data: Record<string, InputTypes>;
+}
 
 export type Step = {
   controls: ControlTypes[];
@@ -47,7 +53,8 @@ export interface CheckList extends Control<'checklist'> {
   legend: string;
   options: {
     label: string;
-    value: string
+    value: string;
+    checked?: boolean;
   }[];
 }
 
@@ -55,7 +62,8 @@ interface RadioGroup extends Control<'radiogroup'> {
   legend: string;
   options: {
     label: string;
-    value: string
+    value: string;
+    checked?: boolean;
   }[];
 }
 
@@ -65,15 +73,16 @@ const number = (p: Omit<InputNumber, 'kind' | 'type'>): InputNumber => ({
   ...p
 })
 
-const interiorDoorTest = {
-  amount: number({
-    name: 'amount',
-    value: 1,
-    min: 1,
-  }),
-};
+// const interiorDoorTest = {
+//   amount: number({
+//     name: 'amount',
+//     value: 1,
+//     min: 1,
+//   }),
+// };
 
-// export const root: Step = {
+// const test: Step = {
+//   label: "test",
 //   controls: [
 //     {
 //       name: 'start',
@@ -97,14 +106,14 @@ const interiorDoorTest = {
 //   ]
 // };
 
-export const window: Step = {
+const window: Step = {
   label: 'Fenêtre',
   controls: [
     number({
       label: 'Combien de fenêtres avez-vous à déposer ?',
       name: 'removal',
       min: 0,
-      max: 10
+      max: 10,
     }),
     number({
       label: 'Combien de fenêtres souhaitez-vous installer ?',
@@ -115,7 +124,7 @@ export const window: Step = {
   ]
 }
 
-export const door: Step = {
+const door: Step = {
   label: 'Porte',
   controls: [
     number({
@@ -133,7 +142,34 @@ export const door: Step = {
   ]
 }
 
+const stairs: Step = {
+  label: 'Escalier',
+  controls: [
+  ]
+}
+
+const furniture: Step = {
+  label: 'Mobilier',
+  controls: [
+  ]
+}
+
+const floor: Step = {
+  label: 'Sol',
+  controls: [
+  ]
+}
+
+const gate: Step = {
+  label: 'Portail',
+  controls: [
+  ]
+}
+
 export const stepsRecord = {
   window,
-  door
+  door,
+  stairs,
+  furniture,
+  floor,
 }

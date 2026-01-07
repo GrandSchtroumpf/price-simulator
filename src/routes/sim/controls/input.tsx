@@ -11,7 +11,7 @@ export default component$<InputNumberProps>(({ control }) => {
   return (
     <>
       <label>{control.label}</label>
-      <input type='number' name={control.name} min={control.min} max={control.max} />
+      <input type='number' name={control.name} min={control.min} max={control.max} value={control.value} />
     </>
   );
 });

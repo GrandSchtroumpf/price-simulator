@@ -1,10 +1,12 @@
 import { component$, createContextId, Slot, useContextProvider, useStore, useVisibleTask$ } from "@qwik.dev/core";
 import { unwrapStore } from "@qwik.dev/core/internal";
+import type { Item } from "./steps";
 
-export const cartContext = createContextId<any[]>('cart');
+
+export const cartContext = createContextId<Item[]>('cart');
 
 export default component$(() => {
-  const cart = useStore<any[]>([]);
+  const cart = useStore<Item[]>([]);
   useContextProvider(cartContext, cart);
 
   useVisibleTask$(() => {
@@ -14,12 +16,12 @@ export default component$(() => {
     for (const item of items) {
       cart.push(item);
     }
-  });
+  }, { strategy: 'document-ready' });
   useVisibleTask$(({ track }) => {
     track(cart);
     const unwrap = unwrapStore(cart);
     localStorage.setItem('cart', JSON.stringify(unwrap));
-  });
+  }, { strategy: 'document-ready' });
   return (
     <Slot />
   )

@@ -102,14 +102,6 @@
     );
   }
 
-  /* @media not(prefers-reduced-motion: reduce) {
-    &:not(.is-visible) .location {
-      transform: translateY(10px);
-      opacity: 0;
-      transition: all 0.1s var(--ease-in);
-    }
-  } */
-
   &.is-visible .location {
     transform: translateY(0);
     opacity: 1;

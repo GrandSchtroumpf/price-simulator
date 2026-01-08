@@ -55,10 +55,60 @@ export const head: DocumentHead = {
     {
       name: 'keywords',
       content: 'menuisier, menuiserie artisanale, meubles sur-mesure, aménagement intérieur, aménagement extérieur, Redon, Ille-et-Vilaine, Erwan Richard',
+    },
+    {
+      property: 'og:url',
+      content: 'https://price-simulator-orpin.vercel.app/'
+    },
+    {
+      property: 'og:image',
+      content: 'https://price-simulator-orpin.vercel.app/og/og-image.jpg'
+    },
+    {
+      property: 'og:image:type',
+      content: 'image/jpeg'
+    },
+    {
+      property: 'og:image:width',
+      content: '1200'
+    },
+    {
+      property: 'og:image:height',
+      content: '630'
+    },
+    {
+      property: 'og:image:alt',
+      content: 'Carte de visite de Erwan Richard"'
+    },
+    {
+      property: 'og:image',
+      content: 'https://price-simulator-orpin.vercel.app/og/og-square.jpg'
+    },
+    {
+      property: 'og:image:type',
+      content: 'image/jpeg'
+    },
+    {
+      property: 'og:image:width',
+      content: '600'
+    },
+    {
+      property: 'og:image:height',
+      content: '600'
+    },
+    {
+      property: 'og:image:alt',
+      content: 'Logo de Erwan Richard"'
     }
   ],
   links: [
-    { rel: 'preload', href: '/fonts/JosefinSans.woff2', as: 'font', type: 'font/woff2', crossOrigin: '' },
+    {
+      rel: 'preload',
+      href: '/fonts/JosefinSans.woff2',
+      as: 'font',
+      type: 'font/woff2',
+      crossOrigin: ''
+    },
   ],
   scripts: [
     {

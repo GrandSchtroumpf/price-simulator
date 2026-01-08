@@ -80,26 +80,6 @@ export const head: DocumentHead = {
       property: 'og:image:alt',
       content: 'Carte de visite de Erwan Richard"'
     },
-    {
-      property: 'og:image',
-      content: 'https://price-simulator-orpin.vercel.app/og/og-square.jpg'
-    },
-    {
-      property: 'og:image:type',
-      content: 'image/jpeg'
-    },
-    {
-      property: 'og:image:width',
-      content: '600'
-    },
-    {
-      property: 'og:image:height',
-      content: '600'
-    },
-    {
-      property: 'og:image:alt',
-      content: 'Logo de Erwan Richard"'
-    }
   ],
   links: [
     {

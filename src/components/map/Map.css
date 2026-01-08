@@ -1,19 +1,20 @@
 #map {
   --padding: 24px;
-
   --ratio: 1920 / 1080;
+  --img-container-height: 100dvh;
   --img-container-width: calc(100dvw - var(--padding) * 2);
-  --img-height: calc(100dvh - var(--padding) * 2);
+  --img-height: calc(var(--img-container-height) - var(--padding) * 2);
   --img-width: calc(var(--ratio) * var(--img-height));
   --delta: calc((var(--img-width) - min(var(--img-width), var(--img-container-width))) / 2);
   display: grid;
-  height: 100dvh;
+  height: var(--img-container-height);
   position: relative;
   padding: var(--padding);
   overflow: clip;
   margin: auto;
   @media (width < 600px) {
-    --padding: 0px;
+    --img-container-height: 80dvh;
+    --padding: 8px;
   }
   
   & img {
@@ -24,48 +25,6 @@
     object-fit: cover;
   }
 
-  /*
-  & .imgs {
-    --transform-in: scale(1.2);
-    grid-area: welcome;
-    position: relative;
-    padding: var(--padding);
-    position: sticky;
-    top: 0;
-    animation-name: transform, fade;
-    animation-duration: 500ms;
-    animation-fill-mode: forwards;
-    animation-timing-function: var(--ease-out);
-    
-    view-timeline: --progress;
-    view-timeline-inset: 20% auto;
-  }
-  
-  
-  & .imgs .img-filter {
-    background-color: oklch(var(--lightness-0) var(--neutral-chroma) var(--hue) / 80%);
-    --opacity-out: 0;
-    position: absolute;
-    inset: 0;
-    animation-name: fade;
-    animation-fill-mode: forwards;
-    animation-timeline: view(100%);
-    animation-timing-function: var(--ease-out);
-  }
-  
-  & img {
-    --transform-in: scale(1.5);
-    --transform-out: scale(1);
-    border-radius: var(--padding);
-    height: 100%;
-    width: 100%;
-    object-fit: cover;
-    animation-name: transform;
-    animation-fill-mode: both;
-    animation-timeline: view(100%);
-    animation-timing-function: var(--ease-out);
-  } */
-
   & .location {
     position: absolute;
     font-size: 1.5rem;
@@ -73,7 +32,7 @@
     overflow: clip;
     isolation: isolate;
     padding: 8px 16px;
-    top: calc(var(--h) * 100dvh);
+    top: calc(var(--h) * var(--img-container-height));
     left: calc(var(--w) * var(--img-width) - var(--delta));
     translate: -50% -50%;
     display: grid;

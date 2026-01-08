@@ -1,10 +1,8 @@
-import { component$, JSXOutput, $, useContext, useComputed$ } from "@qwik.dev/core";
+import { component$, $, useContext, useComputed$ } from "@qwik.dev/core";
 import { useLocation, useNavigate } from "@qwik.dev/router";
 import { Item, Step, StepKey, stepsRecord } from "../steps";
-import { ControlTypes, ControlKind } from "../steps";
+import { DynamicControl } from "../controls";
 import { cartContext } from "../layout";
-import Checklist from "../controls/checklist";
-import Input from "../controls/input";
 import { unwrapStore } from "@qwik.dev/core/internal";
 
 const convertControls = (data: FormData, step: Step) => {
@@ -76,16 +74,6 @@ export default component$(() => {
       return controls;
     }
     return step.controls;
-  });
-
-  const DynamicControl = component$((props: { control: ControlTypes }) => {
-    const controlComponents: Record<ControlKind, JSXOutput> = {
-      checklist: <Checklist {...props} />,
-      input: <Input {...props} />,
-      checkbox: <section></section>,
-      radiogroup: <section></section>,
-    };
-    return controlComponents[props.control.kind];
   });
 
   const onSubmit = $((form: HTMLFormElement) => {

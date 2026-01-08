@@ -1,6 +1,7 @@
-import { component$, useContext, $ } from "@qwik.dev/core";
+import { component$, useContext } from "@qwik.dev/core";
 import { cartContext } from "../layout";
-import { type Item, type Step, stepsRecord } from "../steps";
+import { type Step, stepsRecord, finalStep } from "../steps";
+import { DynamicControl } from "../controls";
 
 const getStepLabelList = (stepKey: string, step: Step) => {
   const labelList: Record<string, string> = {};
@@ -19,39 +20,41 @@ const getStepLabelList = (stepKey: string, step: Step) => {
   return labelList;
 }
 
-const ItemCard = component$((props: { index: number, cart: Item[] }) => {
-  const { index, cart } = props;
-  const { stepKey, data } = cart[index]
-  const step = stepsRecord[stepKey];
-  const labelList = getStepLabelList(stepKey, step);
-
-  return (
-    <section>
-      <div>
-        <h3>{step.label}</h3>
-        <a href={`../${stepKey}?index=${index}`}>Edit</a>
-        <button onClick$={() => { cart.splice(index, 1) }}>Delete</button>
-      </div>
-      <ul>
-        {Object.entries(data).map(([key, value]) => {
-          const displayValue = value instanceof Array
-            ? value.map((answer) => labelList[answer]).join(' / ')
-            : value;
-          return <li>{labelList[key]} {displayValue}</li>
-        })}
-      </ul>
-    </section>
-  )
-});
-
 export default component$(() => {
   const cart = useContext(cartContext);
   return (
     <>
       <h1>Validation devis</h1>
       {cart.map((_, i) => {
-        return <ItemCard index={i} cart={cart} />
+        const { stepKey, data } = cart[i]
+        const step = stepsRecord[stepKey];
+        const labelList = getStepLabelList(stepKey, step);
+        return (
+          <section>
+            <div>
+              <h3>{step.label}</h3>
+              <a href={`../${stepKey}?index=${i}`}>Edit</a>
+              <button onClick$={() => cart.splice(i, 1)}>Delete</button>
+            </div>
+            <ul>
+              {Object.entries(data).map(([key, value]) => {
+                const displayValue = value instanceof Array
+                  ? value.map((answer) => labelList[answer]).join(' / ')
+                  : value;
+                return <li>{labelList[key]} {displayValue}</li>
+              })}
+            </ul>
+          </section>
+        )
       })}
+
+      <h2>{finalStep.label}</h2>
+      <form preventdefault:submit onsubmit$={(_, form) => { }}>
+        {finalStep.controls.map((control) => (
+          <DynamicControl control={control} />
+        ))}
+        <button type='submit'>Valider</button>
+      </form>
     </>
   )
 });

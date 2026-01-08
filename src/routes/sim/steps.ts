@@ -166,6 +166,69 @@ const gate: Step = {
   ]
 }
 
+export const finalStep: Step = {
+  label: "Informations complémentaires",
+  controls: [
+    {
+      kind: 'radiogroup',
+      legend: 'Type de logement',
+      name: 'accommodation',
+      options: [
+        {
+          label: "Maison",
+          value: "house",
+        },
+        {
+          label: "Appartement",
+          value: "flat",
+        },
+        {
+          label: "Autre",
+          value: "other",
+        },
+      ]
+    },
+    {
+      kind: 'radiogroup',
+      legend: 'Type de construction',
+      name: 'age',
+      options: [
+        {
+          label: "Ancien",
+          value: "ancient",
+        },
+        {
+          label: "Rénové",
+          value: "renovated",
+        },
+        {
+          label: "Récent",
+          value: "new",
+        },
+      ]
+    },
+    {
+      kind: 'radiogroup',
+      legend: 'Quelle est la distance entre votre bien et la ville de Redon',
+      name: 'location',
+      options: [
+        {
+          label: "Inférieur à 10km",
+          value: "close",
+        },
+        {
+          label: "Entre 10km et 20km",
+          value: "near",
+        },
+        {
+          label: "Supérieur à 20km",
+          value: "far",
+        },
+      ]
+    },
+  ]
+}
+
 export const stepsRecord = {
   window,
   door,

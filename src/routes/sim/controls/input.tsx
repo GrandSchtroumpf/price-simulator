@@ -1,17 +1,24 @@
-import { $, component$, QRL } from '@qwik.dev/core';
+import { component$} from '@qwik.dev/core';
 import { ControlTypes } from '../steps';
 
 interface InputNumberProps {
   control: ControlTypes;
 }
 
+const DynamicInput = component$((props: { control: ControlTypes }) => {
+  const { control } = props;
+  const inputType = control.kind === 'input' && control.type;
+  if (!inputType) return null;
+  return <input type={inputType} {...props} />
+});
+
 export default component$<InputNumberProps>(({ control }) => {
-  if (control.kind !== 'input' || control.type !== 'number') return null;
+  if (control.kind !== 'input') return null;
 
   return (
     <>
       <label>{control.label}</label>
-      <input type='number' name={control.name} min={control.min} max={control.max} value={control.value} />
+      <DynamicInput control={control} />
     </>
   );
 });

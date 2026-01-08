@@ -4,7 +4,7 @@ import style from './Gallery.css?inline';
 export default component$(() => {
 	useStyles$(style);
 	return (
-		<section class="gallery">
+		<section id="gallery">
 			<figure style="--index:1">
 				<figcaption>Nantes</figcaption>
 				<img loading="lazy" src="/imgs/home/carpentry.webp" alt="Ouvrage de menuiserie" height="300" />

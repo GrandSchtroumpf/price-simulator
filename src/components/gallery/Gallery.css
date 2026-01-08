@@ -1,6 +1,4 @@
-/* Gallery */
-
-.gallery {
+#gallery {
   min-height: 100dvh;
   display: grid;
   padding: 32px;
@@ -64,4 +62,3 @@
     }
   }
 }
-

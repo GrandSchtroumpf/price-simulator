@@ -25,7 +25,7 @@ export default component$(() => {
 			<hr />
 
 			<nav>
-				<a href="#">Mes réalisations</a>
+				<a href="#gallery">Mes réalisations</a>
 				<a href="/simulateur">Simuler un devis</a>
 			</nav>
 		</footer>

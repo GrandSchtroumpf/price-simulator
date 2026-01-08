@@ -1,6 +1,7 @@
 body {
   --logo-duration: 2s;
   display: grid;
+  min-height: 110dvh; /* Prevent layout shift of the scroll */
 }
 
 .wood-background {
@@ -8,16 +9,8 @@ body {
   overflow: clip;
   display: grid;
   justify-items: center;
-  min-height: 2100px;
   min-width: 100%;
   z-index: -1;
-  @media (width < 768px) {
-    min-height: 1100px;
-  }
-}
-.wood-veins {
-  transform: translateY(-200px); /* Hidden big node at the top */
-  height: 100%;
 }
 
 main {

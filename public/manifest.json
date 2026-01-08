@@ -4,8 +4,6 @@
   "short_name": "Le P'tit Menuisier",
   "start_url": ".",
   "display": "standalone",
-  "background_color": "#e4e1da",
-  "theme_color": "#e4e1da",
   "description": "Site web de Erwan Richard, menuisier",
   "icons": [{
     "src": "/favicon.svg",

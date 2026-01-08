@@ -19,7 +19,7 @@ export const Map = component$(() => {
           {Array.from('Rennes').map((letter, i) => <span key={i} style={{ '--index': i }}>{letter}</span>)}
         </p>
       </div>
-      <div class="location" style="--w:0.64;--h:0.78;--delay:400ms">
+      <div class="location" style="--w:0.66;--h:0.8;--delay:400ms">
         <p>
           {Array.from('Nantes').map((letter, i) => <span key={i} style={{ '--index': i }}>{letter}</span>)}
         </p>

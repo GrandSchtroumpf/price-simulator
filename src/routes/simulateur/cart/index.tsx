@@ -22,6 +22,7 @@ const getStepLabelList = (stepKey: string, step: Step) => {
 
 const parseDisplayValue = (value: InputTypes, labels: Record<string, string>) => {
   let parsedValue = value;
+  if (typeof value === 'string') parsedValue = labels[value];
   if (typeof value === 'boolean') parsedValue = value ? 'Oui' : 'Non';
   if (value instanceof Array) parsedValue = value.map((answer) => labels[answer]).join(' / ');
   return parsedValue;

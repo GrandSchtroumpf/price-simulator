@@ -130,12 +130,86 @@ const window: Step = {
       label: "Dépose d'une fenêtre existante ?",
       required: false,
     },
-    number({
-      label: 'Combien de fenêtres souhaitez-vous installer ?',
-      name: 'installation',
-      min: 0,
-      max: 10
-    })
+    {
+      name: 'size',
+      kind: 'radiogroup',
+      legend: "Dimensions de la fenêtre ?",
+      options: [
+        {
+          value: 'small',
+          label: 'Petite (-1 mètre)'
+        },
+        {
+          value: 'medium',
+          label: 'Moyenne (1 à 2 mètres)'
+        },
+        {
+          value: 'large',
+          label: 'Grande (+ 2 mètres)'
+        }
+      ]
+    },
+    {
+      name: 'type',
+      kind: 'radiogroup',
+      legend: "Type de vitrage ?",
+      options: [
+        {
+          value: 'standard',
+          label: 'Double vitrage standard'
+        },
+        {
+          value: 'thermic',
+          label: 'Double thérmique / phonique'
+        },
+        {
+          value: 'secured',
+          label: 'Anti effraction'
+        },
+        {
+          value: 'complete',
+          label: 'Toutes options'
+        },
+      ]
+    },
+    {
+      name: 'meterials',
+      kind: 'radiogroup',
+      legend: "Type de matériaux ?",
+      options: [
+        {
+          value: 'plastic',
+          label: 'PVC'
+        },
+        {
+          value: 'wood',
+          label: 'Bois'
+        },
+        {
+          value: 'aluminum',
+          label: 'Aluminium'
+        }
+      ]
+    },
+    {
+      name: 'finish',
+      kind: 'radiogroup',
+      legend: "Finitions ?",
+      options: [
+        {
+          value: 'raw',
+          label: 'Brut'
+        },
+        {
+          value: 'painted',
+          label: 'Couleurs'
+        },
+        {
+          value: 'varnish',
+          label: 'Vernis'
+        }
+      ]
+    }
   ]
 }
 

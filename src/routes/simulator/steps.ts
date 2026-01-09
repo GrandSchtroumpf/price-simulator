@@ -4,7 +4,7 @@ import StepKey from "./[stepKey]";
 export type ControlTypes = CheckList | CheckBox | RadioGroup | InputNumber | InputString;
 export type ControlKind = ControlTypes['kind'];
 export type StepKey = keyof typeof stepsRecord;
-type InputTypes = string | string[] | number | number[] | boolean;
+export type InputTypes = string | string[] | number | number[] | boolean;
 
 export interface Item {
   stepKey: StepKey;
@@ -127,7 +127,7 @@ const window: Step = {
     {
       name: 'removal',
       kind: 'checkbox',
-      label: "Dépose d'une fenêtre existante",
+      label: "Dépose d'une fenêtre existante ?",
       required: false,
     },
     number({

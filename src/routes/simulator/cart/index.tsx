@@ -1,16 +1,16 @@
 import { component$, useContext } from "@qwik.dev/core";
 import { cartContext } from "../layout";
-import { type Step, stepsRecord, finalStep } from "../steps";
+import { type Step, stepsRecord, finalStep, InputTypes } from "../steps";
 import { DynamicControl } from "../controls";
 
 const getStepLabelList = (stepKey: string, step: Step) => {
   const labelList: Record<string, string> = {};
   labelList[stepKey] = step.label;
   for (const control of step.controls) {
-    if (control.kind === 'input') {
+    if (control.kind === 'input' || control.kind === 'checkbox') {
       labelList[control.name] = control.label || control.name;
     }
-    if (control.kind === 'checklist') {
+    if (control.kind === 'checklist' || control.kind === 'radiogroup') {
       labelList[control.name] = control.legend || control.name;
       for (const option of control.options) {
         labelList[option.value] = option.label;
@@ -19,6 +19,13 @@ const getStepLabelList = (stepKey: string, step: Step) => {
   }
   return labelList;
 }
+
+const parseDisplayValue = (value: InputTypes, labels: Record<string, string>) => {
+  let parsedValue = value;
+  if (typeof value === 'boolean') parsedValue = value ? 'Oui' : 'Non';
+  if (value instanceof Array) parsedValue = value.map((answer) => labels[answer]).join(' / ');
+  return parsedValue;
+};
 
 export default component$(() => {
   const cart = useContext(cartContext);
@@ -38,10 +45,7 @@ export default component$(() => {
             </div>
             <ul>
               {Object.entries(data).map(([key, value]) => {
-                const displayValue = value instanceof Array
-                  ? value.map((answer) => labelList[answer]).join(' / ')
-                  : value;
-                return <li>{labelList[key]} {displayValue}</li>
+                return <li>{labelList[key]} {parseDisplayValue(value, labelList)}</li>
               })}
             </ul>
           </section>

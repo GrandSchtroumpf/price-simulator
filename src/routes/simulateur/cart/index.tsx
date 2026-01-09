@@ -45,8 +45,13 @@ export default component$(() => {
               <button onClick$={() => cart.splice(i, 1)}>Delete</button>
             </div>
             <ul>
+              <li>Temps: {step.times({ stepKey, data })} hours / Matériaux: {step.materials({ stepKey, data })} €</li>
               {Object.entries(data).map(([key, value]) => {
-                return <li>{labelList[key]} {parseDisplayValue(value, labelList)}</li>
+                return (
+                  <>
+                    <li>{labelList[key]} {parseDisplayValue(value, labelList)}</li>
+                  </>
+                )
               })}
             </ul>
           </section>

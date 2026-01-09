@@ -115,13 +115,29 @@ const window: Step = {
   label: 'Fenêtre',
   times: $((item: Item) => {
     let totalTime = 0;
-    if (item.stepKey !== 'window') return totalTime;
-    totalTime += (timeTable[item.stepKey]['removal'] * Number(item.data['removal'])) || 0;
-    totalTime += (timeTable[item.stepKey]['installation'] * Number(item.data['installation'])) || 0;
+    if (item.stepKey !== 'window') return;
+    totalTime += (timeTable.window['installation'] || 0);
+    for (const value of Object.values(item.data)) {
+      if (typeof value === "string" && value in timeTable.window) {
+        totalTime += timeTable.window[value];
+      }
+    }
+    return totalTime;
   }),
   materials: $((item: Item) => {
     let totalMaterials = 0;
     if (item.stepKey !== 'window') return totalMaterials;
+    for (const value of Object.values(item.data)) {
+      const size = item.data['size'];
+      if (typeof value === 'string') {
+        if (size && typeof size === "string") {
+          totalMaterials += (materialsTable.window[size][value] || 0);
+        } else {
+          totalMaterials += (materialsTable.window[value] || 0);
+        }
+      }
+    }
+    return totalMaterials;
   }),
   controls: [
     {
@@ -352,6 +368,9 @@ const timeTable: Record<StepKey, any> = {
   window: {
     removal: 2,
     installation: 3,
+    small: -1,
+    medium: 0,
+    large: 1,
   },
   stairs: {
     removal: 2,
@@ -361,21 +380,66 @@ const timeTable: Record<StepKey, any> = {
   floor: {},
 };
 
-const materialsTable = {
+const materialsTable: Record<StepKey, any> = {
   door: {
     high: 1000,
     medium: 500,
     low: 100
   },
   window: {
-    high: 1000,
-    medium: 500,
-    low: 100
+    small: {
+      standard: 1000,
+      thermic: 500,
+      secured: 100,
+      complete: 100,
+      plastic: 100,
+      wood: 100,
+      aluminum: 100,
+      raw: 100,
+      painted: 100,
+      varnish: 100,
+    },
+    medium: {
+      standard: 1000,
+      thermic: 500,
+      secured: 100,
+      complete: 100,
+      plastic: 100,
+      wood: 100,
+      aluminum: 100,
+      raw: 100,
+      painted: 100,
+      varnish: 100,
+    },
+    large: {
+      standard: 1000,
+      thermic: 500,
+      secured: 100,
+      complete: 100,
+      plastic: 100,
+      wood: 100,
+      aluminum: 100,
+      raw: 100,
+      painted: 100,
+      varnish: 100,
+    },
+    standard: 1000,
+    thermic: 500,
+    secured: 100,
+    complete: 100,
+    plastic: 100,
+    wood: 100,
+    aluminum: 100,
+    raw: 100,
+    painted: 100,
+    varnish: 100,
   },
   stairs: {
     standard: 2000,
     custom: 5000,
-  }
+  },
+  furniture: {},
+  floor: {},
 }
 
 

@@ -120,7 +120,7 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (width < 768px) {
   .recommendation {
     min-height: unset;
     grid-template-columns: 1fr;

@@ -1,0 +1,32 @@
+.radiogroup-container {
+  display: grid;
+  gap: 8px;
+
+  & [role="radiogroup"] {
+    display: grid;
+    grid-auto-flow: column;
+    padding: 8px;
+    border: solid 1px var(--color-outline);
+    border-radius: 8px;
+    position: relative;
+  }
+
+  & input {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    z-index: -1;
+  }
+
+  & label {
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: center;
+  }
+
+  & input:checked + label {
+    color: var(--color-on-accent);
+    background-color: var(--color-accent);
+  }
+}

@@ -1,9 +1,10 @@
 import { component$, $, useContext, useComputed$ } from "@qwik.dev/core";
-import { useLocation, useNavigate } from "@qwik.dev/router";
+import { Link, useLocation, useNavigate } from "@qwik.dev/router";
 import { Item, Step, StepKey, stepsRecord } from "../steps";
 import { DynamicControl } from "../controls";
 import { cartContext } from "../layout";
-import { unwrapStore } from "@qwik.dev/core/internal";
+import { unwrapStore, useStyles$ } from "@qwik.dev/core/internal";
+import styles from './index.css?inline';
 
 const convertControls = (data: FormData, step: Step) => {
   const formObj: Record<string, any> = {};
@@ -59,6 +60,7 @@ const writeControls = (editItem: Item, step: Step) => {
 
 
 export default component$(() => {
+  useStyles$(styles);
   const cart = useContext(cartContext);
   const location = useLocation();
   const navigate = useNavigate();
@@ -90,9 +92,22 @@ export default component$(() => {
 
 
   return (
-    <form preventdefault:submit onsubmit$={(_, form) => onSubmit(form)}>
-      {controls.value.map((control, i) => <DynamicControl key={i} control={control} />)}
-      <button type='submit'>Valider</button>
-    </form>
+    <>
+      <main id="form">
+        <img src={`/imgs/simulator/${stepKey}.webp`} width="1344" height="756" />
+        <header>
+          <Link href=".." aria-label="Retour à la liste sans enregistrer">
+            <svg width="24px" height="24px" viewBox="0 -960 960 960" fill="currentColor">
+              <path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z"/>
+            </svg>
+          </Link>
+          <h1>{step.label}</h1>
+        </header>
+        <form preventdefault:submit onsubmit$={(_, form) => onSubmit(form)}>
+          {controls.value.map((control, i) => <DynamicControl key={i} control={control} />)}
+          <button type='submit'>Valider</button>
+        </form>
+      </main>
+    </>
   )
 });

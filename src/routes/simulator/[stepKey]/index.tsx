@@ -10,7 +10,7 @@ const convertControls = (data: FormData, step: Step) => {
   for (const control of step.controls) {
     switch (control.kind) {
       case 'checkbox': {
-        formObj[control.name] = data.getAll(control.name);
+        formObj[control.name] = !!data.get(control.name);
         break;
       };
       case 'checklist': {

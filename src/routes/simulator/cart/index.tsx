@@ -26,7 +26,7 @@ export default component$(() => {
     <>
       <h1>Validation devis</h1>
       {cart.map((_, i) => {
-        const { stepKey, data } = cart[i]
+        const { stepKey, data } = cart[i];
         const step = stepsRecord[stepKey];
         const labelList = getStepLabelList(stepKey, step);
         return (
@@ -49,7 +49,7 @@ export default component$(() => {
       })}
 
       <h2>{finalStep.label}</h2>
-      <form preventdefault:submit onsubmit$={(_, form) => { }}>
+      <form preventdefault:submit onsubmit$={(_, form) => { console.log(new FormData(form)) }}>
         {finalStep.controls.map((control) => (
           <DynamicControl control={control} />
         ))}

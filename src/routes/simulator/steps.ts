@@ -1,7 +1,10 @@
+import { $ } from "@qwik.dev/core";
+import StepKey from "./[stepKey]";
+
 export type ControlTypes = CheckList | CheckBox | RadioGroup | InputNumber | InputString;
 export type ControlKind = ControlTypes['kind'];
 export type StepKey = keyof typeof stepsRecord;
-type InputTypes = string | string[] | number | number[];
+type InputTypes = string | string[] | number | number[] | boolean;
 
 export interface Item {
   stepKey: StepKey;
@@ -11,6 +14,8 @@ export interface Item {
 export type Step = {
   controls: ControlTypes[];
   label: string;
+  materials?: any;
+  times?: any;
 };
 
 export interface Control<T> {
@@ -108,13 +113,23 @@ const number = (p: Omit<InputNumber, 'kind' | 'type'>): InputNumber => ({
 
 const window: Step = {
   label: 'Fenêtre',
+  times: $((item: Item) => {
+    let totalTime = 0;
+    if (item.stepKey !== 'window') return totalTime;
+    totalTime += (timeTable[item.stepKey]['removal'] * Number(item.data['removal'])) || 0;
+    totalTime += (timeTable[item.stepKey]['installation'] * Number(item.data['installation'])) || 0;
+  }),
+  materials: $((item: Item) => {
+    let totalMaterials = 0;
+    if (item.stepKey !== 'window') return totalMaterials;
+  }),
   controls: [
-    number({
-      label: 'Combien de fenêtres avez-vous à déposer ?',
+    {
       name: 'removal',
-      min: 0,
-      max: 10,
-    }),
+      kind: 'checkbox',
+      label: "Dépose d'une fenêtre existante",
+      required: false,
+    },
     number({
       label: 'Combien de fenêtres souhaitez-vous installer ?',
       name: 'installation',
@@ -126,6 +141,16 @@ const window: Step = {
 
 const door: Step = {
   label: 'Porte',
+  times: $((item: Item) => {
+    let totalTime = 0;
+    if (item.stepKey !== 'door') return totalTime;
+    totalTime += (timeTable[item.stepKey]['removal'] * Number(item.data['removal'])) || 0;
+    totalTime += (timeTable[item.stepKey]['installation'] * Number(item.data['installation'])) || 0;
+  }),
+  materials: $((item: Item) => {
+    let totalMaterials = 0;
+    if (item.stepKey !== 'door') return totalMaterials;
+  }),
   controls: [
     number({
       label: 'Combien de portes avez-vous à déposer ?',
@@ -168,6 +193,20 @@ const gate: Step = {
 
 export const finalStep: Step = {
   label: "Informations complémentaires",
+  // price: $((items: Item[]) => {
+  //   let totalTime = 0;
+  //   let totalMaterial = 0;
+  //   for (const item of items) {
+  //     const step = stepsRecord[item.stepKey];
+  //     for (const control of step.controls) {
+  //       if (control.kind === 'input' && control.type === 'number') {
+  //         const value = item.data[control.name];
+  //         totalTime += (timeTable[item.stepKey][control.name] * Number(value));
+  //         totalTime += timeTable[item.stepKey][control.name];
+  //       }
+  //     }
+  //   };
+  // }),
   controls: [
     {
       kind: 'radiogroup',
@@ -228,6 +267,43 @@ export const finalStep: Step = {
     },
   ]
 }
+
+const HOURLY_RATE = 20;
+
+const timeTable: Record<StepKey, any> = {
+  door: {
+    removal: 0.5,
+    installation: 1,
+  },
+  window: {
+    removal: 2,
+    installation: 3,
+  },
+  stairs: {
+    removal: 2,
+    installation: 3,
+  },
+  furniture: {},
+  floor: {},
+};
+
+const materialsTable = {
+  door: {
+    high: 1000,
+    medium: 500,
+    low: 100
+  },
+  window: {
+    high: 1000,
+    medium: 500,
+    low: 100
+  },
+  stairs: {
+    standard: 2000,
+    custom: 5000,
+  }
+}
+
 
 export const stepsRecord = {
   window,

@@ -21,9 +21,10 @@ export default function (opts: RenderToStreamOptions) {
     ...opts,
     // Use container attributes to set attributes on the html tag.
     containerAttributes: {
-      lang: "en-us",
+      lang: "fr-FR",
       ...opts.containerAttributes,
     },
+    qwikLoader: 'inline',
     serverData: {
       ...opts.serverData,
     },

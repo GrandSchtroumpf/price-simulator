@@ -3,16 +3,15 @@ import style from './Footer.css?inline';
 
 export default component$(() => {
 	useStyles$(style);
-
 	return (
 		<footer class="main-footer">
 			<section class="footer-top">
 				<figure>
 					<img
-							src="/favicon.svg"
-							width="80"
-							height="80"
-							alt="Représentation d'un blason contenant deux marteaux"
+						src="/favicon.svg"
+						width="80"
+						height="80"
+						alt="Représentation d'un blason contenant deux marteaux"
 					/>
 					<figcaption>Erwan RICHARD Menuisier</figcaption>
 				</figure>
@@ -26,8 +25,8 @@ export default component$(() => {
 			<hr />
 
 			<nav>
-				<a href="#">Mes réalisations</a>
-				<a href="#">Simuler un devis</a>
+				<a href="#gallery">Mes réalisations</a>
+				<a href="/simulateur">Simuler un devis</a>
 			</nav>
 		</footer>
 	)

@@ -1,0 +1,32 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "headers": [
+    {
+      "source": "/build/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=2628000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=2628000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/fonts/JosefinSans.woff2",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=2628000, immutable"
+        }
+      ]
+    }
+  ]
+}

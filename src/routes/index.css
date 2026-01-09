@@ -1,21 +1,69 @@
 body {
   --logo-duration: 2s;
   display: grid;
-  position: relative;
+  min-height: 110dvh; /* Prevent layout shift of the scroll */
 }
 
 .wood-background {
   position: absolute;
-  inset: 0;
   overflow: clip;
   display: grid;
   justify-items: center;
-}
-.wood-veins {
-  height: 2100px;
+  min-width: 100%;
+  z-index: -1;
 }
 
 main {
   display: grid;
   scroll-snap-align: center;
+  gap: 80px;
+}
+
+.simulator-link {
+  border-width: 2px;
+  border-color: transparent;
+  border-top-left-radius: 24px;
+  padding: 16px 24px;
+  font-size: 1.3rem;
+  overflow: clip;
+  isolation: isolate;
+  position: relative;
+  background:
+    linear-gradient(var(--color-surface-0), var(--color-surface-0)) padding-box,
+    linear-gradient(
+        200deg,
+        oklch(var(--lightness-outline) var(--accent-chroma) var(--hue)),
+        oklch(
+          calc(var(--lightness-outline) + 20%) var(--accent-chroma) var(--hue)
+        ),
+        oklch(var(--lightness-outline) var(--accent-chroma) var(--hue))
+      )
+      border-box;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    transform: translateX(-100%);
+    background-color: var(--color-accent);
+    opacity: 0.5;
+  }
+  &:hover::before {
+    --transform-in: translateX(-100%) rotate(-45deg);
+    --transform-out: translateX(100%) rotate(-45deg);
+    animation: transform 500ms var(--ease-in-out);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .simulator-link {
+    transition: background 150ms ease;
+
+    &:hover {
+      background: oklch(
+        var(--lightness-outline) var(--accent-chroma) var(--hue) / 0.95
+      );
+    }
+  }
 }

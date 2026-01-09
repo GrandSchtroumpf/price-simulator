@@ -1,0 +1,57 @@
+@theme {
+  --spacing: 0.0625rem; /* 1/16rem -> 1px */
+  --font-sans: Josefin Sans, sans-serif;
+  --color-accent: oklch(60% var(--accent-chroma) var(--hue));
+  --color-black: oklch(5% var(--neutral-chroma) var(--hue));
+  --color-white: oklch(100% var(--neutral-chroma) var(--hue));
+  --color-surface-0: oklch(var(--lightness-0) var(--neutral-chroma) var(--hue));
+  --color-surface-1: oklch(var(--lightness-1) var(--neutral-chroma) var(--hue));
+  --color-surface-2: oklch(var(--lightness-2) var(--neutral-chroma) var(--hue));
+  --color-surface-3: oklch(var(--lightness-3) var(--neutral-chroma) var(--hue));
+  --color-surface-4: oklch(var(--lightness-4) var(--neutral-chroma) var(--hue));
+  --color-outline: oklch(var(--lightness-outline) var(--neutral-chroma) var(--hue));
+  --color-contrast: oklch(var(--lightness-contrast) var(--neutral-chroma) var(--hue));
+  --color-on-contrast: var(--color-surface-4);
+}
+
+@utility accent {
+  --chroma: var(--accent-chroma);
+}
+@utility neutral {
+  --chroma: var(--neutral-chroma);
+}
+
+
+/* Color Scheme */
+@utility light-scheme {
+  --lightness-4: 100%;
+  --lightness-3: 95%;
+  --lightness-2: 93%;
+  --lightness-1: 92%;
+  --lightness-0: 91%;
+  --lightness-outline: 40%;
+  --lightness-btn: 60%;
+  --lightness-contrast: 20%;
+  
+  --accent-chroma: 0.2;
+  --neutral-chroma: 0.01;
+
+  color: var(--color-black);
+  color-scheme: light;
+}
+@utility dark-scheme {
+  --lightness-0: 12%;
+  --lightness-1: 17%;
+  --lightness-2: 22%;
+  --lightness-3: 26%;
+  --lightness-4: 28%;
+  --lightness-outline: 60%;
+  --lightness-btn: 60%;
+  --lightness-contrast: 90%;
+  
+  --accent-chroma: 0.15;
+  --neutral-chroma: 0.02;
+
+  color: var(--color-white);
+  color-scheme: dark;
+}

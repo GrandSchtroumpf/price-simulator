@@ -4,7 +4,7 @@ import StepKey from "./[stepKey]";
 export type ControlTypes = CheckList | CheckBox | RadioGroup | InputNumber | InputString;
 export type ControlKind = ControlTypes['kind'];
 export type StepKey = keyof typeof stepsRecord;
-type InputTypes = string | string[] | number | number[] | boolean;
+export type InputTypes = string | string[] | number | number[] | boolean;
 
 export interface Item {
   stepKey: StepKey;
@@ -115,27 +115,117 @@ const window: Step = {
   label: 'Fenêtre',
   times: $((item: Item) => {
     let totalTime = 0;
-    if (item.stepKey !== 'window') return totalTime;
-    totalTime += (timeTable[item.stepKey]['removal'] * Number(item.data['removal'])) || 0;
-    totalTime += (timeTable[item.stepKey]['installation'] * Number(item.data['installation'])) || 0;
+    if (item.stepKey !== 'window') return;
+    totalTime += (timeTable.window['installation'] || 0);
+    for (const value of Object.values(item.data)) {
+      if (typeof value === "string" && value in timeTable.window) {
+        totalTime += timeTable.window[value];
+      }
+    }
+    return totalTime;
   }),
   materials: $((item: Item) => {
     let totalMaterials = 0;
     if (item.stepKey !== 'window') return totalMaterials;
+    for (const value of Object.values(item.data)) {
+      const size = item.data['size'];
+      if (typeof value === 'string') {
+        if (size && typeof size === "string") {
+          totalMaterials += (materialsTable.window[size][value] || 0);
+        } else {
+          totalMaterials += (materialsTable.window[value] || 0);
+        }
+      }
+    }
+    return totalMaterials;
   }),
   controls: [
     {
       name: 'removal',
       kind: 'checkbox',
-      label: "Dépose d'une fenêtre existante",
+      label: "Dépose d'une fenêtre existante ?",
       required: false,
     },
-    number({
-      label: 'Combien de fenêtres souhaitez-vous installer ?',
-      name: 'installation',
-      min: 0,
-      max: 10
-    })
+    {
+      name: 'size',
+      kind: 'radiogroup',
+      legend: "Dimensions de la fenêtre ?",
+      options: [
+        {
+          value: 'small',
+          label: 'Petite (-1 mètre)'
+        },
+        {
+          value: 'medium',
+          label: 'Moyenne (1 à 2 mètres)'
+        },
+        {
+          value: 'large',
+          label: 'Grande (+ 2 mètres)'
+        }
+      ]
+    },
+    {
+      name: 'type',
+      kind: 'radiogroup',
+      legend: "Type de vitrage ?",
+      options: [
+        {
+          value: 'standard',
+          label: 'Double vitrage standard'
+        },
+        {
+          value: 'thermic',
+          label: 'Double thérmique / phonique'
+        },
+        {
+          value: 'secured',
+          label: 'Anti effraction'
+        },
+        {
+          value: 'complete',
+          label: 'Toutes options'
+        },
+      ]
+    },
+    {
+      name: 'meterials',
+      kind: 'radiogroup',
+      legend: "Type de matériaux ?",
+      options: [
+        {
+          value: 'plastic',
+          label: 'PVC'
+        },
+        {
+          value: 'wood',
+          label: 'Bois'
+        },
+        {
+          value: 'aluminum',
+          label: 'Aluminium'
+        }
+      ]
+    },
+    {
+      name: 'finish',
+      kind: 'radiogroup',
+      legend: "Finitions ?",
+      options: [
+        {
+          value: 'raw',
+          label: 'Brut'
+        },
+        {
+          value: 'painted',
+          label: 'Couleurs'
+        },
+        {
+          value: 'varnish',
+          label: 'Vernis'
+        }
+      ]
+    }
   ]
 }
 
@@ -278,6 +368,9 @@ const timeTable: Record<StepKey, any> = {
   window: {
     removal: 2,
     installation: 3,
+    small: -1,
+    medium: 0,
+    large: 1,
   },
   stairs: {
     removal: 2,
@@ -287,21 +380,66 @@ const timeTable: Record<StepKey, any> = {
   floor: {},
 };
 
-const materialsTable = {
+const materialsTable: Record<StepKey, any> = {
   door: {
     high: 1000,
     medium: 500,
     low: 100
   },
   window: {
-    high: 1000,
-    medium: 500,
-    low: 100
+    small: {
+      standard: 1000,
+      thermic: 500,
+      secured: 100,
+      complete: 100,
+      plastic: 100,
+      wood: 100,
+      aluminum: 100,
+      raw: 100,
+      painted: 100,
+      varnish: 100,
+    },
+    medium: {
+      standard: 1000,
+      thermic: 500,
+      secured: 100,
+      complete: 100,
+      plastic: 100,
+      wood: 100,
+      aluminum: 100,
+      raw: 100,
+      painted: 100,
+      varnish: 100,
+    },
+    large: {
+      standard: 1000,
+      thermic: 500,
+      secured: 100,
+      complete: 100,
+      plastic: 100,
+      wood: 100,
+      aluminum: 100,
+      raw: 100,
+      painted: 100,
+      varnish: 100,
+    },
+    standard: 1000,
+    thermic: 500,
+    secured: 100,
+    complete: 100,
+    plastic: 100,
+    wood: 100,
+    aluminum: 100,
+    raw: 100,
+    painted: 100,
+    varnish: 100,
   },
   stairs: {
     standard: 2000,
     custom: 5000,
-  }
+  },
+  furniture: {},
+  floor: {},
 }
 
 

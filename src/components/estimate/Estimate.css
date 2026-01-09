@@ -16,12 +16,14 @@
     }
   }
   
-  & hgroup,
-  & a {
-    --transform-in: translateY(calc(250px + var(--index) * 50px));
-    animation-name: transform;
-    animation-timeline: view(40% 20%);
-    animation-fill-mode: backwards;
+  @supports (animation-timeline: view()) {
+    & hgroup,
+    & a {
+      --transform-in: translateY(calc(250px + var(--index) * 50px));
+      animation-name: transform;
+      animation-timeline: view(40% 20%);
+      animation-fill-mode: backwards;
+    }
   }
   
   & hgroup h2 {

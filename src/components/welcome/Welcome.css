@@ -6,10 +6,12 @@
   gap: 40px;
   min-height: 90dvh;
   position: relative;
-  --opacity-out: 0;
-  animation-name: fade;
-  animation-fill-mode: both;
-  animation-timeline: view(0% 100%);
+  @supports (animation-timeline: view()) {
+    --opacity-out: 0;
+    animation-name: fade;
+    animation-fill-mode: both;
+    animation-timeline: view(0% 100%);
+  }
 
   & .calling-card {
     display: grid;

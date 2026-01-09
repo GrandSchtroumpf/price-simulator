@@ -5,7 +5,7 @@
   "start_url": ".",
   "display": "standalone",
   "description": "Site web de Erwan Richard, menuisier",
-  "background_color": "#65635d",
+  "background_color": "#080501",
   "icons": [{
     "src": "/favicon.svg",
     "sizes": "any"

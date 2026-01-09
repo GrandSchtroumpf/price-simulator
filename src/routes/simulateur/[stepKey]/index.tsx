@@ -80,16 +80,18 @@ export default component$(() => {
     const formData = new FormData(form);
     const formObj = convertControls(formData, step);
     const item = { stepKey: stepKey as StepKey, data: formObj };
-    typeof index === "string"
-      ? cart.splice(Number(index), 1, item)
-      : cart.push(item);
+    if (typeof index === 'string') {
+      cart.splice(Number(index), 1, item);
+    } else {
+      cart.push(item);
+    }
     navigate('..');
   });
 
 
   return (
     <form preventdefault:submit onsubmit$={(_, form) => onSubmit(form)}>
-      {controls.value.map((control) => <DynamicControl control={control} />)}
+      {controls.value.map((control, i) => <DynamicControl key={i} control={control} />)}
       <button type='submit'>Valider</button>
     </form>
   )

@@ -17,9 +17,16 @@
     grid-template-columns: repeat(auto-fill, minmax(var(--item-width), 1fr));
     gap: 32px;
     margin-inline: auto;
+    padding: 16px;
 
+    @media (width < 1200px) {
+      --item-width: 370px;
+    }
+    @media (width < 1000px) {
+      --item-width: 350px;
+    }
     @media (width < 768px) {
-      --item-width: 250px;
+      --item-width: 300px;
     }
 
     & > a {

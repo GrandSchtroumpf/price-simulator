@@ -38,7 +38,7 @@ export default component$(() => {
         const step = stepsRecord[stepKey];
         const labelList = getStepLabelList(stepKey, step);
         return (
-          <section>
+          <section key={i}>
             <div>
               <h3>{step.label}</h3>
               <a href={`../${stepKey}?index=${i}`}>Edit</a>
@@ -46,13 +46,9 @@ export default component$(() => {
             </div>
             <ul>
               <li>Temps: {step.times({ stepKey, data })} hours / Matériaux: {step.materials({ stepKey, data })} €</li>
-              {Object.entries(data).map(([key, value]) => {
-                return (
-                  <>
-                    <li>{labelList[key]} {parseDisplayValue(value, labelList)}</li>
-                  </>
-                )
-              })}
+              {Object.entries(data).map(([key, value]) => (
+                <li key={key}>{labelList[key]} {parseDisplayValue(value, labelList)}</li>
+              ))}
             </ul>
           </section>
         )
@@ -61,7 +57,7 @@ export default component$(() => {
       <h2>{finalStep.label}</h2>
       <form preventdefault:submit onsubmit$={(_, form) => { console.log(new FormData(form)) }}>
         {finalStep.controls.map((control) => (
-          <DynamicControl control={control} />
+          <DynamicControl key={control.name} control={control} />
         ))}
         <button type='submit'>Valider</button>
       </form>

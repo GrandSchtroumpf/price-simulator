@@ -238,7 +238,7 @@ const door: Step = {
     totalTime += (timeTable[item.stepKey]['installation'] * Number(item.data['installation'])) || 0;
   }),
   materials: $((item: Item) => {
-    let totalMaterials = 0;
+    const totalMaterials = 0;
     if (item.stepKey !== 'door') return totalMaterials;
   }),
   controls: [
@@ -275,11 +275,11 @@ const floor: Step = {
   ]
 }
 
-const gate: Step = {
-  label: 'Portail',
-  controls: [
-  ]
-}
+// const gate: Step = {
+//   label: 'Portail',
+//   controls: [
+//   ]
+// }
 
 export const finalStep: Step = {
   label: "Informations complémentaires",
@@ -358,7 +358,7 @@ export const finalStep: Step = {
   ]
 }
 
-const HOURLY_RATE = 20;
+// const HOURLY_RATE = 20;
 
 const timeTable: Record<StepKey, any> = {
   door: {

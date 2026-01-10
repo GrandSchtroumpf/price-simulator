@@ -5,12 +5,13 @@ body:has(#cart) {
 
 #cart {
   display: grid;
+  align-content: start;
   gap: 16px;
-  place-self: center;
   max-width: 800px;
   width: 100%;
   
   @media (width >= 800px) {
+    place-self: center;
     padding-block: 16px;
     background-color: var(--color-surface-2);
     border-radius: 16px;

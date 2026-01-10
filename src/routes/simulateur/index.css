@@ -77,13 +77,14 @@
       }
     }
   }
-  #cart {
-    position: absolute;
+  .cart {
+    position: fixed;
     inset-inline-end: 16px;
     padding: 8px;
     background-color: var(--color-accent);
     color: var(--color-on-accent);
     border-radius: 32px;
+    z-index: 1;
     @media (width >= 768px) {  
       top: 16px;
     }

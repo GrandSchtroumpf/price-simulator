@@ -18,6 +18,8 @@ body:has(#form) {
       position: absolute;
       z-index: -1;
       background-color: var(--background);
+      border-bottom-left-radius: var(--radius);
+      border-bottom-right-radius: var(--radius);
       view-transition-name: var(--transition-name);
       view-transition-class: background;
     }
@@ -38,6 +40,7 @@ body:has(#form) {
     position: sticky;
     top: 0;
     z-index: 1;
+    background-color: var(--background);
   }
   & h1 {
     display: inline-block;

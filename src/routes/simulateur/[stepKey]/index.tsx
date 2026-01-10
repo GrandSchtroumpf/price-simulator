@@ -1,5 +1,5 @@
 import { component$, $, useContext, useComputed$ } from "@qwik.dev/core";
-import { Link, useLocation, useNavigate } from "@qwik.dev/router";
+import { Link, StaticGenerateHandler, useLocation, useNavigate } from "@qwik.dev/router";
 import { Item, Step, StepKey, stepsRecord } from "../steps";
 import { DynamicControl } from "../controls";
 import { cartContext } from "../layout";
@@ -113,3 +113,9 @@ export default component$(() => {
     </>
   )
 });
+
+export const onStaticGenerate: StaticGenerateHandler = () => {
+  return {
+    params: Object.keys(stepsRecord).map(stepKey => ({ stepKey })),
+  };
+};

@@ -16,10 +16,12 @@ export default component$(() => {
       <nav aria-label="travaux à réaliser">
         {Object.entries(stepsRecord).map(([key, step]) => (
           <Link key={key} href={key}>
-            <div class="img-container">
+            <div class="img-container" style={{ viewTransitionName: `${key}-img` }}>
               <img src={`/imgs/simulator/${key}.webp`} width="1344" height="756" />
             </div>
-            <p>{step.label}</p>
+            <div class="card-content" style={{ ['--transition-name']: `${key}-background` }}>
+              <p style={{ viewTransitionName: `${key}-title` }}>{step.label}</p>
+            </div>
           </Link>
         ))}
       </nav>

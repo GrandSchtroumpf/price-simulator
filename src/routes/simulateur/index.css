@@ -30,27 +30,50 @@
     }
 
     & > a {
+      --radius: 16px;
       display: grid;
-      border-radius: 16px;
       overflow: clip;
-      background-color: var(--color-surface-2);
-      transition: background-color 300ms var(--ease-out);
       &:hover {
-        background-color: var(--color-surface-4);
         & img {
           transform: scale(1.1);
         }
+        & p::before {
+          background-color: var(--color-surface-4);
+        }
       }
       & .img-container {
+        border-top-left-radius: var(--radius);
+        border-top-right-radius: var(--radius);
         overflow: clip;
+        view-transition-class: image;
       }
       & img {
+        border-top-left-radius: var(--radius);
+        border-top-right-radius: var(--radius);
         transition: transform 300ms var(--ease-out);
         width: 100%;
       }
-      & p {
-        font-size: 1.1rem;
+      & .card-content {
         padding: 16px 24px;
+        position: relative;
+        isolation: isolate;
+        &::before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          z-index: -1;
+          background-color: var(--color-surface-2);
+          transition: background-color 300ms var(--ease-out);
+          border-bottom-left-radius: var(--radius);
+          border-bottom-right-radius: var(--radius);
+          view-transition-name: var(--transition-name);
+          view-transition-class: background;
+        }
+      }
+      & p {
+        display: inline-block;
+        font-size: 1.5rem;
+        view-transition-class: title;
       }
     }
   }

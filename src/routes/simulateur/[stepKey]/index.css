@@ -9,25 +9,40 @@ body:has(#form) {
   place-self: center;
   width: 100%;
   max-width: 800px;
+  & .card-content {
+    position: relative;
+    isolation: isolate;
+    &::before {
+      content: "";
+      inset: 0;
+      position: absolute;
+      z-index: -1;
+      background-color: var(--background);
+      view-transition-name: var(--transition-name);
+      view-transition-class: background;
+    }
+  }
   & img {
     border-top-left-radius: var(--radius);
     border-top-right-radius: var(--radius);
     width: 100%;
     height: 300px;
     object-fit: cover;
+    view-transition-class: image;
   }
   & header {
     padding: 16px;
     display: flex;
     gap: 16px;
     align-items: center;
-    background-color: var(--background);
     position: sticky;
     top: 0;
     z-index: 1;
   }
   & h1 {
+    display: inline-block;
     font-size: 2rem;
+    view-transition-class: title;
   }
   & form {
     display: grid;
@@ -35,7 +50,7 @@ body:has(#form) {
     padding: 16px;
     border-bottom-left-radius: var(--radius);
     border-bottom-right-radius: var(--radius);
-    background-color: var(--background);
+    view-transition-name: form;
   }
   & button[type="submit"] {
     background-color: var(--color-accent);

@@ -93,20 +93,22 @@ export default component$(() => {
 
   return (
     <>
-      <main id="form">
-        <img src={`/imgs/simulator/${stepKey}.webp`} width="1344" height="756" />
-        <header>
-          <Link href=".." aria-label="Retour à la liste sans enregistrer">
-            <svg width="24px" height="24px" viewBox="0 -960 960 960" fill="currentColor">
-              <path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z"/>
-            </svg>
-          </Link>
-          <h1>{step.label}</h1>
-        </header>
-        <form preventdefault:submit onsubmit$={(_, form) => onSubmit(form)}>
-          {controls.value.map((control, i) => <DynamicControl key={i} control={control} />)}
-          <button type='submit'>Valider</button>
-        </form>
+      <main id="form" style={{['--transition-name']: `${stepKey}-background`}}>
+        <img src={`/imgs/simulator/${stepKey}.webp`} width="1344" height="756" style={{viewTransitionName: `${stepKey}-img`}} />
+        <div class="card-content">
+          <header>
+            <Link href=".." aria-label="Retour à la liste sans enregistrer">
+              <svg width="24px" height="24px" viewBox="0 -960 960 960" fill="currentColor">
+                <path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z"/>
+              </svg>
+            </Link>
+            <h1 style={{viewTransitionName: `${stepKey}-title`}} >{step.label}</h1>
+          </header>
+          <form preventdefault:submit onsubmit$={(_, form) => onSubmit(form)}>
+            {controls.value.map((control, i) => <DynamicControl key={i} control={control} />)}
+            <button type='submit'>Valider</button>
+          </form>
+        </div>
       </main>
     </>
   )

@@ -1,11 +1,13 @@
 import { component$, createContextId, Slot, useContextProvider, useStore, useVisibleTask$ } from "@qwik.dev/core";
-import { unwrapStore } from "@qwik.dev/core/internal";
+import { unwrapStore, useStyles$ } from "@qwik.dev/core/internal";
 import type { Item } from "./steps";
+import styles from './layout.css?inline';
 
 
 export const cartContext = createContextId<Item[]>('cart');
 
 export default component$(() => {
+  useStyles$(styles);
   const cart = useStore<Item[]>([]);
   useContextProvider(cartContext, cart);
 

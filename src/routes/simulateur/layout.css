@@ -38,6 +38,7 @@
 }
 
 
+::view-transition-old(arrow):only-child,
 ::view-transition-old(form):only-child,
 ::view-transition-old(.title):only-child,
 ::view-transition-old(.background):only-child,
@@ -47,6 +48,7 @@
   animation: fade 100ms forwards;
 }
 
+::view-transition-new(arrow):only-child,
 ::view-transition-new(form):only-child,
 ::view-transition-new(.title):only-child,
 ::view-transition-new(.background):only-child,

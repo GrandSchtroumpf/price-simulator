@@ -41,6 +41,9 @@ body:has(#form) {
     top: 0;
     z-index: 1;
     background-color: var(--background);
+    & svg {
+      view-transition-name: arrow;
+    }
   }
   & h1 {
     display: inline-block;

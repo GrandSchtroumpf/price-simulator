@@ -17,7 +17,7 @@ export default component$<CheckListProps>(({ control }) => {
       <div role="radiogroup" aria-labelledby={id}>
         {control.options.map((option) => (
           <>
-            <input type="radio" id={option.value} name={control.name} value={option.value} checked={option.checked} />
+            <input type="radio" id={option.value} name={control.name} value={option.value} checked={option.checked} required={control.required} />
             <label for={option.value}>{option.label}</label>
           </>
         ))}

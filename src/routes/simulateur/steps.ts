@@ -243,6 +243,7 @@ const window: Step = {
 const interiorDoor: Step = {
   label: "Porte d'intérieur",
   times: $((item: Item) => {
+    if (!item) return 0;
     return 0;
   }),
   materials: $((item: Item) => {

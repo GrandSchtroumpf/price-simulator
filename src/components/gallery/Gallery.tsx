@@ -6,16 +6,16 @@ export default component$(() => {
 	return (
 		<section id="gallery">
 			<figure style="--index:1">
-				<figcaption>Nantes</figcaption>
-				<img loading="lazy" src="/imgs/home/carpentry.webp" alt="Ouvrage de menuiserie" height="300" />
+				<figcaption>Terrasse bois</figcaption>
+				<img loading="lazy" src="/imgs/home/photo-1.webp" alt="Ouvrage de menuiserie" height="300" />
 			</figure>
 			<figure style="--index:2">
-				<figcaption>Redon</figcaption>
-				<img loading="lazy" src="/imgs/home/carpentry.webp" alt="Ouvrage de menuiserie" height="300" />
+				<figcaption>Soutènement bois</figcaption>
+				<img loading="lazy" src="/imgs/home/photo-2.webp" alt="Ouvrage de menuiserie" height="300" />
 			</figure>
 			<figure style="--index:3">
-				<figcaption>Saint Nazaire</figcaption>
-				<img loading="lazy" src="/imgs/home/carpentry.webp" alt="Ouvrage de menuiserie" height="300" />
+				<figcaption>Persiennes</figcaption>
+				<img loading="lazy" src="/imgs/home/photo-3.webp" alt="Ouvrage de menuiserie" height="300" />
 			</figure>
 		</section>
 	)

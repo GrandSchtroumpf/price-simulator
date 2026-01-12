@@ -475,12 +475,12 @@ const materialsTable: Record<StepKey, any> = {
 };
 
 export const finalElementsMultiplier: Record<string, number> = {
-  house: 0.1,
+  house: 0,
   flat: 0.2,
   ancient: 0.4,
   renovated: 0.3,
   new: 0.2,
-  close: 0.1,
+  close: 0,
   near: 0.2,
   far: 0.3
 };

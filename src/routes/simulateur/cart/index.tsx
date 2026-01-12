@@ -42,7 +42,7 @@ export default component$(() => {
       const v = String(value);
       if (v in finalElementsMultiplier) {
         const multiplier = finalElementsMultiplier[v];
-        price += price * multiplier;
+        if (multiplier > 0) price += price * multiplier;
       }
     }
     if (price > 0) finalEstimation.value = Math.floor(price);

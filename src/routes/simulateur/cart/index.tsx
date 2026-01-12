@@ -3,7 +3,6 @@ import { cartContext } from "../layout";
 import { type Step, stepsRecord, finalStep, InputTypes, finalElementsMultiplier } from "../steps";
 import { DynamicControl } from "../controls";
 import styles from './index.css?inline';
-import { Link } from "@qwik.dev/router";
 
 const getStepLabelList = (stepKey: string, step: Step) => {
   const labelList: Record<string, string> = {};
@@ -43,7 +42,7 @@ export default component$(() => {
       const v = String(value);
       if (v in finalElementsMultiplier) {
         const multiplier = finalElementsMultiplier[v];
-        price += price * multiplier;
+        if (multiplier > 0) price += price * multiplier;
       }
     }
     if (price > 0) finalEstimation.value = Math.floor(price);
@@ -55,11 +54,11 @@ export default component$(() => {
   return (
     <main id="cart">
       <header>
-        <Link href=".." aria-label="Retour à la liste">
+        <button onClick$={() => history.back()} aria-label="Retour à la liste">
           <svg width="24px" height="24px" viewBox="0 -960 960 960" fill="currentColor">
             <path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z" />
           </svg>
-        </Link>
+        </button>
         <h1>Validation devis</h1>
       </header>
       <div>
@@ -110,7 +109,10 @@ export default component$(() => {
         })}
       </div>
 
-      <h2>{finalStep.label}</h2>
+      <hgroup>
+        <h2>Informations complémentaires</h2>
+        <p>Ces informations sont nécessaires à la réalisation du devis</p>
+      </hgroup>
       <form preventdefault:submit onsubmit$={(_, form) => onSubmit(form)}>
         {finalStep.controls.map((control) => (
           <DynamicControl key={control.name} control={control} />

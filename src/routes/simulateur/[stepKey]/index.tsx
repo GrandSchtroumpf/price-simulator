@@ -1,5 +1,5 @@
 import { component$, $, useContext, useComputed$ } from "@qwik.dev/core";
-import { Link, StaticGenerateHandler, useLocation, useNavigate } from "@qwik.dev/router";
+import { StaticGenerateHandler, useLocation, useNavigate } from "@qwik.dev/router";
 import { Item, Step, StepKey, stepsRecord } from "../steps";
 import { DynamicControl } from "../controls";
 import { cartContext } from "../layout";
@@ -93,20 +93,20 @@ export default component$(() => {
 
   return (
     <>
-      <main id="form" style={{['--transition-name']: `${stepKey}-background`}}>
-        <img src={`/imgs/simulator/${stepKey}.webp`} width="1344" height="756" style={{viewTransitionName: `${stepKey}-img`}} />
+      <main id="form" style={{ ['--transition-name']: `${stepKey}-background` }}>
+        <img src={`/imgs/simulator/${stepKey}.webp`} width="1344" height="756" style={{ viewTransitionName: `${stepKey}-img` }} />
         <div class="card-content">
           <header>
-            <Link href=".." aria-label="Retour à la liste sans enregistrer">
+            <button onClick$={() => history.back()} aria-label="Retour à la liste sans enregistrer">
               <svg width="24px" height="24px" viewBox="0 -960 960 960" fill="currentColor">
-                <path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z"/>
+                <path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z" />
               </svg>
-            </Link>
-            <h1 style={{viewTransitionName: `${stepKey}-title`}} >{step.label}</h1>
+            </button>
+            <h1 style={{ viewTransitionName: `${stepKey}-title` }} >{step.label}</h1>
           </header>
           <form preventdefault:submit onsubmit$={(_, form) => onSubmit(form)}>
             {controls.value.map((control, i) => <DynamicControl key={i} control={control} />)}
-            <button type='submit'>Valider</button>
+            <button type='submit'>Ajouter au devis</button>
           </form>
         </div>
       </main>

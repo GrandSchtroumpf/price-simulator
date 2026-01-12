@@ -15,7 +15,7 @@
   }
 
   & [role="radiogroup"]:has(:focus-visible) {
-    border-color: var(--color-accent);
+    border-color: var(--color-secondary);
   }
 
   
@@ -40,6 +40,6 @@
 
   & input:checked + label {
     color: var(--color-on-accent);
-    background-color: var(--color-accent);
+    background-color: var(--color-secondary);
   }
 }

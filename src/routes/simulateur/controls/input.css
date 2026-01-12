@@ -1,0 +1,13 @@
+.input-field {
+  display: grid;
+  gap: 8px;
+  & input {
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: solid 1px var(--color-outline);
+  }
+  & input:focus-visible {
+    outline: none;
+    border-color: var(--color-secondary);
+  }
+}

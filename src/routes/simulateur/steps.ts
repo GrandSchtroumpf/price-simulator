@@ -291,6 +291,31 @@ const interiorDoor: Step = {
   ]
 }
 
+const floor: Step = {
+  label: 'Sol',
+  materials: $(() => 0),
+  times: $(() => 0),
+  controls: [
+    number({
+      label: "Surface en m²",
+      name: "surace",
+      value: 1,
+      min: 1
+    }),
+    {
+      legend: "Type de matériaux",
+      name: "metarials",
+      kind: "radiogroup",
+      options: [
+        {
+          label: "Massif",
+          value: "hard"
+        }
+      ]
+    }
+  ]
+}
+
 const stairs: Step = {
   label: 'Escalier',
   materials: $(() => 0),
@@ -301,14 +326,6 @@ const stairs: Step = {
 
 const furniture: Step = {
   label: 'Mobilier',
-  materials: $(() => 0),
-  times: $(() => 0),
-  controls: [
-  ]
-}
-
-const floor: Step = {
-  label: 'Sol',
   materials: $(() => 0),
   times: $(() => 0),
   controls: [

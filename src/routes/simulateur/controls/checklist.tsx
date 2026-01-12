@@ -15,7 +15,7 @@ export default component$<CheckListProps>(({ control }) => {
       <div role='group' aria-labelledby={id}>
         {control.options.map((option) => (
           <div key={option.value}>
-            <input type="checkbox" id={option.value} name={control.name} value={option.value} checked={option.checked} />
+            <input type="checkbox" id={option.value} name={control.name} value={option.value} checked={option.checked} required={control.required} />
             <label for={option.value}>{option.label}</label>
           </div>
         ))}

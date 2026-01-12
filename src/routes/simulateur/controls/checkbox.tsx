@@ -12,7 +12,7 @@ export default component$<CheckListProps>(({ control }) => {
 
   return (
     <div class="checkbox">
-      <input type="checkbox" id={control.name} name={control.name} checked={control.checked} />
+      <input type="checkbox" id={control.name} name={control.name} checked={control.checked} required={control.required}/>
       <label for={control.name}>
         <div class="svg-container">
           <svg width="20" height="20" focusable="false" viewBox="0 0 24 24" aria-hidden="true">

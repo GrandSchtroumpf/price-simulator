@@ -78,6 +78,7 @@ export default component$(() => {
   });
 
   const onSubmit = $((form: HTMLFormElement) => {
+    console.log("nblblblblbl");
     const formData = new FormData(form);
     const formObj = convertControls(formData, step);
     const item = { stepKey: stepKey as StepKey, data: formObj };

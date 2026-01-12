@@ -40,7 +40,7 @@ interface Input extends Control<'input'> {
 
 interface CheckBox extends Control<'checkbox'> {
   label: string;
-  required: boolean;
+  required?: boolean;
   checked?: boolean;
 }
 
@@ -61,6 +61,7 @@ interface InputString extends Input {
 
 export interface CheckList extends Control<'checklist'> {
   legend: string;
+  required?: boolean;
   options: {
     label: string;
     value: string;
@@ -70,6 +71,7 @@ export interface CheckList extends Control<'checklist'> {
 
 interface RadioGroup extends Control<'radiogroup'> {
   legend: string;
+  required?: boolean;
   options: {
     label: string;
     value: string;
@@ -118,18 +120,19 @@ const window: Step = {
       label: "Nombre d'unité",
       name: 'unit',
       min: 1,
-      value: 1
+      value: 1,
+      required: true
     }),
     {
       name: 'removal',
       kind: 'checkbox',
-      label: "Dépose d'une fenêtre existante",
-      required: true,
+      label: "Dépose d'une fenêtre existante"
     },
     {
       name: 'size',
       kind: 'radiogroup',
       legend: "Dimensions de la fenêtre",
+      required: true,
       options: [
         {
           value: 'small',
@@ -149,6 +152,7 @@ const window: Step = {
       name: 'type',
       kind: 'radiogroup',
       legend: "Type de vitrage",
+      required: true,
       options: [
         {
           value: 'standard',
@@ -172,6 +176,7 @@ const window: Step = {
       name: 'meterials',
       kind: 'radiogroup',
       legend: "Type de matériaux",
+      required: true,
       options: [
         {
           value: 'plastic',
@@ -191,6 +196,7 @@ const window: Step = {
       name: 'finish',
       kind: 'radiogroup',
       legend: "Finitions",
+      required: true,
       options: [
         {
           value: 'raw',
@@ -225,12 +231,12 @@ const interiorDoor: Step = {
       name: 'replace',
       kind: 'checkbox',
       label: "Remplacement d'hussieries existantes ?",
-      required: true,
     },
     {
       name: 'size',
       kind: 'radiogroup',
       legend: "Dimensions de la porte ?",
+      required: true,
       options: [
         {
           value: 'standard',
@@ -246,6 +252,7 @@ const interiorDoor: Step = {
       name: 'type',
       kind: 'radiogroup',
       legend: "Type de porte ?",
+      required: true,
       options: [
         {
           value: 'swing',
@@ -265,6 +272,7 @@ const interiorDoor: Step = {
       name: 'type',
       kind: 'radiogroup',
       legend: "Type de finitions?",
+      required: true,
       options: [
         {
           value: 'wood',
@@ -357,6 +365,7 @@ export const finalStep: FinalStep = {
       kind: 'radiogroup',
       legend: 'Type de logement',
       name: 'accommodation',
+      required: true,
       options: [
         {
           label: "Maison",
@@ -372,6 +381,7 @@ export const finalStep: FinalStep = {
       kind: 'radiogroup',
       legend: 'Type de construction',
       name: 'age',
+      required: true,
       options: [
         {
           label: "Ancien",
@@ -391,6 +401,7 @@ export const finalStep: FinalStep = {
       kind: 'radiogroup',
       legend: 'Quelle est la distance entre votre bien et la ville de Redon',
       name: 'location',
+      required: true,
       options: [
         {
           label: "Inférieur à 10km",

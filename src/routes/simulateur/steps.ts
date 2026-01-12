@@ -115,7 +115,7 @@ const window: Step = {
   }),
   controls: [
     number({
-      label: "Nombre d'unité ?",
+      label: "Nombre d'unité",
       name: 'unit',
       min: 1,
       value: 1
@@ -123,13 +123,13 @@ const window: Step = {
     {
       name: 'removal',
       kind: 'checkbox',
-      label: "Dépose d'une fenêtre existante ?",
+      label: "Dépose d'une fenêtre existante",
       required: true,
     },
     {
       name: 'size',
       kind: 'radiogroup',
-      legend: "Dimensions de la fenêtre ?",
+      legend: "Dimensions de la fenêtre",
       options: [
         {
           value: 'small',
@@ -148,7 +148,7 @@ const window: Step = {
     {
       name: 'type',
       kind: 'radiogroup',
-      legend: "Type de vitrage ?",
+      legend: "Type de vitrage",
       options: [
         {
           value: 'standard',
@@ -171,7 +171,7 @@ const window: Step = {
     {
       name: 'meterials',
       kind: 'radiogroup',
-      legend: "Type de matériaux ?",
+      legend: "Type de matériaux",
       options: [
         {
           value: 'plastic',
@@ -190,7 +190,7 @@ const window: Step = {
     {
       name: 'finish',
       kind: 'radiogroup',
-      legend: "Finitions ?",
+      legend: "Finitions",
       options: [
         {
           value: 'raw',

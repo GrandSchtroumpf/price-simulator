@@ -1,8 +1,26 @@
 import { $, component$, useContext, useSignal, useStyles$ } from "@qwik.dev/core";
 import { cartContext } from "../layout";
-import { type Step, stepsRecord, finalStep, InputTypes, finalElementsMultiplier } from "../steps";
+import { type Step, stepsRecord, finalStep, InputTypes, finalElementsMultiplier, Item } from "../steps";
 import { DynamicControl } from "../controls";
 import styles from './index.css?inline';
+
+const mailto = (cart: Item[]) => {
+  const list = [];
+  for (const item of cart) {
+    const { stepKey, data } = item;
+    const step = stepsRecord[stepKey];
+    const labelList = getStepLabelList(stepKey, step);
+    list.push(`${step.label}:`)
+    for (const [key, value] of Object.entries(data)) {
+      list.push(`- ${labelList[key]}: ${parseDisplayValue(value, labelList)}`);
+    }
+    list.push('');
+  }
+  const mailto = 'erwanrichard.lpm@gmail.com';
+  const subject = encodeURIComponent('Estimation - Devis');
+  const body = encodeURIComponent(list.join('\n'));
+  return `mailto:${mailto}?subject=${subject}&body=${body}`;
+}
 
 const getStepLabelList = (stepKey: string, step: Step) => {
   const labelList: Record<string, string> = {};
@@ -123,6 +141,7 @@ export default component$(() => {
         <article id="final-estimation">
           <h2>Votre estimation est de {finalEstimation} €</h2>
           <p>NB: Le prix affiché est un prix indicatif et ne constitue pas un devis ferme et définitif</p>
+          <a class="mailto" href={mailto(cart)}>Contacter Erwan Richard</a>
         </article>
       )}
     </main>

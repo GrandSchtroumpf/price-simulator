@@ -1,5 +1,5 @@
 import { component$, $, useContext, useComputed$ } from "@qwik.dev/core";
-import { StaticGenerateHandler, useLocation, useNavigate } from "@qwik.dev/router";
+import { StaticGenerateHandler, useLocation } from "@qwik.dev/router";
 import { Item, Step, StepKey, stepsRecord } from "../steps";
 import { DynamicControl } from "../controls";
 import { cartContext } from "../layout";
@@ -63,7 +63,6 @@ export default component$(() => {
   useStyles$(styles);
   const cart = useContext(cartContext);
   const location = useLocation();
-  const navigate = useNavigate();
   const { stepKey } = location.params;
   if (!(stepKey in stepsRecord)) return null;
   const step = stepsRecord[stepKey as StepKey];
@@ -87,7 +86,7 @@ export default component$(() => {
     } else {
       cart.push(item);
     }
-    navigate('..');
+    history.back();
   });
 
 

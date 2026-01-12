@@ -1,6 +1,7 @@
-import { $ } from "@qwik.dev/core";
+import { $, QRL } from "@qwik.dev/core";
 import StepKey from "./[stepKey]";
 
+const HOURLY_RATE = 20;
 export type ControlTypes = CheckList | CheckBox | RadioGroup | InputNumber | InputString;
 export type ControlKind = ControlTypes['kind'];
 export type StepKey = keyof typeof stepsRecord;
@@ -11,12 +12,16 @@ export interface Item {
   data: Record<string, InputTypes>;
 }
 
-export type Step = {
+export interface Step {
   controls: ControlTypes[];
   label: string;
-  materials?: any;
-  times?: any;
+  materials: QRL<(cart: Item) => number>;
+  times: QRL<(cart: Item) => number>;
 };
+
+interface FinalStep extends Omit<Step, 'times' | 'materials'> {
+  price: QRL<(cart: Item[]) => Promise<number>>;
+}
 
 export interface Control<T> {
   kind: T;
@@ -115,7 +120,7 @@ const window: Step = {
   label: 'Fenêtre',
   times: $((item: Item) => {
     let totalTime = 0;
-    if (item.stepKey !== 'window') return;
+    if (item.stepKey !== 'window') return 0;
     totalTime += (timeTable.window['installation'] || 0);
     for (const value of Object.values(item.data)) {
       if (typeof value === "string" && value in timeTable.window) {
@@ -238,10 +243,12 @@ const window: Step = {
 const interiorDoor: Step = {
   label: "Porte d'intérieur",
   times: $((item: Item) => {
+    return 0;
   }),
   materials: $((item: Item) => {
     const totalMaterials = 0;
     if (item.stepKey !== 'interiorDoor') return totalMaterials;
+    return totalMaterials;
   }),
   controls: [
     {
@@ -316,18 +323,24 @@ const interiorDoor: Step = {
 
 const stairs: Step = {
   label: 'Escalier',
+  materials: $(() => 0),
+  times: $(() => 0),
   controls: [
   ]
 }
 
 const furniture: Step = {
   label: 'Mobilier',
+  materials: $(() => 0),
+  times: $(() => 0),
   controls: [
   ]
 }
 
 const floor: Step = {
   label: 'Sol',
+  materials: $(() => 0),
+  times: $(() => 0),
   controls: [
   ]
 }
@@ -338,22 +351,20 @@ const floor: Step = {
 //   ]
 // }
 
-export const finalStep: Step = {
+export const finalStep: FinalStep = {
   label: "Informations complémentaires",
-  // price: $((items: Item[]) => {
-  //   let totalTime = 0;
-  //   let totalMaterial = 0;
-  //   for (const item of items) {
-  //     const step = stepsRecord[item.stepKey];
-  //     for (const control of step.controls) {
-  //       if (control.kind === 'input' && control.type === 'number') {
-  //         const value = item.data[control.name];
-  //         totalTime += (timeTable[item.stepKey][control.name] * Number(value));
-  //         totalTime += timeTable[item.stepKey][control.name];
-  //       }
-  //     }
-  //   };
-  // }),
+  price: $(async (cart: Item[]) => {
+    let totalMaterials = 0;
+    let totalTime = 0;
+    for (const item of cart) {
+      const step = stepsRecord[item.stepKey];
+      totalMaterials += await step.materials(item);
+      totalTime += await step.times(item);
+    };
+    if (totalTime < 8) totalTime = 8;
+    const finalEstimation = totalMaterials + (totalTime * HOURLY_RATE);
+    return finalEstimation;
+  }),
   controls: [
     {
       kind: 'radiogroup',
@@ -367,11 +378,7 @@ export const finalStep: Step = {
         {
           label: "Appartement",
           value: "flat",
-        },
-        {
-          label: "Autre",
-          value: "other",
-        },
+        }
       ]
     },
     {
@@ -414,8 +421,6 @@ export const finalStep: Step = {
     },
   ]
 }
-
-// const HOURLY_RATE = 20;
 
 const timeTable: Record<StepKey, any> = {
   interiorDoor: {
@@ -497,7 +502,18 @@ const materialsTable: Record<StepKey, any> = {
   },
   furniture: {},
   floor: {},
-}
+};
+
+export const finalElementsMultiplier: Record<string, number> = {
+  house: 1,
+  flat: 1.1,
+  ancient: 1.4,
+  renovated: 1.3,
+  new: 1.2,
+  close: 1,
+  near: 1.1,
+  far: 1.2
+};
 
 
 export const stepsRecord = {

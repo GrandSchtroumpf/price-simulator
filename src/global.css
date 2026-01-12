@@ -18,12 +18,22 @@
   inherits: true;
   initial-value: 90deg;
 }
+@property --secondary-hue {
+  syntax: "<angle>";
+  inherits: true;
+  initial-value: 270deg;
+}
 @property --neutral-chroma {
   syntax: "<number>";
   inherits: true;
   initial-value: 0.02;
 }
 @property --accent-chroma {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0.15;
+}
+@property --secondary-chroma {
   syntax: "<number>";
   inherits: true;
   initial-value: 0.15;

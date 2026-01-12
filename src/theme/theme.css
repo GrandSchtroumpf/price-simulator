@@ -3,6 +3,8 @@
   --font-sans: Josefin Sans, sans-serif;
   --color-accent: oklch(var(--lightness-accent) var(--accent-chroma) var(--hue));
   --color-on-accent: oklch(20% var(--accent-chroma) var(--hue));
+  --color-secondary: oklch(var(--lightness-secondary) var(--secondary-chroma) var(--secondary-hue));
+  --color-on-secondary: oklch(20% var(--secondary-chroma) var(--secondary-hue));
   --color-black: oklch(5% var(--neutral-chroma) var(--hue));
   --color-white: oklch(100% var(--neutral-chroma) var(--hue));
   --color-surface-0: oklch(var(--lightness-0) var(--neutral-chroma) var(--hue));
@@ -17,6 +19,9 @@
 
 @utility accent {
   --chroma: var(--accent-chroma);
+}
+@utility secondary {
+  --chroma: var(--secondary-chroma);
 }
 @utility neutral {
   --chroma: var(--neutral-chroma);
@@ -34,8 +39,10 @@
   --lightness-btn: 60%;
   --lightness-contrast: 20%;
   --lightness-accent: 60%;
+  --lightness-secondary: 60%;
   
   --accent-chroma: 0.2;
+  --secondary-chroma: 0.2;
   --neutral-chroma: 0.01;
 
   color: var(--color-black);
@@ -51,8 +58,10 @@
   --lightness-btn: 60%;
   --lightness-contrast: 90%;
   --lightness-accent: 75%;
+  --lightness-secondary: 75%;
   
   --accent-chroma: 0.15;
+  --secondary-chroma: 0.15;
   --neutral-chroma: 0.02;
 
   color: var(--color-white);

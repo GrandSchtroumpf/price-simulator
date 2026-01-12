@@ -83,39 +83,6 @@ const number = (p: Omit<InputNumber, 'kind' | 'type'>): InputNumber => ({
   ...p
 })
 
-// const interiorDoorTest = {
-//   amount: number({
-//     name: 'amount',
-//     value: 1,
-//     min: 1,
-//   }),
-// };
-
-// const test: Step = {
-//   label: "test",
-//   controls: [
-//     {
-//       name: 'start',
-//       kind: 'checklist',
-//       legend: 'Travaux à réaliser',
-//       options: [
-//         {
-//           label: 'Fenêtre',
-//           value: 'window'
-//         },
-//         {
-//           label: 'Portail',
-//           value: 'fence'
-//         },
-//         {
-//           label: 'Escalier',
-//           value: 'stairs'
-//         },
-//       ]
-//     }
-//   ]
-// };
-
 const window: Step = {
   label: 'Fenêtre',
   times: $((item: Item) => {
@@ -127,6 +94,7 @@ const window: Step = {
         totalTime += timeTable.window[value];
       }
     }
+    if (item.data['unit']) totalTime = totalTime * Number(item.data['unit']);
     return totalTime;
   }),
   materials: $((item: Item) => {
@@ -142,6 +110,7 @@ const window: Step = {
         }
       }
     }
+    if (item.data['unit']) totalMaterials = totalMaterials * Number(item.data['unit']);
     return totalMaterials;
   }),
   controls: [

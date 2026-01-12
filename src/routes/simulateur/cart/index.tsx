@@ -117,8 +117,8 @@ export default component$(() => {
         {finalStep.controls.map((control) => (
           <DynamicControl key={control.name} control={control} />
         ))}
-        <button type='submit'>Valider</button>
-      </form>
+        {!finalEstimation.value && <button type='submit'>Valider</button>}
+      </form> 
       {finalEstimation.value > 0 && (
         <article id="final-estimation">
           <h2>Votre estimation est de {finalEstimation} €</h2>

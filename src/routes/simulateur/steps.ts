@@ -140,11 +140,17 @@ const window: Step = {
     return totalMaterials;
   }),
   controls: [
+    number({
+      label: "Nombre d'unité ?",
+      name: 'unit',
+      min: 1,
+      value: 1
+    }),
     {
       name: 'removal',
       kind: 'checkbox',
       label: "Dépose d'une fenêtre existante ?",
-      required: false,
+      required: true,
     },
     {
       name: 'size',
@@ -229,31 +235,80 @@ const window: Step = {
   ]
 }
 
-const door: Step = {
-  label: 'Porte',
+const interiorDoor: Step = {
+  label: "Porte d'intérieur",
   times: $((item: Item) => {
-    let totalTime = 0;
-    if (item.stepKey !== 'door') return totalTime;
-    totalTime += (timeTable[item.stepKey]['removal'] * Number(item.data['removal'])) || 0;
-    totalTime += (timeTable[item.stepKey]['installation'] * Number(item.data['installation'])) || 0;
   }),
   materials: $((item: Item) => {
-    let totalMaterials = 0;
-    if (item.stepKey !== 'door') return totalMaterials;
   }),
   controls: [
-    number({
-      label: 'Combien de portes avez-vous à déposer ?',
-      name: 'removal',
-      min: 0,
-      max: 10
-    }),
-    number({
-      label: 'Combien de portes souhaitez-vous installer ?',
-      name: 'installation',
-      min: 0,
-      max: 10
-    })
+    {
+      name: 'replace',
+      kind: 'checkbox',
+      label: "Remplacement d'hussieries existantes ?",
+      required: true,
+    },
+    {
+      name: 'size',
+      kind: 'radiogroup',
+      legend: "Dimensions de la porte ?",
+      options: [
+        {
+          value: 'standard',
+          label: 'Standard'
+        },
+        {
+          value: 'custom',
+          label: 'Sur mesure'
+        }
+      ]
+    },
+    {
+      name: 'type',
+      kind: 'radiogroup',
+      legend: "Type de porte ?",
+      options: [
+        {
+          value: 'swing',
+          label: 'Battante'
+        },
+        {
+          value: 'sliding',
+          label: 'Coulissante'
+        },
+        {
+          value: 'gallandage',
+          label: 'Galandage'
+        }
+      ]
+    },
+    {
+      name: 'type',
+      kind: 'radiogroup',
+      legend: "Type de finitions?",
+      options: [
+        {
+          value: 'wood',
+          label: 'Bois'
+        },
+        {
+          value: 'flush',
+          label: 'Isoplane'
+        },
+        {
+          value: 'pannel',
+          label: 'Postfromée'
+        },
+        {
+          value: 'glass',
+          label: 'Verre'
+        },
+        {
+          value: 'veneer',
+          label: 'Plaqué bois'
+        }
+      ]
+    },
   ]
 }
 
@@ -361,7 +416,7 @@ export const finalStep: Step = {
 const HOURLY_RATE = 20;
 
 const timeTable: Record<StepKey, any> = {
-  door: {
+  interiorDoor: {
     removal: 0.5,
     installation: 1,
   },
@@ -381,7 +436,7 @@ const timeTable: Record<StepKey, any> = {
 };
 
 const materialsTable: Record<StepKey, any> = {
-  door: {
+  interiorDoor: {
     high: 1000,
     medium: 500,
     low: 100
@@ -445,7 +500,7 @@ const materialsTable: Record<StepKey, any> = {
 
 export const stepsRecord = {
   window,
-  door,
+  interiorDoor,
   stairs,
   furniture,
   floor,

@@ -3,6 +3,16 @@ body:has(#cart) {
   min-height: 100dvh;
 }
 
+#final-estimation {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  p{
+    font-weight: 200;
+  }
+}
+
 #cart {
   display: grid;
   align-content: start;

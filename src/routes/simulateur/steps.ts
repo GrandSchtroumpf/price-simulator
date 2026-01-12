@@ -1,6 +1,7 @@
-import { $ } from "@qwik.dev/core";
+import { $, QRL } from "@qwik.dev/core";
 import StepKey from "./[stepKey]";
 
+const HOURLY_RATE = 20;
 export type ControlTypes = CheckList | CheckBox | RadioGroup | InputNumber | InputString;
 export type ControlKind = ControlTypes['kind'];
 export type StepKey = keyof typeof stepsRecord;
@@ -11,12 +12,16 @@ export interface Item {
   data: Record<string, InputTypes>;
 }
 
-export type Step = {
+export interface Step {
   controls: ControlTypes[];
   label: string;
-  materials?: any;
-  times?: any;
+  materials: QRL<(cart: Item) => number>;
+  times: QRL<(cart: Item) => number>;
 };
+
+interface FinalStep extends Omit<Step, 'times' | 'materials'> {
+  price: QRL<(cart: Item[]) => Promise<number>>;
+}
 
 export interface Control<T> {
   kind: T;
@@ -115,7 +120,7 @@ const window: Step = {
   label: 'Fenêtre',
   times: $((item: Item) => {
     let totalTime = 0;
-    if (item.stepKey !== 'window') return;
+    if (item.stepKey !== 'window') return 0;
     totalTime += (timeTable.window['installation'] || 0);
     for (const value of Object.values(item.data)) {
       if (typeof value === "string" && value in timeTable.window) {
@@ -140,11 +145,17 @@ const window: Step = {
     return totalMaterials;
   }),
   controls: [
+    number({
+      label: "Nombre d'unité ?",
+      name: 'unit',
+      min: 1,
+      value: 1
+    }),
     {
       name: 'removal',
       kind: 'checkbox',
       label: "Dépose d'une fenêtre existante ?",
-      required: false,
+      required: true,
     },
     {
       name: 'size',
@@ -229,48 +240,108 @@ const window: Step = {
   ]
 }
 
-const door: Step = {
-  label: 'Porte',
+const interiorDoor: Step = {
+  label: "Porte d'intérieur",
   times: $((item: Item) => {
-    let totalTime = 0;
-    if (item.stepKey !== 'door') return totalTime;
-    totalTime += (timeTable[item.stepKey]['removal'] * Number(item.data['removal'])) || 0;
-    totalTime += (timeTable[item.stepKey]['installation'] * Number(item.data['installation'])) || 0;
+    if (!item) return 0;
+    return 0;
   }),
   materials: $((item: Item) => {
     const totalMaterials = 0;
-    if (item.stepKey !== 'door') return totalMaterials;
+    if (item.stepKey !== 'interiorDoor') return totalMaterials;
+    return totalMaterials;
   }),
   controls: [
-    number({
-      label: 'Combien de portes avez-vous à déposer ?',
-      name: 'removal',
-      min: 0,
-      max: 10
-    }),
-    number({
-      label: 'Combien de portes souhaitez-vous installer ?',
-      name: 'installation',
-      min: 0,
-      max: 10
-    })
+    {
+      name: 'replace',
+      kind: 'checkbox',
+      label: "Remplacement d'hussieries existantes ?",
+      required: true,
+    },
+    {
+      name: 'size',
+      kind: 'radiogroup',
+      legend: "Dimensions de la porte ?",
+      options: [
+        {
+          value: 'standard',
+          label: 'Standard'
+        },
+        {
+          value: 'custom',
+          label: 'Sur mesure'
+        }
+      ]
+    },
+    {
+      name: 'type',
+      kind: 'radiogroup',
+      legend: "Type de porte ?",
+      options: [
+        {
+          value: 'swing',
+          label: 'Battante'
+        },
+        {
+          value: 'sliding',
+          label: 'Coulissante'
+        },
+        {
+          value: 'gallandage',
+          label: 'Galandage'
+        }
+      ]
+    },
+    {
+      name: 'type',
+      kind: 'radiogroup',
+      legend: "Type de finitions?",
+      options: [
+        {
+          value: 'wood',
+          label: 'Bois'
+        },
+        {
+          value: 'flush',
+          label: 'Isoplane'
+        },
+        {
+          value: 'pannel',
+          label: 'Postfromée'
+        },
+        {
+          value: 'glass',
+          label: 'Verre'
+        },
+        {
+          value: 'veneer',
+          label: 'Plaqué bois'
+        }
+      ]
+    },
   ]
 }
 
 const stairs: Step = {
   label: 'Escalier',
+  materials: $(() => 0),
+  times: $(() => 0),
   controls: [
   ]
 }
 
 const furniture: Step = {
   label: 'Mobilier',
+  materials: $(() => 0),
+  times: $(() => 0),
   controls: [
   ]
 }
 
 const floor: Step = {
   label: 'Sol',
+  materials: $(() => 0),
+  times: $(() => 0),
   controls: [
   ]
 }
@@ -281,22 +352,20 @@ const floor: Step = {
 //   ]
 // }
 
-export const finalStep: Step = {
+export const finalStep: FinalStep = {
   label: "Informations complémentaires",
-  // price: $((items: Item[]) => {
-  //   let totalTime = 0;
-  //   let totalMaterial = 0;
-  //   for (const item of items) {
-  //     const step = stepsRecord[item.stepKey];
-  //     for (const control of step.controls) {
-  //       if (control.kind === 'input' && control.type === 'number') {
-  //         const value = item.data[control.name];
-  //         totalTime += (timeTable[item.stepKey][control.name] * Number(value));
-  //         totalTime += timeTable[item.stepKey][control.name];
-  //       }
-  //     }
-  //   };
-  // }),
+  price: $(async (cart: Item[]) => {
+    let totalMaterials = 0;
+    let totalTime = 0;
+    for (const item of cart) {
+      const step = stepsRecord[item.stepKey];
+      totalMaterials += await step.materials(item);
+      totalTime += await step.times(item);
+    };
+    if (totalTime < 8) totalTime = 8;
+    const finalEstimation = totalMaterials + (totalTime * HOURLY_RATE);
+    return finalEstimation;
+  }),
   controls: [
     {
       kind: 'radiogroup',
@@ -310,11 +379,7 @@ export const finalStep: Step = {
         {
           label: "Appartement",
           value: "flat",
-        },
-        {
-          label: "Autre",
-          value: "other",
-        },
+        }
       ]
     },
     {
@@ -358,10 +423,8 @@ export const finalStep: Step = {
   ]
 }
 
-// const HOURLY_RATE = 20;
-
 const timeTable: Record<StepKey, any> = {
-  door: {
+  interiorDoor: {
     removal: 0.5,
     installation: 1,
   },
@@ -381,7 +444,7 @@ const timeTable: Record<StepKey, any> = {
 };
 
 const materialsTable: Record<StepKey, any> = {
-  door: {
+  interiorDoor: {
     high: 1000,
     medium: 500,
     low: 100
@@ -440,12 +503,23 @@ const materialsTable: Record<StepKey, any> = {
   },
   furniture: {},
   floor: {},
-}
+};
+
+export const finalElementsMultiplier: Record<string, number> = {
+  house: 1,
+  flat: 1.1,
+  ancient: 1.4,
+  renovated: 1.3,
+  new: 1.2,
+  close: 1,
+  near: 1.1,
+  far: 1.2
+};
 
 
 export const stepsRecord = {
   window,
-  door,
+  interiorDoor,
   stairs,
   furniture,
   floor,

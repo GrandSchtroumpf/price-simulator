@@ -1,0 +1,7 @@
+{
+  "prerender": [
+    {
+      "urls": ["simulateur/index.html"]
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+:root {
+  --transition-duration: 500ms;
+}
+
+::view-transition-group(.title),
+::view-transition-group(.background),
+::view-transition-group(.image) {
+  animation-duration: var(--transition-duration);
+  animation-timing-function: var(--ease-out);
+  animation-delay: 50ms;
+}
+::view-transition-old(.image),
+::view-transition-new(.image) {
+  /* Prevent the default animation, so both views remain opacity:1 throughout the transition */
+  animation: none;
+  /* Use normal blending, so the new view sits on top and obscures the old view */
+  mix-blend-mode: normal;
+  height: 100%;
+  overflow: clip;
+}
+@media (width >= 786px) {
+  ::view-transition-old(.image),
+  ::view-transition-new(.image) {
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+  }
+  ::view-transition-old(.background),
+  ::view-transition-new(.background) {
+    border-bottom-left-radius: 16px;
+    border-bottom-right-radius: 16px;
+  }
+}
+@media (width < 786px) {
+  ::view-transition-old(.image) {
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+  }
+}
+
+
+::view-transition-old(arrow):only-child,
+::view-transition-old(form):only-child,
+::view-transition-old(.title):only-child,
+::view-transition-old(.background):only-child,
+::view-transition-old(.image):only-child {
+  --opacity-in: 1;
+  --opacity-out: 0;
+  animation: fade 100ms forwards;
+}
+
+::view-transition-new(arrow):only-child,
+::view-transition-new(form):only-child,
+::view-transition-new(.title):only-child,
+::view-transition-new(.background):only-child,
+::view-transition-new(.image):only-child {
+  --opacity-in: 0;
+  --opacity-out: 1;
+  animation: fade 300ms 250ms backwards;
+}
+
+/* The old view is the thumbnail */
+::view-transition-old(.image) {
+  object-fit: contain;
+}
+
+/* The new view is the full image */
+::view-transition-new(.image) {
+  object-fit: cover;
+}
+
+::view-transition-new(.title),
+::view-transition-old(.title),
+::view-transition-new(.background),
+::view-transition-old(.background) {
+  height: 100%;
+}

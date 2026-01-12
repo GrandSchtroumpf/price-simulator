@@ -4,6 +4,9 @@
   background-color: oklch(var(--lightness-btn) var(--chroma) var(--hue));
   text-align: center;
   color: var(--color-white);
+  & svg {
+    flex-shrink: 0;
+  }
 }
 
 @utility btn-fill {

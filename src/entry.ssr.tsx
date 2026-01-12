@@ -24,7 +24,6 @@ export default function (opts: RenderToStreamOptions) {
       lang: "fr-FR",
       ...opts.containerAttributes,
     },
-    qwikLoader: 'inline',
     serverData: {
       ...opts.serverData,
     },

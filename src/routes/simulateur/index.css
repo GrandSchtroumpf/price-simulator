@@ -1,16 +1,95 @@
-ul {
-  display: flex;
-  justify-content: space-between;
-  width: 50%;
-  margin: 16px auto;
+#simulator {
+  display: grid;
+  gap: 32px;
 
-  a {
-    border: solid 1px black;
-    cursor: pointer;
-    padding: 8px 16px;
+  & hgroup {
+    display: grid;
+    justify-items: center;
+    gap: 8px;
+    padding: 32px;
   }
+  & h1 {
+    font-size: 2rem;
+  }
+  & nav {
+    --item-width: 400px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(var(--item-width), 1fr));
+    gap: 32px;
+    margin-inline: auto;
+    padding: 16px;
 
-  a:hover{
-    background-color: rgb(165, 210, 210);
+    @media (width < 1200px) {
+      --item-width: 370px;
+    }
+    @media (width < 1000px) {
+      --item-width: 350px;
+    }
+    @media (width < 768px) {
+      --item-width: 300px;
+    }
+
+    & > a {
+      --radius: 16px;
+      display: grid;
+      overflow: clip;
+      &:hover {
+        & img {
+          transform: scale(1.1);
+        }
+        & p::before {
+          background-color: var(--color-surface-4);
+        }
+      }
+      & .img-container {
+        border-top-left-radius: var(--radius);
+        border-top-right-radius: var(--radius);
+        overflow: clip;
+        view-transition-class: image;
+      }
+      & img {
+        border-top-left-radius: var(--radius);
+        border-top-right-radius: var(--radius);
+        transition: transform 300ms var(--ease-out);
+        width: 100%;
+      }
+      & .card-content {
+        padding: 16px 24px;
+        position: relative;
+        isolation: isolate;
+        &::before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          z-index: -1;
+          background-color: var(--color-surface-2);
+          transition: background-color 300ms var(--ease-out);
+          border-bottom-left-radius: var(--radius);
+          border-bottom-right-radius: var(--radius);
+          view-transition-name: var(--transition-name);
+          view-transition-class: background;
+        }
+      }
+      & p {
+        display: inline-block;
+        font-size: 1.5rem;
+        view-transition-class: title;
+      }
+    }
+  }
+  .cart {
+    position: fixed;
+    inset-inline-end: 16px;
+    padding: 8px;
+    background-color: var(--color-accent);
+    color: var(--color-on-accent);
+    border-radius: 32px;
+    z-index: 1;
+    @media (width >= 768px) {  
+      top: 16px;
+    }
+    @media (width < 768px) {  
+      bottom: 16px;
+    }
   }
 }

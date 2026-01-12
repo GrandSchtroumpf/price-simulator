@@ -42,7 +42,7 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (width < 768px) {
   .estimate {
     & hgroup {
       padding-inline: 16px;

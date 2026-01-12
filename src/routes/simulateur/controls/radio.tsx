@@ -1,23 +1,25 @@
-import { component$, useId } from '@qwik.dev/core';
+import { component$, useId, useStyles$ } from '@qwik.dev/core';
 import { ControlTypes } from '../steps';
+import styles from './radio.css?inline';
 
 interface CheckListProps {
   control: ControlTypes;
 }
 
 export default component$<CheckListProps>(({ control }) => {
+  useStyles$(styles);
   if (control.kind !== 'radiogroup') return null;
   const id = useId();
 
   return (
-    <div>
+    <div class="radiogroup-container">
       <p id={id}>{control.legend}</p>
-      <div role='group' aria-labelledby={id}>
+      <div role="radiogroup" aria-labelledby={id}>
         {control.options.map((option) => (
-          <div>
+          <>
             <input type="radio" id={option.value} name={control.name} value={option.value} checked={option.checked} />
             <label for={option.value}>{option.label}</label>
-          </div>
+          </>
         ))}
       </div>
     </div>

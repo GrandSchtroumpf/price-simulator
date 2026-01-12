@@ -58,7 +58,7 @@
     object-fit: cover;
     border-top-left-radius: 2rem;
   }
-  @media (max-width: 768px) {
+  @media (width < 768px) {
     & figcaption {
       font-size: 1.4rem;
     }

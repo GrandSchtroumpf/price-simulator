@@ -1,7 +1,8 @@
 @theme {
   --spacing: 0.0625rem; /* 1/16rem -> 1px */
   --font-sans: Josefin Sans, sans-serif;
-  --color-accent: oklch(60% var(--accent-chroma) var(--hue));
+  --color-accent: oklch(var(--lightness-accent) var(--accent-chroma) var(--hue));
+  --color-on-accent: oklch(20% var(--accent-chroma) var(--hue));
   --color-black: oklch(5% var(--neutral-chroma) var(--hue));
   --color-white: oklch(100% var(--neutral-chroma) var(--hue));
   --color-surface-0: oklch(var(--lightness-0) var(--neutral-chroma) var(--hue));
@@ -32,6 +33,7 @@
   --lightness-outline: 40%;
   --lightness-btn: 60%;
   --lightness-contrast: 20%;
+  --lightness-accent: 60%;
   
   --accent-chroma: 0.2;
   --neutral-chroma: 0.01;
@@ -48,6 +50,7 @@
   --lightness-outline: 60%;
   --lightness-btn: 60%;
   --lightness-contrast: 90%;
+  --lightness-accent: 75%;
   
   --accent-chroma: 0.15;
   --neutral-chroma: 0.02;

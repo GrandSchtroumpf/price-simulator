@@ -10,6 +10,7 @@ import Footer from "~/components/footer/Footer";
 import WoodVeins from '~/media/wood-veins.svg?jsx';
 import style from './index.css?inline';
 import homeSchema from "~/schemas/home-schemas.json?raw";
+import speculationRules from "~/schemas/home-speculationrules.json?raw";
 
 export default component$(() => {
   useStyles$(style);
@@ -41,6 +42,7 @@ export default component$(() => {
       <div class="wood-background" aria-hidden="true">
         <WoodVeins class="wood-veins" />
       </div>
+      <script type="speculationrules" dangerouslySetInnerHTML={speculationRules}></script>
     </>
   )
 })
@@ -92,9 +94,7 @@ export const head: DocumentHead = {
   ],
   scripts: [
     {
-      props: {
-        type: "application/ld+json"
-      },
+      type: "application/ld+json",
       script: homeSchema
     }
   ],

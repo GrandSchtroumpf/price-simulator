@@ -1,0 +1,45 @@
+.radiogroup-container {
+  display: grid;
+  gap: 8px;
+
+  & [role="radiogroup"] {
+    display: grid;
+    grid-auto-flow: column;
+    padding: 8px;
+    border: solid 1px var(--color-outline);
+    border-radius: 8px;
+    position: relative;
+    @media (width < 800px) {
+      grid-auto-flow: row;
+    }
+  }
+
+  & [role="radiogroup"]:has(:focus-visible) {
+    border-color: var(--color-accent);
+  }
+
+  
+  & input {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    z-index: -1;
+  }
+
+  & label {
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: center;
+    position: relative;
+    isolation: isolate;
+    @media (width < 800px) {
+      text-align: start;
+    }
+  }
+
+  & input:checked + label {
+    color: var(--color-on-accent);
+    background-color: var(--color-accent);
+  }
+}

@@ -1,6 +1,7 @@
 import { component$, useStyles$ } from "@qwik.dev/core";
 import style from './Recommendation.css?inline';
 import scrollAnimation from './ScrollAnimation.css?raw';
+import Stars from "../stars/Stars";
 
 export default component$(() => {
 	/** Remove when lightningcss > 1.30.2 */
@@ -17,49 +18,54 @@ export default component$(() => {
 
 			<ul style="--index: 0">
 				<li>
-					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Expedita quidem tempora deleniti accusantium aut praesentium? Dolorem sint debitis illo ratione. Fuga saepe nihil obcaecati officia distinctio vel inventore rerum deserunt.</p>
-					<hr />
 					<img loading="lazy" src="/imgs/home/placeholder.webp" width="56" height="56" alt="Photo de profil" />
 					<hgroup>
-						<h3>Société DOE</h3>
-						<p>Travaux effectués le 13 octobre 2012</p>
+						<h3>Valérie G</h3>
+						<p>Janvier 2026</p>
 					</hgroup>
+					<Stars />
+					<hr />
+					<p>Artisan sérieux, à l'écoute et toujours de bons conseils, Erwan a réalisé différents travaux de menuiserie dans ma maison en paille ossature bois (lambris au plafond, tous les encadrements de fenêtre intérieur) ainsi que la pose des cloisons en placo. Je suis très satisfaite du résultat. Je le recommande sans hésitation.</p>
 				</li>
 				<li style="--index: 1">
-					<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis voluptatem voluptatum ducimus incidunt, repudiandae doloremque quas suscipit dolor similique omnis deleniti excepturi non consectetur dolore repellat saepe aspernatur numquam? Quas.</p>
-					<hr />
 					<img loading="lazy" src="/imgs/home/placeholder.webp" width="56" height="56" alt="Photo de profil" />
 					<hgroup>
-						<h3>John DOE</h3>
-						<p>Travaux non effectués en janvier 2026</p>
+						<h3>Nicolas Fernandes</h3>
+						<p>Octobre 2012</p>
 					</hgroup>
+					<Stars />
+					<hr />
+					<p>Une terrasse en hauteur de 32m2 faites en 8 jours, rigoureux sérieux et pleins de bonnes idées Erwan a été super. Je le recommande très fortement !</p>
 				</li>
 				<li style="--index: 2">
-					<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo, et. Temporibus sint ratione ea doloribus explicabo aspernatur magni suscipit beatae, voluptatem quod, ut neque voluptates rem eaque. Mollitia, nam eaque!</p>
-					<hr />
 					<img loading="lazy" src="/imgs/home/placeholder.webp" width="56" height="56" alt="Photo de profil" />
 					<hgroup>
-						<h3>Jane DOE</h3>
-						<p>Travaux réalisés en janvier 2025</p>
+						<h3>Frédéric Gravot</h3>
+						<p>Janvier 2025</p>
 					</hgroup>
+					<Stars />
+					<hr />
+					<p>Pose d'ouvertures PVC, portes et fenêtres. Travail parfait jusqu'aux finitions. Déjà prévu pour d'autres chantiers. Je recommande sans modération 🤠</p>
 				</li>
 				<li style="--index: 3">
-					<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos nulla, sed laboriosam doloremque iure dolores sequi laborum ut fugit quas ad veniam incidunt voluptatibus porro maxime quod hic voluptatum rem.</p>
-					<hr />
 					<img loading="lazy" src="/imgs/home/placeholder.webp" width="56" height="56" alt="Photo de profil" />
 					<hgroup>
-						<h3>Nicolas MICHEL</h3>
-						<p>Travaux réalisés en février 2023</p>
+						<h3>G The</h3>
+						<p>Il y a plus d'un an</p>
 					</hgroup>
+					<Stars />
+					<hr />
+					<p>Intervention sur une réalisation d'isolation intérieure, avec placo et pose des bandes. Travail parfaitement réalisé et très bonne communication.</p>
 				</li>
 				<li style="--index: 4">
-					<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis saepe harum, dolore culpa omnis quae vel in dolorem voluptatibus quis rerum, magni, at obcaecati voluptates quos soluta incidunt nisi officiis!</p>
-					<hr />
 					<img loading="lazy" src="/imgs/home/placeholder.webp" width="56" height="56" alt="Photo de profil" />
 					<hgroup>
-						<h3>Baptiste LE PABIC</h3>
-						<p>Travaux réalisés en janvier 2026</p>
+						<h3>Wilfrid Le Hénaff</h3>
+						<p>Mars 2024</p>
 					</hgroup>
+					<Stars />
+					<hr />
+					<p>Artisan très sérieux, et d'une finesse dans son travail hors du commun. Très soigneux.</p>
 				</li>
 			</ul>
 		</section>

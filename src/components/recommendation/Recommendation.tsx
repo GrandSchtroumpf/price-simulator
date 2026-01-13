@@ -1,7 +1,10 @@
 import { component$, useStyles$ } from "@qwik.dev/core";
 import style from './Recommendation.css?inline';
+import scrollAnimation from './ScrollAnimation.css?raw';
 
 export default component$(() => {
+	/** Remove when lightningcss > 1.30.2 */
+	useStyles$(scrollAnimation);
 	useStyles$(style);
 
 	return (

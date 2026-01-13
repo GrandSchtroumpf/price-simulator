@@ -1,0 +1,11 @@
+#recommandations li > img {
+  @container sticky-recommandation scroll-state(stuck: top) {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+}
+#recommandations li > hgroup {
+  @container sticky-recommandation scroll-state(stuck: top) {
+    transform: translateX(-56px);
+  }
+}

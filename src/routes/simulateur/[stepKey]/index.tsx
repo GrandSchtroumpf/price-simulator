@@ -3,7 +3,7 @@ import { StaticGenerateHandler, useLocation } from "@qwik.dev/router";
 import { Item, Step, StepKey, stepsRecord } from "../steps";
 import { DynamicControl } from "../controls";
 import { cartContext } from "../layout";
-import { unwrapStore, useSignal, useStyles$ } from "@qwik.dev/core/internal";
+import { unwrapStore, useSignal, useStyles$, useVisibleTask$ } from "@qwik.dev/core/internal";
 import styles from './index.css?inline';
 
 const convertControls = (data: FormData, step: Step) => {
@@ -63,14 +63,23 @@ export default component$(() => {
   const cart = useContext(cartContext);
   const location = useLocation();
   const stepPrice = useSignal(0);
+  const index = useSignal<undefined | number>(undefined)
   const { stepKey } = location.params;
   if (!(stepKey in stepsRecord)) return null;
   const step = stepsRecord[stepKey as StepKey];
-  const index = location.url.searchParams.get('index');
+
+  useVisibleTask$(() => {
+    const editIndex = location.url.searchParams.get('index');
+    if (editIndex) {
+      index.value = Number(editIndex);
+    } else {
+      index.value = undefined;
+    }
+  });
 
   const controls = useComputed$(() => {
-    if (typeof index === 'string') {
-      const editItem = cart[Number(index)];
+    if (typeof index.value === 'number') {
+      const editItem = cart[index.value];
       const controls = writeControls(editItem, step);
       return controls;
     }

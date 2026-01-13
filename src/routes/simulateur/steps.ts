@@ -164,7 +164,7 @@ const interior: Step = {
           value: "groundLevel"
         },
         {
-          label: "Etage",
+          label: "Étage",
           value: "floorLevel"
         },
         {
@@ -239,11 +239,11 @@ const deck: Step = {
           value: "groundLevel"
         },
         {
-          label: "Surélevé avec éscalier",
+          label: "Surélevé avec escalier",
           value: "elevatedWithStairs"
         },
         {
-          label: "Surélevé avec éscalier",
+          label: "Surélevé avec escalier",
           value: "elevatedWithoutStairs"
         },
       ]

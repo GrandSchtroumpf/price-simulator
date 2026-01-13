@@ -520,13 +520,6 @@ const stairs: Step = {
   ]
 }
 
-const furniture: Step = {
-  label: 'Mobilier',
-  materials: $(() => 0),
-  times: $(() => 0),
-  controls: [
-  ]
-}
 
 // const gate: Step = {
 //   label: 'Portail',
@@ -540,56 +533,24 @@ export const finalStep: FinalStep = {
   controls: [
     {
       kind: 'radiogroup',
-      legend: 'Type de logement',
-      name: 'accommodation',
-      required: true,
-      options: [
-        {
-          label: "Maison",
-          value: "house",
-        },
-        {
-          label: "Appartement",
-          value: "flat",
-        }
-      ]
-    },
-    {
-      kind: 'radiogroup',
-      legend: 'Type de construction',
-      name: 'age',
-      required: true,
-      options: [
-        {
-          label: "Ancien",
-          value: "ancient",
-        },
-        {
-          label: "Rénové",
-          value: "renovated",
-        },
-        {
-          label: "Récent",
-          value: "new",
-        },
-      ]
-    },
-    {
-      kind: 'radiogroup',
       legend: 'Quelle est la distance entre votre bien et la ville de Redon',
       name: 'location',
       required: true,
       options: [
         {
-          label: "Inférieur à 10km",
+          label: "Inférieur à 20km",
           value: "close",
         },
         {
-          label: "Entre 10km et 20km",
+          label: "Entre 20km et 40km",
           value: "near",
         },
         {
-          label: "Supérieur à 20km",
+          label: "Entre 40km et 60km",
+          value: "distant",
+        },
+        {
+          label: "Supérieur à 60km",
           value: "far",
         },
       ]
@@ -696,10 +657,8 @@ export const finalElementsMultiplier: Record<string, number> = {
 
 
 export const stepsRecord = {
-  window,
   interior,
   deck,
   stairs,
-  furniture,
   floor,
 }

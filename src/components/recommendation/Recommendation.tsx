@@ -18,7 +18,7 @@ export default component$(() => {
 
 			<ul style="--index: 0">
 				<li>
-					<img loading="lazy" src="/imgs/home/placeholder.webp" width="56" height="56" alt="Photo de profil" />
+					<img loading="lazy" src="/imgs/home/recommendations/avatar-v.png" width="56" height="56" alt="Photo de profil" />
 					<hgroup>
 						<h3>Valérie G</h3>
 						<p>Janvier 2026</p>
@@ -28,7 +28,7 @@ export default component$(() => {
 					<p>Artisan sérieux, à l'écoute et toujours de bons conseils, Erwan a réalisé différents travaux de menuiserie dans ma maison en paille ossature bois (lambris au plafond, tous les encadrements de fenêtre intérieur) ainsi que la pose des cloisons en placo. Je suis très satisfaite du résultat. Je le recommande sans hésitation.</p>
 				</li>
 				<li style="--index: 1">
-					<img loading="lazy" src="/imgs/home/placeholder.webp" width="56" height="56" alt="Photo de profil" />
+					<img loading="lazy" src="/imgs/home/recommendations/avatar-n.png" width="56" height="56" alt="Photo de profil" />
 					<hgroup>
 						<h3>Nicolas Fernandes</h3>
 						<p>Octobre 2012</p>
@@ -38,7 +38,7 @@ export default component$(() => {
 					<p>Une terrasse en hauteur de 32m2 faites en 8 jours, rigoureux sérieux et pleins de bonnes idées Erwan a été super. Je le recommande très fortement !</p>
 				</li>
 				<li style="--index: 2">
-					<img loading="lazy" src="/imgs/home/placeholder.webp" width="56" height="56" alt="Photo de profil" />
+					<img loading="lazy" src="/imgs/home/recommendations/avatar-f.png" width="56" height="56" alt="Photo de profil" />
 					<hgroup>
 						<h3>Frédéric Gravot</h3>
 						<p>Janvier 2025</p>
@@ -48,7 +48,7 @@ export default component$(() => {
 					<p>Pose d'ouvertures PVC, portes et fenêtres. Travail parfait jusqu'aux finitions. Déjà prévu pour d'autres chantiers. Je recommande sans modération 🤠</p>
 				</li>
 				<li style="--index: 3">
-					<img loading="lazy" src="/imgs/home/placeholder.webp" width="56" height="56" alt="Photo de profil" />
+					<img loading="lazy" src="/imgs/home/recommendations/avatar-g.png" width="56" height="56" alt="Photo de profil" />
 					<hgroup>
 						<h3>G The</h3>
 						<p>Il y a plus d'un an</p>
@@ -58,7 +58,7 @@ export default component$(() => {
 					<p>Intervention sur une réalisation d'isolation intérieure, avec placo et pose des bandes. Travail parfaitement réalisé et très bonne communication.</p>
 				</li>
 				<li style="--index: 4">
-					<img loading="lazy" src="/imgs/home/placeholder.webp" width="56" height="56" alt="Photo de profil" />
+					<img loading="lazy" src="/imgs/home/recommendations/avatar-w.png" width="56" height="56" alt="Photo de profil" />
 					<hgroup>
 						<h3>Wilfrid Le Hénaff</h3>
 						<p>Mars 2024</p>

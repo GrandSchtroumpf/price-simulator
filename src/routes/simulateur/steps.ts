@@ -1,7 +1,6 @@
 import { $, QRL } from "@qwik.dev/core";
 import StepKey from "./[stepKey]";
 
-const HOURLY_RATE = 20;
 export type ControlTypes = CheckList | CheckBox | RadioGroup | InputNumber | InputString;
 export type ControlKind = ControlTypes['kind'];
 export type StepKey = keyof typeof stepsRecord;
@@ -20,7 +19,7 @@ export interface Step {
 };
 
 interface FinalStep extends Omit<Step, 'times' | 'materials'> {
-  price: QRL<(cart: Item[]) => Promise<number>>;
+  price: QRL<(cart: Item[]) => number>;
 }
 
 export interface Control<T> {
@@ -85,223 +84,226 @@ const number = (p: Omit<InputNumber, 'kind' | 'type'>): InputNumber => ({
   ...p
 })
 
-const window: Step = {
-  label: 'Fenêtre',
-  times: $((item: Item) => {
-    let totalTime = 0;
-    if (item.stepKey !== 'window') return 0;
-    totalTime += (timeTable.window['installation'] || 0);
-    for (const value of Object.values(item.data)) {
-      if (typeof value === "string" && value in timeTable.window) {
-        totalTime += timeTable.window[value];
-      }
-    }
-    if (item.data['unit']) totalTime = totalTime * Number(item.data['unit']);
-    return totalTime;
-  }),
-  materials: $((item: Item) => {
-    let totalMaterials = 0;
-    if (item.stepKey !== 'window') return totalMaterials;
-    for (const value of Object.values(item.data)) {
-      const size = item.data['size'];
-      if (typeof value === 'string') {
-        if (size && typeof size === "string") {
-          totalMaterials += (materialsTable.window[size][value] || 0);
-        } else {
-          totalMaterials += (materialsTable.window[value] || 0);
-        }
-      }
-    }
-    if (item.data['unit']) totalMaterials = totalMaterials * Number(item.data['unit']);
-    return totalMaterials;
-  }),
-  controls: [
-    number({
-      label: "Nombre d'unité",
-      name: 'unit',
-      min: 1,
-      value: 1,
-      required: true
-    }),
-    {
-      name: 'removal',
-      kind: 'checkbox',
-      label: "Dépose d'une fenêtre existante"
-    },
-    {
-      name: 'size',
-      kind: 'radiogroup',
-      legend: "Dimensions de la fenêtre",
-      required: true,
-      options: [
-        {
-          value: 'small',
-          label: 'Petite (-1 mètre)'
-        },
-        {
-          value: 'medium',
-          label: 'Moyenne (1 à 2 mètres)'
-        },
-        {
-          value: 'large',
-          label: 'Grande (+ 2 mètres)'
-        }
-      ]
-    },
-    {
-      name: 'type',
-      kind: 'radiogroup',
-      legend: "Type de vitrage",
-      required: true,
-      options: [
-        {
-          value: 'standard',
-          label: 'Double vitrage standard'
-        },
-        {
-          value: 'thermic',
-          label: 'Double thérmique / phonique'
-        },
-        {
-          value: 'secured',
-          label: 'Anti effraction'
-        },
-        {
-          value: 'complete',
-          label: 'Toutes options'
-        },
-      ]
-    },
-    {
-      name: 'meterials',
-      kind: 'radiogroup',
-      legend: "Type de matériaux",
-      required: true,
-      options: [
-        {
-          value: 'plastic',
-          label: 'PVC'
-        },
-        {
-          value: 'wood',
-          label: 'Bois'
-        },
-        {
-          value: 'aluminum',
-          label: 'Aluminium'
-        }
-      ]
-    },
-    {
-      name: 'finish',
-      kind: 'radiogroup',
-      legend: "Finitions",
-      required: true,
-      options: [
-        {
-          value: 'raw',
-          label: 'Brut'
-        },
-        {
-          value: 'painted',
-          label: 'Couleurs'
-        },
-        {
-          value: 'varnish',
-          label: 'Vernis'
-        }
-      ]
-    }
-  ]
-}
+// const window: Step = {
+//   label: 'Fenêtre',
+//   times: $((item: Item) => {
+//     let totalTime = 0;
+//     if (item.stepKey !== 'window') return 0;
+//     totalTime += (timeTable.window['installation'] || 0);
+//     for (const value of Object.values(item.data)) {
+//       if (typeof value === "string" && value in timeTable.window) {
+//         totalTime += timeTable.window[value];
+//       }
+//     }
+//     if (item.data['unit']) totalTime = totalTime * Number(item.data['unit']);
+//     return totalTime;
+//   }),
+//   materials: $((item: Item) => {
+//     let totalMaterials = 0;
+//     if (item.stepKey !== 'window') return totalMaterials;
+//     for (const value of Object.values(item.data)) {
+//       const size = item.data['size'];
+//       if (typeof value === 'string') {
+//         if (size && typeof size === "string") {
+//           totalMaterials += (materialsTable.window[size][value] || 0);
+//         } else {
+//           totalMaterials += (materialsTable.window[value] || 0);
+//         }
+//       }
+//     }
+//     if (item.data['unit']) totalMaterials = totalMaterials * Number(item.data['unit']);
+//     return totalMaterials;
+//   }),
+//   controls: [
+//     number({
+//       label: "Nombre d'unité",
+//       name: 'unit',
+//       min: 1,
+//       value: 1,
+//       required: true
+//     }),
+//     {
+//       name: 'removal',
+//       kind: 'checkbox',
+//       label: "Dépose d'une fenêtre existante"
+//     },
+//     {
+//       name: 'size',
+//       kind: 'radiogroup',
+//       legend: "Dimensions de la fenêtre",
+//       required: true,
+//       options: [
+//         {
+//           value: 'small',
+//           label: 'Petite (-1 mètre)'
+//         },
+//         {
+//           value: 'medium',
+//           label: 'Moyenne (1 à 2 mètres)'
+//         },
+//         {
+//           value: 'large',
+//           label: 'Grande (+ 2 mètres)'
+//         }
+//       ]
+//     },
+//     {
+//       name: 'type',
+//       kind: 'radiogroup',
+//       legend: "Type de vitrage",
+//       required: true,
+//       options: [
+//         {
+//           value: 'standard',
+//           label: 'Double vitrage standard'
+//         },
+//         {
+//           value: 'thermic',
+//           label: 'Double thérmique / phonique'
+//         },
+//         {
+//           value: 'secured',
+//           label: 'Anti effraction'
+//         },
+//         {
+//           value: 'complete',
+//           label: 'Toutes options'
+//         },
+//       ]
+//     },
+//     {
+//       name: 'meterials',
+//       kind: 'radiogroup',
+//       legend: "Type de matériaux",
+//       required: true,
+//       options: [
+//         {
+//           value: 'plastic',
+//           label: 'PVC'
+//         },
+//         {
+//           value: 'wood',
+//           label: 'Bois'
+//         },
+//         {
+//           value: 'aluminum',
+//           label: 'Aluminium'
+//         }
+//       ]
+//     },
+//     {
+//       name: 'finish',
+//       kind: 'radiogroup',
+//       legend: "Finitions",
+//       required: true,
+//       options: [
+//         {
+//           value: 'raw',
+//           label: 'Brut'
+//         },
+//         {
+//           value: 'painted',
+//           label: 'Couleurs'
+//         },
+//         {
+//           value: 'varnish',
+//           label: 'Vernis'
+//         }
+//       ]
+//     }
+//   ]
+// }
 
-const interiorDoor: Step = {
-  label: "Porte d'intérieur",
-  times: $((item: Item) => {
-    if (!item) return 0;
-    return 0;
-  }),
-  materials: $((item: Item) => {
-    const totalMaterials = 0;
-    if (item.stepKey !== 'interiorDoor') return totalMaterials;
-    return totalMaterials;
-  }),
-  controls: [
-    {
-      name: 'replace',
-      kind: 'checkbox',
-      label: "Remplacement d'hussieries existantes ?",
-    },
-    {
-      name: 'size',
-      kind: 'radiogroup',
-      legend: "Dimensions de la porte ?",
-      required: true,
-      options: [
-        {
-          value: 'standard',
-          label: 'Standard'
-        },
-        {
-          value: 'custom',
-          label: 'Sur mesure'
-        }
-      ]
-    },
-    {
-      name: 'type',
-      kind: 'radiogroup',
-      legend: "Type de porte ?",
-      required: true,
-      options: [
-        {
-          value: 'swing',
-          label: 'Battante'
-        },
-        {
-          value: 'sliding',
-          label: 'Coulissante'
-        },
-        {
-          value: 'gallandage',
-          label: 'Galandage'
-        }
-      ]
-    },
-    {
-      name: 'type',
-      kind: 'radiogroup',
-      legend: "Type de finitions?",
-      required: true,
-      options: [
-        {
-          value: 'wood',
-          label: 'Bois'
-        },
-        {
-          value: 'flush',
-          label: 'Isoplane'
-        },
-        {
-          value: 'pannel',
-          label: 'Postfromée'
-        },
-        {
-          value: 'glass',
-          label: 'Verre'
-        },
-        {
-          value: 'veneer',
-          label: 'Plaqué bois'
-        }
-      ]
-    },
-  ]
-}
+// const interiorDoor: Step = {
+//   label: "Porte d'intérieur",
+//   times: $((item: Item) => {
+//     if (!item) return 0;
+//     return 0;
+//   }),
+//   materials: $((item: Item) => {
+//     const totalMaterials = 0;
+//     if (item.stepKey !== 'interiorDoor') return totalMaterials;
+//     return totalMaterials;
+//   }),
+//   controls: [
+//     {
+//       name: 'replace',
+//       kind: 'checkbox',
+//       label: "Remplacement d'hussieries existantes ?",
+//     },
+//     {
+//       name: 'size',
+//       kind: 'radiogroup',
+//       legend: "Dimensions de la porte ?",
+//       required: true,
+//       options: [
+//         {
+//           value: 'standard',
+//           label: 'Standard'
+//         },
+//         {
+//           value: 'custom',
+//           label: 'Sur mesure'
+//         }
+//       ]
+//     },
+//     {
+//       name: 'type',
+//       kind: 'radiogroup',
+//       legend: "Type de porte ?",
+//       required: true,
+//       options: [
+//         {
+//           value: 'swing',
+//           label: 'Battante'
+//         },
+//         {
+//           value: 'sliding',
+//           label: 'Coulissante'
+//         },
+//         {
+//           value: 'gallandage',
+//           label: 'Galandage'
+//         }
+//       ]
+//     },
+//     {
+//       name: 'type',
+//       kind: 'radiogroup',
+//       legend: "Type de finitions?",
+//       required: true,
+//       options: [
+//         {
+//           value: 'wood',
+//           label: 'Bois'
+//         },
+//         {
+//           value: 'flush',
+//           label: 'Isoplane'
+//         },
+//         {
+//           value: 'pannel',
+//           label: 'Postfromée'
+//         },
+//         {
+//           value: 'glass',
+//           label: 'Verre'
+//         },
+//         {
+//           value: 'veneer',
+//           label: 'Plaqué bois'
+//         }
+//       ]
+//     },
+//   ]
+// }
 
 const floor: Step = {
   label: 'Sol',
-  materials: $(() => 0),
+  materials: $((item: Item) => {
+    if (!item) return 0;
+    return 0;
+  }),
   times: $(() => 0),
   controls: [
     number({
@@ -314,21 +316,207 @@ const floor: Step = {
       legend: "Type de matériaux",
       name: "metarials",
       kind: "radiogroup",
+      required: true,
       options: [
         {
           label: "Massif",
           value: "hard"
-        }
+        },
+        {
+          label: "Stratifié",
+          value: "plastic"
+        },
+        {
+          label: "Vinyle-PVC",
+          value: "vinyl"
+        },
       ]
     }
   ]
 }
+
+const interior: Step = {
+  label: "Aménagement/Isolation intérieur",
+  materials: $(() => 0),
+  times: $(() => 0),
+  controls: [
+    number({
+      label: "Surface en m²",
+      name: "surace",
+      value: 1,
+      min: 1
+    }),
+    {
+      legend: "Pièce",
+      name: "room",
+      kind: "radiogroup",
+      required: true,
+      options: [
+        {
+          label: "Rez de chaussée",
+          value: "groundLevel"
+        },
+        {
+          label: "Etage",
+          value: "floorLevel"
+        },
+        {
+          label: "Combles",
+          value: "attic"
+        },
+      ]
+    },
+    {
+      legend: "Types de matériaux",
+      name: "materials",
+      kind: "radiogroup",
+      required: true,
+      options: [
+        {
+          label: "Laine de verre",
+          value: "glass"
+        },
+        {
+          label: "Laine de roche",
+          value: "rock"
+        },
+        {
+          label: "Laine de bois",
+          value: "wood"
+        },
+      ]
+    }
+  ]
+}
+
+const deck: Step = {
+  label: "Terrasse",
+  materials: $(() => 0),
+  times: $(() => 0),
+  controls: [
+    number({
+      label: "Surface en m²",
+      name: "surace",
+      value: 1,
+      min: 1
+    }),
+    {
+      legend: "Niveau",
+      name: "level",
+      kind: "radiogroup",
+      required: true,
+      options: [
+        {
+          label: "Sol",
+          value: "floorLevel"
+        },
+        {
+          label: "Surélevé avec éscalier",
+          value: "elevatedWithStairs"
+        },
+        {
+          label: "Surélevé avec éscalier",
+          value: "elevatedWithoutStairs"
+        },
+      ]
+    },
+    {
+      legend: "Garde corps",
+      name: "guardrail",
+      kind: "radiogroup",
+      required: true,
+      options: [
+        {
+          label: "Sans garde corps",
+          value: "without"
+        },
+        {
+          label: "Bois",
+          value: "wood"
+        },
+        {
+          label: "Alu",
+          value: "aluminum"
+        },
+      ]
+    }
+  ]
+}
+
 
 const stairs: Step = {
   label: 'Escalier',
   materials: $(() => 0),
   times: $(() => 0),
   controls: [
+    {
+      legend: "Contre marche",
+      name: "step",
+      kind: "radiogroup",
+      required: true,
+      options: [
+        {
+          label: "Avec contre-marche",
+          value: "withStep"
+        },
+        {
+          label: "Sans contre-marche",
+          value: "withoutStep"
+        }
+      ]
+    },
+    {
+      legend: "Garde-corps",
+      name: "step",
+      kind: "radiogroup",
+      required: true,
+      options: [
+        {
+          label: "Avec garde-corps",
+          value: "withGardrail"
+        },
+        {
+          label: "Sans garde-corps",
+          value: "withoutGardrail"
+        }
+      ]
+    },
+    {
+      legend: "Type d'escalier",
+      name: "type",
+      kind: "radiogroup",
+      required: true,
+      options: [
+        {
+          label: "Droit",
+          value: "straight"
+        },
+        {
+          label: "Quart tournant",
+          value: "quarter"
+        }
+      ]
+    },
+    {
+      legend: "Type de matériaux",
+      name: "guardrail",
+      kind: "radiogroup",
+      required: true,
+      options: [
+        {
+          label: "Hêtre",
+          value: "beech"
+        },
+        {
+          label: "Pin",
+          value: "pine"
+        },
+        {
+          label: "Limon",
+          value: "stringer"
+        },
+      ]
+    }
   ]
 }
 
@@ -348,18 +536,7 @@ const furniture: Step = {
 
 export const finalStep: FinalStep = {
   label: "Informations complémentaires",
-  price: $(async (cart: Item[]) => {
-    let totalMaterials = 0;
-    let totalTime = 0;
-    for (const item of cart) {
-      const step = stepsRecord[item.stepKey];
-      totalMaterials += await step.materials(item);
-      totalTime += await step.times(item);
-    };
-    if (totalTime < 8) totalTime = 8;
-    const finalEstimation = totalMaterials + (totalTime * HOURLY_RATE);
-    return finalEstimation;
-  }),
+  price: $(() => 0),
   controls: [
     {
       kind: 'radiogroup',
@@ -420,87 +597,91 @@ export const finalStep: FinalStep = {
   ]
 }
 
-const timeTable: Record<StepKey, any> = {
-  interiorDoor: {
-    removal: 0.5,
-    installation: 1,
-  },
-  window: {
-    removal: 2,
-    installation: 3,
-    small: -1,
-    medium: 0,
-    large: 1,
-  },
-  stairs: {
-    removal: 2,
-    installation: 3,
-  },
-  furniture: {},
-  floor: {},
-};
+// const timeTable: Record<StepKey, any> = {
+//   deck: {},
+//   interiorDoor: {
+//     removal: 0.5,
+//     installation: 1,
+//   },
+//   window: {
+//     removal: 2,
+//     installation: 3,
+//     small: -1,
+//     medium: 0,
+//     large: 1,
+//   },
+//   stairs: {
+//     removal: 2,
+//     installation: 3,
+//   },
+//   furniture: {},
+//   floor: {},
+//   interior: {},
+// };
 
-const materialsTable: Record<StepKey, any> = {
-  interiorDoor: {
-    high: 1000,
-    medium: 500,
-    low: 100
-  },
-  window: {
-    small: {
-      standard: 1000,
-      thermic: 500,
-      secured: 100,
-      complete: 100,
-      plastic: 100,
-      wood: 100,
-      aluminum: 100,
-      raw: 100,
-      painted: 100,
-      varnish: 100,
-    },
-    medium: {
-      standard: 1000,
-      thermic: 500,
-      secured: 100,
-      complete: 100,
-      plastic: 100,
-      wood: 100,
-      aluminum: 100,
-      raw: 100,
-      painted: 100,
-      varnish: 100,
-    },
-    large: {
-      standard: 1000,
-      thermic: 500,
-      secured: 100,
-      complete: 100,
-      plastic: 100,
-      wood: 100,
-      aluminum: 100,
-      raw: 100,
-      painted: 100,
-      varnish: 100,
-    },
-    standard: 1000,
-    thermic: 500,
-    secured: 100,
-    complete: 100,
-    plastic: 100,
-    wood: 100,
-    aluminum: 100,
-    raw: 100,
-    painted: 100,
-    varnish: 100,
-  },
-  stairs: {
-    standard: 2000,
-    custom: 5000,
-  },
-  furniture: {},
-  floor: {},
-};
+// const materialsTable: Record<StepKey, any> = {
+//   interior: {},
+//   deck: {},
+//   interiorDoor: {
+//     high: 1000,
+//     medium: 500,
+//     low: 100
+//   },
+//   window: {
+//     small: {
+//       standard: 1000,
+//       thermic: 500,
+//       secured: 100,
+//       complete: 100,
+//       plastic: 100,
+//       wood: 100,
+//       aluminum: 100,
+//       raw: 100,
+//       painted: 100,
+//       varnish: 100,
+//     },
+//     medium: {
+//       standard: 1000,
+//       thermic: 500,
+//       secured: 100,
+//       complete: 100,
+//       plastic: 100,
+//       wood: 100,
+//       aluminum: 100,
+//       raw: 100,
+//       painted: 100,
+//       varnish: 100,
+//     },
+//     large: {
+//       standard: 1000,
+//       thermic: 500,
+//       secured: 100,
+//       complete: 100,
+//       plastic: 100,
+//       wood: 100,
+//       aluminum: 100,
+//       raw: 100,
+//       painted: 100,
+//       varnish: 100,
+//     },
+//     standard: 1000,
+//     thermic: 500,
+//     secured: 100,
+//     complete: 100,
+//     plastic: 100,
+//     wood: 100,
+//     aluminum: 100,
+//     raw: 100,
+//     painted: 100,
+//     varnish: 100,
+//   },
+//   stairs: {
+//     standard: 2000,
+//     custom: 5000,
+//   },
+//   furniture: {},
+//   floor: {},
+// };
 
 export const finalElementsMultiplier: Record<string, number> = {
   house: 0,
@@ -516,7 +697,8 @@ export const finalElementsMultiplier: Record<string, number> = {
 
 export const stepsRecord = {
   window,
-  interiorDoor,
+  interior,
+  deck,
   stairs,
   furniture,
   floor,

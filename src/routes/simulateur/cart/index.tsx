@@ -53,10 +53,9 @@ export default component$(() => {
   const finalEstimation = useSignal(0);
 
   const onSubmit = $(async (form: HTMLFormElement) => {
+    const isValid = form.checkValidity();
+    if (!isValid) return;
     const price = finalStep.finalPrice ? await finalStep.finalPrice(cart) : 0;
-    const formData = new FormData(form);
-    const formObj = Object.fromEntries(formData);
-    console.log(formObj);
     if (price > 0) finalEstimation.value = Math.floor(price);
   });
 

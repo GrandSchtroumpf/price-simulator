@@ -2,6 +2,11 @@ body:has(#form) {
   display: grid;
   min-height: 100dvh;
 }
+
+.step-price {
+  padding-inline: 16px;
+}
+
 #form {
   --radius: 16px;
   --background: var(--color-surface-2);

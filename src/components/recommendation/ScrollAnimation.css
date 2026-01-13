@@ -1,9 +1,9 @@
 @container sticky-recommandation scroll-state(stuck: top) {
-  #recommandations li > img {
+  #recommendation li > img {
     opacity: 0;
     transform: scale(0.5);
   }
-  #recommandations li > hgroup {
+  #recommendation li > hgroup {
     transform: translateX(-56px);
   }
 }

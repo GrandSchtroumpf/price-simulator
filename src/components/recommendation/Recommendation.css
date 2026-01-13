@@ -1,6 +1,6 @@
 @reference '#theme';
 
-.recommendation {
+#recommendation {
   display: grid;
   place-items: center;
   min-height: 175dvh;

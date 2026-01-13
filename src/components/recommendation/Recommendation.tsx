@@ -8,7 +8,7 @@ export default component$(() => {
 	useStyles$(style);
 
 	return (
-		<section class="recommendation">
+		<section id="recommendation">
 			<h2>Avis clients</h2>
 
 			<div class="worker-img">

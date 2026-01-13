@@ -14,12 +14,11 @@ export interface Item {
 export interface Step {
   controls: ControlTypes[];
   label: string;
-  materials: QRL<(cart: Item) => number>;
-  times: QRL<(cart: Item) => number>;
+  price?: QRL<(item: Item) => number>;
 };
 
-interface FinalStep extends Omit<Step, 'times' | 'materials'> {
-  price: QRL<(cart: Item[]) => number>;
+interface FinalStep extends Omit<Step, 'price'> {
+  finalPrice?: QRL<(cart: Item[]) => Promise<number>>;
 }
 
 export interface Control<T> {
@@ -86,21 +85,28 @@ const number = (p: Omit<InputNumber, 'kind' | 'type'>): InputNumber => ({
 
 const floor: Step = {
   label: 'Sol',
-  materials: $((item: Item) => {
-    if (!item) return 0;
-    return 0;
+  price: $((item: Item) => {
+    const materialPrices: Record<string, number> = {
+      hard: 200,
+      plastic: 100,
+      vinyl: 150
+    };
+    const material = String(item.data['materials']);
+    const surface = Number(item.data['surface']);
+    const pricePerSquare = materialPrices[material] * surface;
+    return pricePerSquare || 0;
   }),
-  times: $(() => 0),
   controls: [
     number({
       label: "Surface en m²",
-      name: "surace",
+      name: "surface",
+      required: true,
       value: 1,
       min: 1
     }),
     {
       legend: "Type de matériaux",
-      name: "metarials",
+      name: "materials",
       kind: "radiogroup",
       required: true,
       options: [
@@ -123,12 +129,27 @@ const floor: Step = {
 
 const interior: Step = {
   label: "Aménagement/Isolation intérieur",
-  materials: $(() => 0),
-  times: $(() => 0),
+  price: $((item: Item) => {
+    const materialPrices: Record<string, number> = {
+      glass: 100,
+      rock: 150,
+      wood: 250
+    };
+    const multipliers: Record<string, number> = {
+      groundLevel: 1,
+      floorLevel: 1.1,
+      attic: 1.2,
+    };
+    const material = String(item.data['materials']);
+    const surface = Number(item.data['surface']);
+    const pricePerSquare = materialPrices[material] * surface;
+    const price = pricePerSquare * multipliers[String(item.data['room'])];
+    return price || 0;
+  }),
   controls: [
     number({
       label: "Surface en m²",
-      name: "surace",
+      name: "surface",
       value: 1,
       min: 1
     }),
@@ -177,12 +198,33 @@ const interior: Step = {
 
 const deck: Step = {
   label: "Terrasse",
-  materials: $(() => 0),
-  times: $(() => 0),
+  price: $((item: Item) => {
+    const materialPrices: Record<string, number> = {
+      douglas: 100,
+      composite: 150,
+      treated: 250
+    };
+    const flatModifiers: Record<string, number> = {
+      withoutGuard: 0,
+      woodGuard: 10,
+      aluminumGuard: 15
+    };
+    const multipliers: Record<string, number> = {
+      groundLevel: 1,
+      elevatedWithStairs: 1.3,
+      elevatedWithoutStairs: 1.1,
+    };
+    const material = String(item.data['materials']);
+    const option = String(item.data['guardrail']);
+    const surface = Number(item.data['surface']);
+    const pricePerSquare = (materialPrices[material] + flatModifiers[option]) * surface;
+    const price = pricePerSquare * multipliers[String(item.data['level'])];
+    return price || 0;
+  }),
   controls: [
     number({
       label: "Surface en m²",
-      name: "surace",
+      name: "surface",
       value: 1,
       min: 1
     }),
@@ -194,7 +236,7 @@ const deck: Step = {
       options: [
         {
           label: "Sol",
-          value: "floorLevel"
+          value: "groundLevel"
         },
         {
           label: "Surélevé avec éscalier",
@@ -207,6 +249,26 @@ const deck: Step = {
       ]
     },
     {
+      legend: "Type de matériaux",
+      name: "materials",
+      kind: "radiogroup",
+      required: true,
+      options: [
+        {
+          label: "Douglas",
+          value: "douglas"
+        },
+        {
+          label: "Composite",
+          value: "composite"
+        },
+        {
+          label: "Autoclave",
+          value: "treated"
+        },
+      ]
+    },
+    {
       legend: "Garde corps",
       name: "guardrail",
       kind: "radiogroup",
@@ -214,15 +276,15 @@ const deck: Step = {
       options: [
         {
           label: "Sans garde corps",
-          value: "without"
+          value: "withoutGuard"
         },
         {
           label: "Bois",
-          value: "wood"
+          value: "woodGuard"
         },
         {
           label: "Alu",
-          value: "aluminum"
+          value: "aluminumGuard"
         },
       ]
     }
@@ -232,8 +294,30 @@ const deck: Step = {
 
 const stairs: Step = {
   label: 'Escalier',
-  materials: $(() => 0),
-  times: $(() => 0),
+  price: $((item: Item) => {
+    const unitPrice: Record<string, number> = {
+      straight: 1000,
+      quarter: 1500,
+    }
+    const materialPrices: Record<string, number> = {
+      beech: 0,
+      pine: 1000,
+      stringer: 1500
+    };
+    const flatModifiers: Record<string, number> = {
+      withStep: 100,
+      withoutStep: 0,
+      withGuardrail: 300,
+      withoutGuardrail: 0,
+    };
+    const unitType = String(item.data['type']);
+    const material = String(item.data['materials']);
+    const optionA = String(item.data['step']);
+    const optionB = String(item.data['guardrail']);
+    const pricePerUnit = unitPrice[unitType] + materialPrices[material];
+    const price = pricePerUnit + flatModifiers[optionA] + flatModifiers[optionB];
+    return price || 0;
+  }),
   controls: [
     {
       legend: "Contre marche",
@@ -253,17 +337,17 @@ const stairs: Step = {
     },
     {
       legend: "Garde-corps",
-      name: "step",
+      name: "guardrail",
       kind: "radiogroup",
       required: true,
       options: [
         {
           label: "Avec garde-corps",
-          value: "withGardrail"
+          value: "withGuardrail"
         },
         {
           label: "Sans garde-corps",
-          value: "withoutGardrail"
+          value: "withoutGuardrail"
         }
       ]
     },
@@ -285,7 +369,7 @@ const stairs: Step = {
     },
     {
       legend: "Type de matériaux",
-      name: "guardrail",
+      name: "materials",
       kind: "radiogroup",
       required: true,
       options: [
@@ -308,7 +392,15 @@ const stairs: Step = {
 
 export const finalStep: FinalStep = {
   label: "Informations complémentaires",
-  price: $(() => 0),
+  finalPrice: $(async (cart: Item[]) => {
+    let totalPrice = 0;
+    for (const item of cart) {
+      const step = stepsRecord[item.stepKey];
+      const itemPrice = step.price ? await step.price(item) : 0;
+      totalPrice += itemPrice;
+    }
+    return totalPrice;
+  }),
   controls: [
     {
       kind: 'radiogroup',

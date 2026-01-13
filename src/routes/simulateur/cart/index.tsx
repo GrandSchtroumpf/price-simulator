@@ -1,6 +1,6 @@
 import { $, component$, useContext, useSignal, useStyles$ } from "@qwik.dev/core";
 import { cartContext } from "../layout";
-import { type Step, stepsRecord, finalStep, InputTypes, finalElementsMultiplier, Item } from "../steps";
+import { type Step, stepsRecord, finalStep, InputTypes, Item } from "../steps";
 import { DynamicControl } from "../controls";
 import styles from './index.css?inline';
 
@@ -53,20 +53,11 @@ export default component$(() => {
   const finalEstimation = useSignal(0);
 
   const onSubmit = $(async (form: HTMLFormElement) => {
-    let price = await finalStep.price(cart);
+    const price = finalStep.finalPrice ? await finalStep.finalPrice(cart) : 0;
     const formData = new FormData(form);
     const formObj = Object.fromEntries(formData);
-    for (const value of Object.values(formObj)) {
-      const v = String(value);
-      if (v in finalElementsMultiplier) {
-        const multiplier = finalElementsMultiplier[v];
-        if (multiplier > 0) price += price * multiplier;
-      }
-    }
+    console.log(formObj);
     if (price > 0) finalEstimation.value = Math.floor(price);
-    setTimeout(() => {
-      document.getElementById('final-estimation')?.scrollIntoView({ behavior: 'smooth' });
-    }, 100)
   });
 
   return (
@@ -84,6 +75,7 @@ export default component$(() => {
           const { stepKey, data } = cart[i];
           const step = stepsRecord[stepKey];
           const labelList = getStepLabelList(stepKey, step);
+          const price = step.price ? step.price(cart[i]) : 0;
           return (
             <details key={i} name="cart">
               <summary>
@@ -113,12 +105,8 @@ export default component$(() => {
                 </tbody>
                 <tfoot>
                   <tr>
-                    <th>Temps</th>
-                    <td>{step.times({ stepKey, data })} hours</td>
-                  </tr>
-                  <tr>
-                    <th>Matériaux</th>
-                    <td>{step.materials({ stepKey, data })} €</td>
+                    <th>Prix</th>
+                    <td>{price} €</td>
                   </tr>
                 </tfoot>
               </table>
@@ -136,7 +124,7 @@ export default component$(() => {
           <DynamicControl key={control.name} control={control} />
         ))}
         {!finalEstimation.value && <button type='submit'>Valider</button>}
-      </form> 
+      </form>
       {finalEstimation.value > 0 && (
         <article id="final-estimation">
           <h2>Votre estimation est de {finalEstimation} €</h2>

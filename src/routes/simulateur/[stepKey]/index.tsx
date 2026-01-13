@@ -91,9 +91,12 @@ export default component$(() => {
     history.back();
   });
 
-  const onChange = $(async (form: HTMLFormElement) => {
+  const onInput = $(async (form: HTMLFormElement) => {
     const isValid = form.checkValidity();
-    if (!isValid) return;
+    if (!isValid) {
+      stepPrice.value = 0;
+      return;
+    };
     const formData = new FormData(form);
     const formObj = convertControls(formData, step);
     const item = { stepKey: stepKey as StepKey, data: formObj };
@@ -118,7 +121,7 @@ export default component$(() => {
             ? <p>Estimation: {stepPrice}€</p>
             : <p>Remplissez les informations si dessous pour obtenir un prix indicatif</p>
           }
-          <form preventdefault:submit onsubmit$={(_, form) => onSubmit(form)} onChange$={(_, form) => onChange(form)}>
+          <form preventdefault:submit onsubmit$={(_, form) => onSubmit(form)} onInput$={(_, form) => onInput(form)}>
             {controls.value.map((control, i) => <DynamicControl key={i} control={control} />)}
             <button type='submit'>Ajouter au devis</button>
           </form>

@@ -94,7 +94,7 @@ const floor: Step = {
     const material = String(item.data['materials']);
     const surface = Number(item.data['surface']);
     const pricePerSquare = materialPrices[material] * surface;
-    return pricePerSquare || 0;
+    return Math.floor(pricePerSquare || 0);
   }),
   controls: [
     number({
@@ -144,7 +144,7 @@ const interior: Step = {
     const surface = Number(item.data['surface']);
     const pricePerSquare = materialPrices[material] * surface;
     const price = pricePerSquare * multipliers[String(item.data['room'])];
-    return price || 0;
+    return Math.floor(price || 0);
   }),
   controls: [
     number({
@@ -219,7 +219,7 @@ const deck: Step = {
     const surface = Number(item.data['surface']);
     const pricePerSquare = (materialPrices[material] + flatModifiers[option]) * surface;
     const price = pricePerSquare * multipliers[String(item.data['level'])];
-    return price || 0;
+    return Math.floor(price || 0);
   }),
   controls: [
     number({
@@ -316,7 +316,7 @@ const stairs: Step = {
     const optionB = String(item.data['guardrail']);
     const pricePerUnit = unitPrice[unitType] + materialPrices[material];
     const price = pricePerUnit + flatModifiers[optionA] + flatModifiers[optionB];
-    return price || 0;
+    return Math.floor(price || 0);
   }),
   controls: [
     {
@@ -399,7 +399,7 @@ export const finalStep: FinalStep = {
       const itemPrice = step.price ? await step.price(item) : 0;
       totalPrice += itemPrice;
     }
-    return totalPrice;
+    return Math.floor(totalPrice);
   }),
   controls: [
     {

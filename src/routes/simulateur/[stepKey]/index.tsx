@@ -3,7 +3,7 @@ import { StaticGenerateHandler, useLocation } from "@qwik.dev/router";
 import { Item, Step, StepKey, stepsRecord } from "../steps";
 import { DynamicControl } from "../controls";
 import { cartContext } from "../layout";
-import { unwrapStore, useStyles$ } from "@qwik.dev/core/internal";
+import { unwrapStore, useSignal, useStyles$ } from "@qwik.dev/core/internal";
 import styles from './index.css?inline';
 
 const convertControls = (data: FormData, step: Step) => {
@@ -58,11 +58,11 @@ const writeControls = (editItem: Item, step: Step) => {
   return copy;
 };
 
-
 export default component$(() => {
   useStyles$(styles);
   const cart = useContext(cartContext);
   const location = useLocation();
+  const stepPrice = useSignal(0);
   const { stepKey } = location.params;
   if (!(stepKey in stepsRecord)) return null;
   const step = stepsRecord[stepKey as StepKey];
@@ -89,6 +89,15 @@ export default component$(() => {
     history.back();
   });
 
+  const onChange = $(async (form: HTMLFormElement) => {
+    const isValid = form.checkValidity();
+    if (!isValid) return;
+    const formData = new FormData(form);
+    const formObj = convertControls(formData, step);
+    const item = { stepKey: stepKey as StepKey, data: formObj };
+    const price = step.price ? await step.price(item) : 0;
+    stepPrice.value = price;
+  })
 
   return (
     <>
@@ -103,7 +112,11 @@ export default component$(() => {
             </button>
             <h1 style={{ viewTransitionName: `${stepKey}-title` }} >{step.label}</h1>
           </header>
-          <form preventdefault:submit onsubmit$={(_, form) => onSubmit(form)}>
+          {stepPrice.value
+            ? <p>Estimation: {stepPrice}€</p>
+            : <p>Remplissez les informations si dessous pour obtenir un prix indicatif</p>
+          }
+          <form preventdefault:submit onsubmit$={(_, form) => onSubmit(form)} onChange$={(_, form) => onChange(form)}>
             {controls.value.map((control, i) => <DynamicControl key={i} control={control} />)}
             <button type='submit'>Ajouter au devis</button>
           </form>

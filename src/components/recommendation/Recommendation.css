@@ -98,11 +98,6 @@
     line-height: 1.2;
   }
 
-  & li > .stars {
-    display: flex;
-    align-items: center;
-  }
-
   & li > hr {
     grid-column: 1 / 4;
     grid-row: 2;

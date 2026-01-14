@@ -6,4 +6,11 @@
   #recommendation li > hgroup {
     transform: translateX(-56px);
   }
+  #stars p {
+    opacity: 0;
+  }
+  #recommendation #stars div {
+    transform: translateX(calc(var(--index) * -25px));
+    transition-timing-function: var(--ease-out-back);
+  }
 }

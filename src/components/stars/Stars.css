@@ -1,0 +1,18 @@
+#stars {
+  display: grid;
+  grid-template-areas: "text stack";
+  place-content: center;
+  gap: 4px;
+}
+
+#stars p {
+  grid-area: text;
+  padding: 1px;
+}
+
+#stars > div {
+  position: relative;
+  grid-area: stack;
+  transform: translateX(0);
+  transition: transform 300ms var(--ease-out);
+}

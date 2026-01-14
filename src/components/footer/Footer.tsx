@@ -17,8 +17,8 @@ export default component$(() => {
 				</figure>
 
 				<address>
-					<a href="mailto:toto@example.fr">erwan@example.fr</a>
-					<a href="tel:+33123456789">+33 00 00 00 00</a>
+					<a href="mailto:toto@example.fr">erwanrichard.lpm@gmail.com</a>
+					<a href="tel:+33660791386">06 60 79 13 86</a>
 				</address>
 			</section>
 

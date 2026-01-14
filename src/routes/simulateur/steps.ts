@@ -1,5 +1,4 @@
 import { $, QRL } from "@qwik.dev/core";
-import StepKey from "./[stepKey]";
 
 export type ControlTypes = CheckList | CheckBox | RadioGroup | InputNumber | InputString;
 export type ControlKind = ControlTypes['kind'];
@@ -99,9 +98,7 @@ const getPriceData = (control: ControlTypes, value: InputTypes) => {
   };
   if (control.kind === 'radiogroup') {
     const option = control.options.find((option) => option.value === value);
-    if (option?.priceData) {
-      return option?.priceData;
-    }
+    if (option?.priceData) return option.priceData;
   }
 };
 
@@ -116,9 +113,9 @@ const getPrice = $((item: Item) => {
     if (!dataRecord[priceData.type]) dataRecord[priceData.type] = [];
     dataRecord[priceData.type].push(priceData.value)
   }
-  const base = (dataRecord['addition']?.reduce((a: number, b: number) => a + b, 0) || 1);
-  const multipliers = (dataRecord['multiplier']?.reduce((a: number, b: number) => a * b, 1) || 1);
-  return Math.floor(base * multipliers) || 0;
+  const base = dataRecord['addition']?.reduce((a: number, b: number) => a + b, 0) || 1;
+  const multipliers = dataRecord['multiplier']?.reduce((a: number, b: number) => a * b, 1) || 1;
+  return Math.floor(base * multipliers);
 });
 
 

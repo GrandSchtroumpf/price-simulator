@@ -27,7 +27,7 @@ export default component$(() => {
       </nav>
       {!!cart.length && (
         <Link class="cart" href="cart" aria-label="Panier pour le devis">
-          <p>Vos devis: {cart.length}</p>
+          <p>Voir le devis</p>
         </Link>
       )}
     </main>

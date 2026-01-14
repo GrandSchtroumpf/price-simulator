@@ -1,0 +1,23 @@
+#stars {
+  display: grid;
+  grid-template-areas: "stack";
+  place-content: center;
+}
+
+#stars > div {
+  position: relative;
+  grid-area: stack;
+}
+
+#stars > div::before {
+  content: "5";
+  position: absolute;
+  top: 2px;
+  color: #fabd05;
+  transform: translateX(-16px);
+}
+
+#stars > div > svg {
+  transform: translateX(0);
+  transition: transform 300ms var(--ease-out);
+}

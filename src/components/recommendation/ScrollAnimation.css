@@ -6,4 +6,10 @@
   #recommendation li > hgroup {
     transform: translateX(-56px);
   }
+  #recommendation #stars div svg {
+    transform: translateX(calc(var(--index) * -25px));
+  }
+  #recommendation #stars div::before {
+    opacity: 0;
+  }
 }

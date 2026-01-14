@@ -147,17 +147,17 @@ const floor: Step = {
         {
           label: "Massif",
           value: "hard",
-          priceData: writePriceData('multiplier', 200)
+          priceData: writePriceData('addition', 200)
         },
         {
           label: "Stratifié",
           value: "plastic",
-          priceData: writePriceData('multiplier', 100)
+          priceData: writePriceData('addition', 100)
         },
         {
           label: "Vinyle-PVC",
           value: "vinyl",
-          priceData: writePriceData('multiplier', 150)
+          priceData: writePriceData('addition', 150)
         },
       ]
     }
@@ -207,17 +207,17 @@ const interior: Step = {
         {
           label: "Laine de verre",
           value: "glass",
-          priceData: writePriceData('multiplier', 100)
+          priceData: writePriceData('addition', 100)
         },
         {
           label: "Laine de roche",
           value: "rock",
-          priceData: writePriceData('multiplier', 150)
+          priceData: writePriceData('addition', 150)
         },
         {
           label: "Laine de bois",
           value: "wood",
-          priceData: writePriceData('multiplier', 250)
+          priceData: writePriceData('addition', 250)
         },
       ]
     }
@@ -267,17 +267,17 @@ const deck: Step = {
         {
           label: "Douglas",
           value: "douglas",
-          priceData: writePriceData('multiplier', 100)
+          priceData: writePriceData('addition', 100)
         },
         {
           label: "Composite",
           value: "composite",
-          priceData: writePriceData('multiplier', 150)
+          priceData: writePriceData('addition', 150)
         },
         {
           label: "Autoclave",
           value: "treated",
-          priceData: writePriceData('multiplier', 200)
+          priceData: writePriceData('addition', 250)
         },
       ]
     },

@@ -1,10 +1,15 @@
 import { $, QRL } from "@qwik.dev/core";
-import StepKey from "./[stepKey]";
 
 export type ControlTypes = CheckList | CheckBox | RadioGroup | InputNumber | InputString;
 export type ControlKind = ControlTypes['kind'];
 export type StepKey = keyof typeof stepsRecord;
 export type InputTypes = string | string[] | number | number[] | boolean;
+
+interface PriceData {
+  type: 'multiplier' | 'addition';
+  value?: number;
+  time?: number;
+}
 
 export interface Item {
   stepKey: StepKey;
@@ -14,7 +19,7 @@ export interface Item {
 export interface Step {
   controls: ControlTypes[];
   label: string;
-  price?: QRL<(item: Item) => number>;
+  price?: QRL<(cart: Item) => Promise<number>>;
 };
 
 interface FinalStep extends Omit<Step, 'price'> {
@@ -34,12 +39,14 @@ interface Input extends Control<'input'> {
   inputmode?: string;
   readonly?: boolean
   placeholder?: string;
+  priceData?: PriceData;
 }
 
 interface CheckBox extends Control<'checkbox'> {
   label: string;
   required?: boolean;
   checked?: boolean;
+  priceData?: PriceData;
 }
 
 interface InputNumber extends Input {
@@ -64,6 +71,7 @@ export interface CheckList extends Control<'checklist'> {
     label: string;
     value: string;
     checked?: boolean;
+    priceData?: PriceData;
   }[];
 }
 
@@ -74,6 +82,7 @@ interface RadioGroup extends Control<'radiogroup'> {
     label: string;
     value: string;
     checked?: boolean;
+    priceData?: PriceData;
   }[];
 }
 
@@ -81,28 +90,50 @@ const number = (p: Omit<InputNumber, 'kind' | 'type'>): InputNumber => ({
   kind: 'input',
   type: 'number',
   ...p
-})
+});
+
+const getPriceData = (control: ControlTypes, value: InputTypes) => {
+  if (control.kind === "input" && control.type === 'number') {
+    if (control.priceData) return { ...control.priceData, value: Number(value) };
+  };
+  if (control.kind === 'radiogroup') {
+    const option = control.options.find((option) => option.value === value);
+    if (option?.priceData) return option.priceData;
+  }
+};
+
+const getPrice = $((item: Item) => {
+  const step = stepsRecord[item.stepKey];
+  const dataRecord: Record<string, number[]> = {};
+  for (const [controlName, value] of Object.entries(item.data)) {
+    const control = step.controls.find((control) => control.name === controlName);
+    if (!control) return 0;
+    const priceData = getPriceData(control, value);
+    if (!priceData || typeof priceData.value !== 'number') return 0;
+    if (!dataRecord[priceData.type]) dataRecord[priceData.type] = [];
+    dataRecord[priceData.type].push(priceData.value)
+  }
+  const base = dataRecord['addition']?.reduce((a: number, b: number) => a + b, 0) || 1;
+  const multipliers = dataRecord['multiplier']?.reduce((a: number, b: number) => a * b, 1) || 1;
+  return Math.floor(base * multipliers);
+});
+
+
+const writePriceData = (type: PriceData['type'], value?: PriceData['value'], time?: PriceData['time']) => {
+  return { type, value, time };
+};
 
 const floor: Step = {
   label: 'Sol',
-  price: $((item: Item) => {
-    const materialPrices: Record<string, number> = {
-      hard: 200,
-      plastic: 100,
-      vinyl: 150
-    };
-    const material = String(item.data['materials']);
-    const surface = Number(item.data['surface']);
-    const pricePerSquare = materialPrices[material] * surface;
-    return Math.floor(pricePerSquare || 0);
-  }),
+  price: $(async (item: Item) => getPrice(item)),
   controls: [
     number({
       label: "Surface en m²",
       name: "surface",
       required: true,
       value: 1,
-      min: 1
+      min: 1,
+      priceData: writePriceData('multiplier')
     }),
     {
       legend: "Type de matériaux",
@@ -112,15 +143,18 @@ const floor: Step = {
       options: [
         {
           label: "Massif",
-          value: "hard"
+          value: "hard",
+          priceData: writePriceData('addition', 200)
         },
         {
           label: "Stratifié",
-          value: "plastic"
+          value: "plastic",
+          priceData: writePriceData('addition', 100)
         },
         {
           label: "Vinyle-PVC",
-          value: "vinyl"
+          value: "vinyl",
+          priceData: writePriceData('addition', 150)
         },
       ]
     }
@@ -129,29 +163,14 @@ const floor: Step = {
 
 const interior: Step = {
   label: "Aménagement/Isolation intérieur",
-  price: $((item: Item) => {
-    const materialPrices: Record<string, number> = {
-      glass: 100,
-      rock: 150,
-      wood: 250
-    };
-    const multipliers: Record<string, number> = {
-      groundLevel: 1,
-      floorLevel: 1.1,
-      attic: 1.2,
-    };
-    const material = String(item.data['materials']);
-    const surface = Number(item.data['surface']);
-    const pricePerSquare = materialPrices[material] * surface;
-    const price = pricePerSquare * multipliers[String(item.data['room'])];
-    return Math.floor(price || 0);
-  }),
+  price: $(async (item: Item) => getPrice(item)),
   controls: [
     number({
       label: "Surface en m²",
       name: "surface",
       value: 1,
-      min: 1
+      min: 1,
+      priceData: writePriceData('multiplier')
     }),
     {
       legend: "Pièce",
@@ -161,15 +180,18 @@ const interior: Step = {
       options: [
         {
           label: "Rez de chaussée",
-          value: "groundLevel"
+          value: "groundLevel",
+          priceData: writePriceData('multiplier', 1)
         },
         {
           label: "Étage",
-          value: "floorLevel"
+          value: "floorLevel",
+          priceData: writePriceData('multiplier', 1.1)
         },
         {
           label: "Combles",
-          value: "attic"
+          value: "attic",
+          priceData: writePriceData('multiplier', 1.2)
         },
       ]
     },
@@ -181,15 +203,18 @@ const interior: Step = {
       options: [
         {
           label: "Laine de verre",
-          value: "glass"
+          value: "glass",
+          priceData: writePriceData('addition', 100)
         },
         {
           label: "Laine de roche",
-          value: "rock"
+          value: "rock",
+          priceData: writePriceData('addition', 150)
         },
         {
           label: "Laine de bois",
-          value: "wood"
+          value: "wood",
+          priceData: writePriceData('addition', 250)
         },
       ]
     }
@@ -198,35 +223,14 @@ const interior: Step = {
 
 const deck: Step = {
   label: "Terrasse",
-  price: $((item: Item) => {
-    const materialPrices: Record<string, number> = {
-      douglas: 100,
-      composite: 150,
-      treated: 250
-    };
-    const flatModifiers: Record<string, number> = {
-      withoutGuard: 0,
-      woodGuard: 10,
-      aluminumGuard: 15
-    };
-    const multipliers: Record<string, number> = {
-      groundLevel: 1,
-      elevatedWithStairs: 1.3,
-      elevatedWithoutStairs: 1.1,
-    };
-    const material = String(item.data['materials']);
-    const option = String(item.data['guardrail']);
-    const surface = Number(item.data['surface']);
-    const pricePerSquare = (materialPrices[material] + flatModifiers[option]) * surface;
-    const price = pricePerSquare * multipliers[String(item.data['level'])];
-    return Math.floor(price || 0);
-  }),
+  price: $(async (item: Item) => getPrice(item)),
   controls: [
     number({
       label: "Surface en m²",
       name: "surface",
       value: 1,
-      min: 1
+      min: 1,
+      priceData: writePriceData('multiplier')
     }),
     {
       legend: "Niveau",
@@ -236,15 +240,18 @@ const deck: Step = {
       options: [
         {
           label: "Sol",
-          value: "groundLevel"
+          value: "groundLevel",
+          priceData: writePriceData('multiplier', 1)
         },
         {
           label: "Surélevé avec escalier",
-          value: "elevatedWithStairs"
+          value: "elevatedWithStairs",
+          priceData: writePriceData('multiplier', 1.3)
         },
         {
           label: "Surélevé avec escalier",
-          value: "elevatedWithoutStairs"
+          value: "elevatedWithoutStairs",
+          priceData: writePriceData('multiplier', 1.1)
         },
       ]
     },
@@ -256,15 +263,18 @@ const deck: Step = {
       options: [
         {
           label: "Douglas",
-          value: "douglas"
+          value: "douglas",
+          priceData: writePriceData('addition', 100)
         },
         {
           label: "Composite",
-          value: "composite"
+          value: "composite",
+          priceData: writePriceData('addition', 150)
         },
         {
           label: "Autoclave",
-          value: "treated"
+          value: "treated",
+          priceData: writePriceData('addition', 250)
         },
       ]
     },
@@ -276,15 +286,18 @@ const deck: Step = {
       options: [
         {
           label: "Sans garde corps",
-          value: "withoutGuard"
+          value: "withoutGuard",
+          priceData: writePriceData('addition', 0)
         },
         {
           label: "Bois",
-          value: "woodGuard"
+          value: "woodGuard",
+          priceData: writePriceData('addition', 10)
         },
         {
           label: "Alu",
-          value: "aluminumGuard"
+          value: "aluminumGuard",
+          priceData: writePriceData('addition', 15)
         },
       ]
     }
@@ -294,30 +307,7 @@ const deck: Step = {
 
 const stairs: Step = {
   label: 'Escalier',
-  price: $((item: Item) => {
-    const unitPrice: Record<string, number> = {
-      straight: 1000,
-      quarter: 1500,
-    }
-    const materialPrices: Record<string, number> = {
-      beech: 0,
-      pine: 1000,
-      stringer: 1500
-    };
-    const flatModifiers: Record<string, number> = {
-      withStep: 100,
-      withoutStep: 0,
-      withGuardrail: 300,
-      withoutGuardrail: 0,
-    };
-    const unitType = String(item.data['type']);
-    const material = String(item.data['materials']);
-    const optionA = String(item.data['step']);
-    const optionB = String(item.data['guardrail']);
-    const pricePerUnit = unitPrice[unitType] + materialPrices[material];
-    const price = pricePerUnit + flatModifiers[optionA] + flatModifiers[optionB];
-    return Math.floor(price || 0);
-  }),
+  price: $(async (item: Item) => getPrice(item)),
   controls: [
     {
       legend: "Contre marche",
@@ -327,11 +317,13 @@ const stairs: Step = {
       options: [
         {
           label: "Avec contre-marche",
-          value: "withStep"
+          value: "withStep",
+          priceData: writePriceData('addition', 100)
         },
         {
           label: "Sans contre-marche",
-          value: "withoutStep"
+          value: "withoutStep",
+          priceData: writePriceData('addition', 0)
         }
       ]
     },
@@ -343,11 +335,13 @@ const stairs: Step = {
       options: [
         {
           label: "Avec garde-corps",
-          value: "withGuardrail"
+          value: "withGuardrail",
+          priceData: writePriceData('addition', 300)
         },
         {
           label: "Sans garde-corps",
-          value: "withoutGuardrail"
+          value: "withoutGuardrail",
+          priceData: writePriceData('addition', 0)
         }
       ]
     },
@@ -359,11 +353,13 @@ const stairs: Step = {
       options: [
         {
           label: "Droit",
-          value: "straight"
+          value: "straight",
+          priceData: writePriceData('addition', 1000)
         },
         {
           label: "Quart tournant",
-          value: "quarter"
+          value: "quarter",
+          priceData: writePriceData('addition', 1500)
         }
       ]
     },
@@ -375,15 +371,18 @@ const stairs: Step = {
       options: [
         {
           label: "Hêtre",
-          value: "beech"
+          value: "beech",
+          priceData: writePriceData('addition', 0)
         },
         {
           label: "Pin",
-          value: "pine"
+          value: "pine",
+          priceData: writePriceData('addition', 1000)
         },
         {
           label: "Limon",
-          value: "stringer"
+          value: "stringer",
+          priceData: writePriceData('addition', 1500)
         },
       ]
     }

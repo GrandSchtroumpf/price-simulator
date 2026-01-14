@@ -6,6 +6,11 @@ export type ControlKind = ControlTypes['kind'];
 export type StepKey = keyof typeof stepsRecord;
 export type InputTypes = string | string[] | number | number[] | boolean;
 
+interface PriceTable {
+  addition?: Record<string, number>;
+  multiplier?: Record<string, number>;
+}
+
 export interface Item {
   stepKey: StepKey;
   data: Record<string, InputTypes>;
@@ -14,7 +19,7 @@ export interface Item {
 export interface Step {
   controls: ControlTypes[];
   label: string;
-  price?: QRL<(item: Item) => number>;
+  price?: QRL<(cart: Item) => Promise<number>>;
 };
 
 interface FinalStep extends Omit<Step, 'price'> {
@@ -25,6 +30,7 @@ export interface Control<T> {
   kind: T;
   name: string;
   class?: string;
+  calcType?: 'addition' | 'multiplier';
 }
 
 interface Input extends Control<'input'> {
@@ -81,20 +87,36 @@ const number = (p: Omit<InputNumber, 'kind' | 'type'>): InputNumber => ({
   kind: 'input',
   type: 'number',
   ...p
-})
+});
+
+const getPrice = $((item: Item, stepKey: StepKey, priceTable: PriceTable) => {
+  const step = stepsRecord[stepKey];
+  const dataRecord: Record<string, any> = {}
+  for (const control of step.controls) {
+    if (!control.calcType) continue;
+    if (!dataRecord[control.calcType]) dataRecord[control.calcType] = [];
+    const itemValue = item.data[control.name];
+    if (typeof itemValue === 'number') {
+      dataRecord[control.calcType].push(itemValue);
+    } else if (typeof itemValue === 'string') {
+      const priceData = priceTable[control.calcType]?.[itemValue];
+      dataRecord[control.calcType].push(priceData);
+    }
+  }
+  const base = (dataRecord['addition']?.reduce((a: number, b: number) => a + b, 0) || 1);
+  const multipliers = (dataRecord['multiplier']?.reduce((a: number, b: number) => a * b, 1) || 1);
+  return Math.floor(base * multipliers)
+});
 
 const floor: Step = {
   label: 'Sol',
-  price: $((item: Item) => {
+  price: $(async (item: Item) => {
     const materialPrices: Record<string, number> = {
       hard: 200,
       plastic: 100,
       vinyl: 150
     };
-    const material = String(item.data['materials']);
-    const surface = Number(item.data['surface']);
-    const pricePerSquare = materialPrices[material] * surface;
-    return Math.floor(pricePerSquare || 0);
+    return getPrice(item, 'floor', { multiplier: materialPrices });
   }),
   controls: [
     number({
@@ -102,13 +124,15 @@ const floor: Step = {
       name: "surface",
       required: true,
       value: 1,
-      min: 1
+      min: 1,
+      calcType: 'multiplier'
     }),
     {
       legend: "Type de matériaux",
       name: "materials",
       kind: "radiogroup",
       required: true,
+      calcType: 'multiplier',
       options: [
         {
           label: "Massif",
@@ -140,28 +164,27 @@ const interior: Step = {
       floorLevel: 1.1,
       attic: 1.2,
     };
-    const material = String(item.data['materials']);
-    const surface = Number(item.data['surface']);
-    const pricePerSquare = materialPrices[material] * surface;
-    const price = pricePerSquare * multipliers[String(item.data['room'])];
-    return Math.floor(price || 0);
+    return getPrice(item, 'interior', { multiplier: { ...materialPrices, ...multipliers } });
+
   }),
   controls: [
     number({
       label: "Surface en m²",
       name: "surface",
       value: 1,
-      min: 1
+      min: 1,
+      calcType: 'multiplier',
     }),
     {
       legend: "Pièce",
       name: "room",
       kind: "radiogroup",
       required: true,
+      calcType: 'multiplier',
       options: [
         {
           label: "Rez de chaussée",
-          value: "groundLevel"
+          value: "groundLevel",
         },
         {
           label: "Étage",
@@ -178,6 +201,7 @@ const interior: Step = {
       name: "materials",
       kind: "radiogroup",
       required: true,
+      calcType: 'multiplier',
       options: [
         {
           label: "Laine de verre",
@@ -214,25 +238,22 @@ const deck: Step = {
       elevatedWithStairs: 1.3,
       elevatedWithoutStairs: 1.1,
     };
-    const material = String(item.data['materials']);
-    const option = String(item.data['guardrail']);
-    const surface = Number(item.data['surface']);
-    const pricePerSquare = (materialPrices[material] + flatModifiers[option]) * surface;
-    const price = pricePerSquare * multipliers[String(item.data['level'])];
-    return Math.floor(price || 0);
+    return getPrice(item, 'deck', { multiplier: { ...materialPrices, ...multipliers }, addition: flatModifiers });
   }),
   controls: [
     number({
       label: "Surface en m²",
       name: "surface",
       value: 1,
-      min: 1
+      min: 1,
+      calcType: 'multiplier'
     }),
     {
       legend: "Niveau",
       name: "level",
       kind: "radiogroup",
       required: true,
+      calcType: 'multiplier',
       options: [
         {
           label: "Sol",
@@ -253,6 +274,7 @@ const deck: Step = {
       name: "materials",
       kind: "radiogroup",
       required: true,
+      calcType: 'multiplier',
       options: [
         {
           label: "Douglas",
@@ -272,6 +294,7 @@ const deck: Step = {
       legend: "Garde corps",
       name: "guardrail",
       kind: "radiogroup",
+      calcType: 'addition',
       required: true,
       options: [
         {
@@ -310,13 +333,7 @@ const stairs: Step = {
       withGuardrail: 300,
       withoutGuardrail: 0,
     };
-    const unitType = String(item.data['type']);
-    const material = String(item.data['materials']);
-    const optionA = String(item.data['step']);
-    const optionB = String(item.data['guardrail']);
-    const pricePerUnit = unitPrice[unitType] + materialPrices[material];
-    const price = pricePerUnit + flatModifiers[optionA] + flatModifiers[optionB];
-    return Math.floor(price || 0);
+    return getPrice(item, 'stairs', { addition: { ...materialPrices, ...unitPrice, ...flatModifiers } });
   }),
   controls: [
     {
@@ -324,6 +341,7 @@ const stairs: Step = {
       name: "step",
       kind: "radiogroup",
       required: true,
+      calcType: 'addition',
       options: [
         {
           label: "Avec contre-marche",
@@ -340,6 +358,7 @@ const stairs: Step = {
       name: "guardrail",
       kind: "radiogroup",
       required: true,
+      calcType: 'addition',
       options: [
         {
           label: "Avec garde-corps",
@@ -356,6 +375,7 @@ const stairs: Step = {
       name: "type",
       kind: "radiogroup",
       required: true,
+      calcType: 'addition',
       options: [
         {
           label: "Droit",
@@ -372,6 +392,7 @@ const stairs: Step = {
       name: "materials",
       kind: "radiogroup",
       required: true,
+      calcType: 'addition',
       options: [
         {
           label: "Hêtre",

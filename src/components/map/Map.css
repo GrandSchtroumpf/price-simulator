@@ -48,6 +48,10 @@
   & .location p {
     grid-area: stack;
     display: flex;
+
+    @media (width < 600px) {
+      font-size: 1rem;
+    }
   }
   & .location .circle {
     grid-area: stack;
@@ -97,6 +101,7 @@
     @media (width < 600px) {
       bottom: 16px;
       left: 16px;
+      font-size: 0.8rem;
     }
   }
 }

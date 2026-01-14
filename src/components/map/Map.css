@@ -42,9 +42,9 @@
     place-items: center;
     gap: 4px;
   }
-  & .location p:first-child {
+  /* & .location p:first-child {
     transform: translateY(16px);
-  }
+  } */
   & .location p {
     grid-area: stack;
     display: flex;

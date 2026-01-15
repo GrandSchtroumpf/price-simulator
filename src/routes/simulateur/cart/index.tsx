@@ -1,6 +1,6 @@
 import { $, component$, useContext, useSignal, useStyles$ } from "@qwik.dev/core";
 import { cartContext } from "../layout";
-import { type Step, stepsRecord, finalStep, InputTypes, Item } from "../steps";
+import { type Step, stepsRecord, finalStep, InputTypes, Item, displayPrice } from "../steps";
 import { DynamicControl } from "../controls";
 import styles from './index.css?inline';
 
@@ -74,7 +74,7 @@ export default component$(() => {
           const { stepKey, data } = cart[i];
           const step = stepsRecord[stepKey];
           const labelList = getStepLabelList(stepKey, step);
-          const price = step.price ? step.price(cart[i]) : { min: 0, max: 0 };
+          const price = step.price && step.price(cart[i]);
           return (
             <details key={i} name="cart">
               <summary>
@@ -105,7 +105,7 @@ export default component$(() => {
                 <tfoot>
                   <tr>
                     <th>Prix</th>
-                    <td>{price.min} / {price.max} €</td>
+                    <td>{displayPrice(price)}</td>
                   </tr>
                 </tfoot>
               </table>

@@ -4,13 +4,14 @@ export type ControlTypes = CheckList | CheckBox | RadioGroup | InputNumber | Inp
 export type ControlKind = ControlTypes['kind'];
 export type StepKey = keyof typeof stepsRecord;
 export type InputTypes = string | string[] | number | number[] | boolean;
+export interface Range {
+  min: number;
+  max?: number;
+}
 
 interface PriceData {
   type: 'multiplier' | 'addition';
-  value?: {
-    min: number;
-    max?: number;
-  };
+  value?: Range;
   time?: number;
 }
 
@@ -22,7 +23,7 @@ export interface Item {
 export interface Step {
   controls: ControlTypes[];
   label: string;
-  price?: (cart: Item) => { min: number, max: number };
+  price?: QRL<(cart: Item) => Promise<{ min: number, max: number }>>;
 };
 
 interface FinalStep extends Omit<Step, 'price'> {
@@ -107,33 +108,38 @@ const getPriceData = (control: ControlTypes, value: InputTypes) => {
 
 const getPrice = (item: Item) => {
   const step = stepsRecord[item.stepKey];
-  const dataRecord: Record<string, { min?: number, max?: number }[]> = {};
+  let minAddition = 0;
+  let maxAddition = 0;
+  let minMultiplier = 1;
+  let maxMultiplier = 1;
   for (const [controlName, value] of Object.entries(item.data)) {
-    const control = step.controls.find((control) => control.name === controlName);
+    const control = step.controls.find(c => c.name === controlName);
     if (!control) continue;
     const priceData = getPriceData(control, value);
-    if (!priceData || !priceData.value) continue;
-    if (!dataRecord[priceData.type]) dataRecord[priceData.type] = [];
-    dataRecord[priceData.type].push(priceData.value)
+    if (!priceData?.value) continue;
+    const { min, max } = priceData.value;
+    if (priceData.type === 'addition') {
+      minAddition += min ?? 0;
+      maxAddition += max ?? min ?? 0;
+    }
+    if (priceData.type === 'multiplier') {
+      minMultiplier *= min ?? 1;
+      maxMultiplier *= max ?? min ?? 1;
+    }
   }
-  const minAddTotal = dataRecord['addition']
-    .map((value) => value.min || 0)
-    .reduce((a, b) => a + b, 0)
-  const maxAddTotal = dataRecord['addition']
-    .map((value) => value.max || value.min || 0)
-    .reduce((a, b) => a + b, 0)
-  const minMulTotal = dataRecord['multiplier']
-    .map((value) => value.min || 1)
-    .reduce((a, b) => a * b, 1)
-  const maxMulTotal = dataRecord['multiplier']
-    .map((value) => value.max || value.min || 1)
-    .reduce((a, b) => a * b, 1)
-  const price = {
-    min: Math.floor(minAddTotal * minMulTotal),
-    max: Math.floor(maxAddTotal * maxMulTotal)
+  return {
+    min: Math.floor(minAddition * minMultiplier),
+    max: Math.floor(maxAddition * maxMultiplier),
   };
-  return price;
 };
+
+const currency = new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
+export async function displayPrice(pricePromise?: Promise<Range>) {
+  const price = await pricePromise;
+  if (!price) return;
+  if (price.min === price.max) return currency.format(price.min);
+  return (currency as any).formatRange(price.min, price.max);
+}
 
 
 const writePriceData = (
@@ -151,7 +157,7 @@ const writePriceData = (
 
 const floor: Step = {
   label: 'Sol',
-  price: (item: Item) => getPrice(item),
+  price: $(async (item: Item) => getPrice(item)),
   controls: [
     number({
       label: "Surface en m²",
@@ -189,7 +195,7 @@ const floor: Step = {
 
 const interior: Step = {
   label: "Aménagement/Isolation intérieur",
-  price: (item: Item) => getPrice(item),
+  price: $(async (item: Item) => getPrice(item)),
   controls: [
     number({
       label: "Surface en m²",
@@ -249,7 +255,7 @@ const interior: Step = {
 
 const deck: Step = {
   label: "Terrasse",
-  price: (item: Item) => getPrice(item),
+  price: $(async (item: Item) => getPrice(item)),
   controls: [
     number({
       label: "Surface en m²",
@@ -333,7 +339,7 @@ const deck: Step = {
 
 const stairs: Step = {
   label: 'Escalier',
-  price: (item: Item) => getPrice(item),
+  price: $(async (item: Item) => getPrice(item)),
   controls: [
     {
       legend: "Contre marche",

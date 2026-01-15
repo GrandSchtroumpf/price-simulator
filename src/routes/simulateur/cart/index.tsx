@@ -50,13 +50,13 @@ const parseDisplayValue = (value: InputTypes, labels: Record<string, string>) =>
 export default component$(() => {
   useStyles$(styles);
   const cart = useContext(cartContext);
-  const finalEstimation = useSignal<{ min: number, max: number } | undefined>(undefined);
+  const finalEstimation = useSignal<Promise<string | undefined> | undefined>(undefined);
 
-  const onSubmit = $(async (form: HTMLFormElement) => {
+  const onSubmit = $((form: HTMLFormElement) => {
     const isValid = form.checkValidity();
     if (!isValid) return;
-    const price = finalStep.finalPrice ? await finalStep.finalPrice(cart) : { min: 0, max: 0 };
-    if (price.min > 0 && price.max > 0) finalEstimation.value = { min: price.min, max: price.max };
+    const price = finalStep.finalPrice && finalStep.finalPrice(cart);
+    finalEstimation.value = displayPrice(price);
   });
 
   return (
@@ -126,7 +126,7 @@ export default component$(() => {
       </form>
       {finalEstimation.value && (
         <article id="final-estimation">
-          <h2>Votre estimation est comprise entre {finalEstimation.value.min} et {finalEstimation.value.max} €</h2>
+          <h2>Votre estimation est de {finalEstimation}</h2>
           <p>NB: Le prix affiché est un prix indicatif et ne constitue pas un devis ferme et définitif</p>
           <a class="mailto" href={mailto(cart)}>Contacter Erwan Richard</a>
         </article>

@@ -23,11 +23,11 @@ export interface Item {
 export interface Step {
   controls: ControlTypes[];
   label: string;
-  price?: QRL<(cart: Item) => Promise<{ min: number, max: number }>>;
+  price?: QRL<(cart: Item) => Promise<Range>>;
 };
 
 interface FinalStep extends Omit<Step, 'price'> {
-  finalPrice?: QRL<(cart: Item[]) => Promise<{ min: number, max: number }>>;
+  finalPrice?: QRL<(cart: Item[]) => Promise<Range>>;
 }
 
 export interface Control<T> {
@@ -425,12 +425,14 @@ export const finalStep: FinalStep = {
   label: "Informations complémentaires",
   finalPrice: $(async (cart: Item[]) => {
     let totalMinPrice = 0;
-    let totalMaxPrice = 0;
+    let totalMaxPrice = 0; 
     for (const item of cart) {
       const step = stepsRecord[item.stepKey];
-      const itemPrice = step.price ? await step.price(item) : { min: 0, max: 0 };
-      totalMinPrice += itemPrice.min;
-      totalMaxPrice += itemPrice.max;
+      const itemPrice = step.price && await step.price(item);
+      if (itemPrice?.min) {
+        totalMinPrice += itemPrice.min;
+        totalMaxPrice += itemPrice.max ?? itemPrice.min;
+      }
     }
     return {
       min: Math.floor(totalMinPrice),

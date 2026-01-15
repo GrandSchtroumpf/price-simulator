@@ -17,6 +17,15 @@
     display: grid;
     align-content: end;
     gap: 24px;
+
+    & p {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      font-size: clamp(1rem, 2.5vw, 1.4rem);
+      --base-delay: 600ms;
+      @apply splitted-text;
+    }
   }
   & .logo {
     display: grid;
@@ -89,13 +98,13 @@
     --base-delay: 200ms;
     @apply splitted-text;
   }
-  & h2 {
+  & h2,
+  h3 {
     display: flex;
     font-size: clamp(1.4rem, 2.5vw, 4rem);
     font-weight: 200;
     @apply splitted-text;
   }
-
   & a {
     place-self: center;
     font-size: clamp(1.2rem, 1.5vw, 2rem);

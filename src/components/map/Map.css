@@ -29,7 +29,6 @@
 
   & .location {
     position: absolute;
-    font-size: 1.5rem;
     color: var(--color-on-contrast);
     overflow: clip;
     isolation: isolate;
@@ -42,16 +41,12 @@
     place-items: center;
     gap: 4px;
   }
-  /* & .location p:first-child {
-    transform: translateY(16px);
-  } */
   & .location p {
     grid-area: stack;
     display: flex;
-
-    @media (width < 600px) {
-      font-size: 1rem;
-    }
+  }
+  & .location p:first-child {
+    transform: translateY(0.8rem);
   }
   & .location .circle {
     grid-area: stack;
@@ -101,7 +96,6 @@
     @media (width < 600px) {
       bottom: 16px;
       left: 16px;
-      font-size: 0.8rem;
     }
   }
 }

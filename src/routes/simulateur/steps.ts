@@ -134,7 +134,7 @@ const getPrice = (item: Item) => {
 };
 
 const currency = new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
-export async function displayPrice(pricePromise?: Promise<Range>) {
+export async function displayPrice(pricePromise?: Promise<Range>): Promise<string | undefined> {
   const price = await pricePromise;
   if (!price) return;
   if (price.min === price.max) return currency.format(price.min);
@@ -425,7 +425,7 @@ export const finalStep: FinalStep = {
   label: "Informations complémentaires",
   finalPrice: $(async (cart: Item[]) => {
     let totalMinPrice = 0;
-    let totalMaxPrice = 0; 
+    let totalMaxPrice = 0;
     for (const item of cart) {
       const step = stepsRecord[item.stepKey];
       const itemPrice = step.price && await step.price(item);

@@ -22,7 +22,7 @@ export interface Item {
 export interface Step {
   controls: ControlTypes[];
   label: string;
-  price?: QRL<(cart: Item) => Promise<{ min: number, max: number }>>;
+  price?: (cart: Item) => { min: number, max: number };
 };
 
 interface FinalStep extends Omit<Step, 'price'> {
@@ -105,7 +105,7 @@ const getPriceData = (control: ControlTypes, value: InputTypes) => {
   }
 };
 
-const getPrice = $((item: Item) => {
+const getPrice = (item: Item) => {
   const step = stepsRecord[item.stepKey];
   const dataRecord: Record<string, { min?: number, max?: number }[]> = {};
   for (const [controlName, value] of Object.entries(item.data)) {
@@ -132,9 +132,8 @@ const getPrice = $((item: Item) => {
     min: Math.floor(minAddTotal * minMulTotal),
     max: Math.floor(maxAddTotal * maxMulTotal)
   };
-  console.log(price)
   return price;
-});
+};
 
 
 const writePriceData = (
@@ -152,7 +151,7 @@ const writePriceData = (
 
 const floor: Step = {
   label: 'Sol',
-  price: $(async (item: Item) => getPrice(item)),
+  price: (item: Item) => getPrice(item),
   controls: [
     number({
       label: "Surface en m²",
@@ -190,7 +189,7 @@ const floor: Step = {
 
 const interior: Step = {
   label: "Aménagement/Isolation intérieur",
-  price: $(async (item: Item) => getPrice(item)),
+  price: (item: Item) => getPrice(item),
   controls: [
     number({
       label: "Surface en m²",
@@ -250,7 +249,7 @@ const interior: Step = {
 
 const deck: Step = {
   label: "Terrasse",
-  price: $(async (item: Item) => getPrice(item)),
+  price: (item: Item) => getPrice(item),
   controls: [
     number({
       label: "Surface en m²",
@@ -334,7 +333,7 @@ const deck: Step = {
 
 const stairs: Step = {
   label: 'Escalier',
-  price: $(async (item: Item) => getPrice(item)),
+  price: (item: Item) => getPrice(item),
   controls: [
     {
       legend: "Contre marche",

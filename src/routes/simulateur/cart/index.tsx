@@ -70,11 +70,11 @@ export default component$(() => {
         <h1>Validation devis</h1>
       </header>
       <div>
-        {cart.map(async (_, i) => {
+        {cart.map((_, i) => {
           const { stepKey, data } = cart[i];
           const step = stepsRecord[stepKey];
           const labelList = getStepLabelList(stepKey, step);
-          const price = step.price ? await step.price(cart[i]) : { min: 0, max: 0 };
+          const price = step.price ? step.price(cart[i]) : { min: 0, max: 0 };
           return (
             <details key={i} name="cart">
               <summary>

@@ -46,7 +46,7 @@
     display: flex;
   }
   & .location p:first-child {
-    translate: 0 12px;
+    transform: translateY(0.8rem);
   }
   & .location .circle {
     grid-area: stack;

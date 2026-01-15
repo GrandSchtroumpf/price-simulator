@@ -62,7 +62,7 @@ export default component$(() => {
   useStyles$(styles);
   const cart = useContext(cartContext);
   const location = useLocation();
-  const stepPrice = useSignal(0);
+  const stepPrice = useSignal<{ min: number, max: number } | undefined>(undefined);
   const index = useSignal<undefined | number>(undefined)
   const { stepKey } = location.params;
   if (!(stepKey in stepsRecord)) return null;
@@ -103,13 +103,13 @@ export default component$(() => {
   const onInput = $(async (form: HTMLFormElement) => {
     const isValid = form.checkValidity();
     if (!isValid) {
-      stepPrice.value = 0;
+      stepPrice.value = undefined;
       return;
     };
     const formData = new FormData(form);
     const formObj = convertControls(formData, step);
     const item = { stepKey: stepKey as StepKey, data: formObj };
-    const price = step.price ? await step.price(item) : 0;
+    const price = step.price ? await step.price(item) : undefined;
     stepPrice.value = price;
   })
 
@@ -128,7 +128,7 @@ export default component$(() => {
           </header>
           <div class="step-price">
             {stepPrice.value
-              ? <p>Estimation: {stepPrice}€</p>
+              ? <p>Estimation: {stepPrice.value.min} / {stepPrice.value.max}€</p>
               : <p>Remplissez les informations si dessous pour obtenir un prix indicatif</p>
             }
           </div>

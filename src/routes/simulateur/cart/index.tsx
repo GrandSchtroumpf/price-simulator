@@ -50,13 +50,13 @@ const parseDisplayValue = (value: InputTypes, labels: Record<string, string>) =>
 export default component$(() => {
   useStyles$(styles);
   const cart = useContext(cartContext);
-  const finalEstimation = useSignal(0);
+  const finalEstimation = useSignal<{ min: number, max: number } | undefined>(undefined);
 
   const onSubmit = $(async (form: HTMLFormElement) => {
     const isValid = form.checkValidity();
     if (!isValid) return;
-    const price = finalStep.finalPrice ? await finalStep.finalPrice(cart) : 0;
-    if (price > 0) finalEstimation.value = Math.floor(price);
+    const price = finalStep.finalPrice ? await finalStep.finalPrice(cart) : { min: 0, max: 0 };
+    if (price.min > 0 && price.max > 0) finalEstimation.value = { min: price.min, max: price.max };
   });
 
   return (
@@ -70,11 +70,11 @@ export default component$(() => {
         <h1>Validation devis</h1>
       </header>
       <div>
-        {cart.map((_, i) => {
+        {cart.map(async (_, i) => {
           const { stepKey, data } = cart[i];
           const step = stepsRecord[stepKey];
           const labelList = getStepLabelList(stepKey, step);
-          const price = step.price ? step.price(cart[i]) : 0;
+          const price = step.price ? await step.price(cart[i]) : { min: 0, max: 0 };
           return (
             <details key={i} name="cart">
               <summary>
@@ -105,7 +105,7 @@ export default component$(() => {
                 <tfoot>
                   <tr>
                     <th>Prix</th>
-                    <td>{price} €</td>
+                    <td>{price.min} / {price.max} €</td>
                   </tr>
                 </tfoot>
               </table>
@@ -124,9 +124,9 @@ export default component$(() => {
         ))}
         {!finalEstimation.value && <button type='submit'>Valider</button>}
       </form>
-      {finalEstimation.value > 0 && (
+      {finalEstimation.value && (
         <article id="final-estimation">
-          <h2>Votre estimation est de {finalEstimation} €</h2>
+          <h2>Votre estimation est comprise entre {finalEstimation.value.min} et {finalEstimation.value.max} €</h2>
           <p>NB: Le prix affiché est un prix indicatif et ne constitue pas un devis ferme et définitif</p>
           <a class="mailto" href={mailto(cart)}>Contacter Erwan Richard</a>
         </article>

@@ -50,13 +50,13 @@ const parseDisplayValue = (value: InputTypes, labels: Record<string, string>) =>
 export default component$(() => {
   useStyles$(styles);
   const cart = useContext(cartContext);
-  const finalEstimation = useSignal<Promise<string | undefined> | undefined>(undefined);
+  const finalEstimation = useSignal<string>('');
 
-  const onSubmit = $((form: HTMLFormElement) => {
+  const onSubmit = $(async (form: HTMLFormElement) => {
     const isValid = form.checkValidity();
     if (!isValid) return;
-    const price = finalStep.finalPrice && finalStep.finalPrice(cart);
-    finalEstimation.value = displayPrice(price);
+    const price = finalStep.finalPrice?.(cart);
+    finalEstimation.value = await displayPrice(price);
   });
 
   return (
@@ -74,7 +74,7 @@ export default component$(() => {
           const { stepKey, data } = cart[i];
           const step = stepsRecord[stepKey];
           const labelList = getStepLabelList(stepKey, step);
-          const price = step.price && step.price(cart[i]);
+          const price = step.price?.(cart[i]);
           return (
             <details key={i} name="cart">
               <summary>

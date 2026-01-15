@@ -23,7 +23,7 @@ export interface Item {
 export interface Step {
   controls: ControlTypes[];
   label: string;
-  price?: QRL<(cart: Item) => Promise<Range>>;
+  price?: QRL<(cart: Item) => Range>;
 };
 
 interface FinalStep extends Omit<Step, 'price'> {
@@ -134,9 +134,9 @@ const getPrice = (item: Item) => {
 };
 
 const currency = new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
-export async function displayPrice(pricePromise?: Promise<Range>): Promise<string | undefined> {
+export async function displayPrice(pricePromise?: Promise<Range>): Promise<string> {
   const price = await pricePromise;
-  if (!price) return;
+  if (!price) return '';
   if (price.min === price.max) return currency.format(price.min);
   return (currency as any).formatRange(price.min, price.max);
 }
@@ -157,7 +157,7 @@ const writePriceData = (
 
 const floor: Step = {
   label: 'Sol',
-  price: $(async (item: Item) => getPrice(item)),
+  price: $((item: Item) => getPrice(item)),
   controls: [
     number({
       label: "Surface en m²",
@@ -195,7 +195,7 @@ const floor: Step = {
 
 const interior: Step = {
   label: "Aménagement/Isolation intérieur",
-  price: $(async (item: Item) => getPrice(item)),
+  price: $((item: Item) => getPrice(item)),
   controls: [
     number({
       label: "Surface en m²",
@@ -255,7 +255,7 @@ const interior: Step = {
 
 const deck: Step = {
   label: "Terrasse",
-  price: $(async (item: Item) => getPrice(item)),
+  price: $((item: Item) => getPrice(item)),
   controls: [
     number({
       label: "Surface en m²",
@@ -339,7 +339,7 @@ const deck: Step = {
 
 const stairs: Step = {
   label: 'Escalier',
-  price: $(async (item: Item) => getPrice(item)),
+  price: $((item: Item) => getPrice(item)),
   controls: [
     {
       legend: "Contre marche",

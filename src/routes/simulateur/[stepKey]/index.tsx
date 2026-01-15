@@ -62,7 +62,7 @@ export default component$(() => {
   useStyles$(styles);
   const cart = useContext(cartContext);
   const location = useLocation();
-  const stepPrice = useSignal<Promise<string | undefined> | undefined>(undefined);
+  const stepPrice = useSignal<string>('');
   const index = useSignal<undefined | number>(undefined)
   const { stepKey } = location.params;
   if (!(stepKey in stepsRecord)) return null;
@@ -100,19 +100,18 @@ export default component$(() => {
     history.back();
   });
 
-  const onInput = $((form: HTMLFormElement) => {
+  const onInput = $(async (form: HTMLFormElement) => {
     const isValid = form.checkValidity();
     if (!isValid) {
-      stepPrice.value = undefined;
+      stepPrice.value = '';
       return;
     };
     const formData = new FormData(form);
     const formObj = convertControls(formData, step);
     const item = { stepKey: stepKey as StepKey, data: formObj };
-    const price = step.price && step.price(item);
+    const price = step.price?.(item);
     if (!price) return;
-    const formatedPrice = displayPrice(price);
-    stepPrice.value = formatedPrice;
+    stepPrice.value = await displayPrice(price);
   })
 
   return (

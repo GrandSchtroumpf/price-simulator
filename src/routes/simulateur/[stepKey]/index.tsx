@@ -130,7 +130,7 @@ export default component$(() => {
           <div class="step-price">
             {stepPrice.value
               ? <p>Estimation: {stepPrice}</p>
-              : <p>Remplissez les informations si dessous pour obtenir un prix indicatif</p>
+              : <p>Remplissez les informations ci-dessous pour obtenir un prix indicatif</p>
             }
           </div>
           <form preventdefault:submit onsubmit$={(_, form) => onSubmit(form)} onInput$={(_, form) => onInput(form)}>

@@ -281,7 +281,7 @@ const deck: Step = {
           priceData: writePriceData('multiplier', 1.3, 1.4)
         },
         {
-          label: "Surélevé avec escalier",
+          label: "Surélevé sans escalier",
           value: "elevatedWithoutStairs",
           priceData: writePriceData('multiplier', 1.1, 1.2)
         },

@@ -3,7 +3,7 @@ import { StaticGenerateHandler, useLocation } from "@qwik.dev/router";
 import { displayPrice, Item, Step, StepKey, stepsRecord } from "../steps";
 import { DynamicControl } from "../controls";
 import { cartContext } from "../layout";
-import { unwrapStore, useSignal, useStyles$, useVisibleTask$ } from "@qwik.dev/core/internal";
+import { unwrapStore, useId, useSignal, useStyles$, useVisibleTask$ } from "@qwik.dev/core/internal";
 import styles from './index.css?inline';
 
 const convertControls = (data: FormData, step: Step) => {
@@ -60,6 +60,7 @@ const writeControls = (editItem: Item, step: Step) => {
 
 export default component$(() => {
   useStyles$(styles);
+  const id = useId();
   const cart = useContext(cartContext);
   const location = useLocation();
   const stepPrice = useSignal<string>('');
@@ -126,14 +127,13 @@ export default component$(() => {
               </svg>
             </button>
             <h1 style={{ viewTransitionName: `${stepKey}-title` }} >{step.label}</h1>
+            {stepPrice.value && <output form={id} aria-label="Prix total">{stepPrice.value}</output>
+            }
           </header>
           <div class="step-price">
-            {stepPrice.value
-              ? <p>Estimation: {stepPrice}</p>
-              : <p>Remplissez les informations ci-dessous pour obtenir un prix indicatif</p>
-            }
+            <p>Estimation : Remplissez les informations ci-dessous pour obtenir un prix indicatif</p>
           </div>
-          <form preventdefault:submit onsubmit$={(_, form) => onSubmit(form)} onInput$={(_, form) => onInput(form)}>
+          <form id={id} preventdefault:submit onsubmit$={(_, form) => onSubmit(form)} onInput$={(_, form) => onInput(form)}>
             {controls.value.map((control, i) => <DynamicControl key={i} control={control} />)}
             <button type='submit'>Ajouter au devis</button>
           </form>

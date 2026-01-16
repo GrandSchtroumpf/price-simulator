@@ -11,7 +11,7 @@ export interface Range {
 
 interface PriceData {
   type: 'multiplier' | 'addition';
-  value?: Range;
+  value: Range;
   time?: number;
 }
 
@@ -146,13 +146,11 @@ export async function displayPrice(pricePromise?: Promise<Range>): Promise<strin
 
 const writePriceData = (
   type: PriceData['type'],
-  min?: number,
+  min: number,
   max?: number,
   time?: PriceData['time']
 ): PriceData => {
-  const priceData = { type };
-  const value = { min, max: max ?? min };
-  if (min) Object.assign(priceData, { value });
+  const priceData = { type, value: { min, max: max ?? min } };
   if (time) Object.assign(priceData, time);
   return priceData
 };
@@ -167,7 +165,7 @@ const floor: Step = {
       required: true,
       value: 1,
       min: 1,
-      priceData: writePriceData('multiplier')
+      priceData: writePriceData('multiplier', 1)
     }),
     {
       legend: "Type de matériaux",
@@ -204,7 +202,7 @@ const interior: Step = {
       name: "surface",
       value: 1,
       min: 1,
-      priceData: writePriceData('multiplier')
+      priceData: writePriceData('multiplier', 1)
     }),
     {
       legend: "Pièce",
@@ -264,7 +262,7 @@ const deck: Step = {
       name: "surface",
       value: 1,
       min: 1,
-      priceData: writePriceData('multiplier')
+      priceData: writePriceData('multiplier', 1)
     }),
     {
       legend: "Niveau",

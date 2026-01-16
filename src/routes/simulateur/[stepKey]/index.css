@@ -73,11 +73,18 @@ body:has(#form) {
     border-bottom-right-radius: var(--radius);
     view-transition-name: form;
   }
+  & footer {
+    display: flex;
+    gap: 16px;
+  }
   & button[type="submit"] {
+    flex: 1;
     background-color: var(--color-accent);
     color: var(--color-on-accent);
     padding: 8px 16px;
     border-radius: 8px;
+  } & button[type="submit"]:first-child {
+    background-color: var(--color-surface-4);
   }
   @media (width < 800px) {
     --radius: 0px;

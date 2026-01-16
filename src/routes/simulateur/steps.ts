@@ -6,7 +6,7 @@ export type StepKey = keyof typeof stepsRecord;
 export type InputTypes = string | string[] | number | number[] | boolean;
 export interface Range {
   min: number;
-  max?: number;
+  max: number;
 }
 
 interface PriceData {
@@ -98,7 +98,9 @@ const number = (p: Omit<InputNumber, 'kind' | 'type'>): InputNumber => ({
 
 const getPriceData = (control: ControlTypes, value: InputTypes) => {
   if (control.kind === "input" && control.type === 'number') {
-    if (control.priceData) return { ...control.priceData, value: { min: Number(value) } };
+    if (control.priceData) {
+      return { ...control.priceData, value: { min: Number(value), max: Number(value) } };
+    }
   };
   if (control.kind === 'radiogroup') {
     const option = control.options.find((option) => option.value === value);
@@ -120,11 +122,11 @@ const getPrice = (item: Item) => {
     const { min, max } = priceData.value;
     if (priceData.type === 'addition') {
       minAddition += min ?? 0;
-      maxAddition += max ?? min ?? 0;
+      maxAddition += max ?? 0;
     }
     if (priceData.type === 'multiplier') {
       minMultiplier *= min ?? 1;
-      maxMultiplier *= max ?? min ?? 1;
+      maxMultiplier *= max ?? 1;
     }
   }
   return {
@@ -149,8 +151,8 @@ const writePriceData = (
   time?: PriceData['time']
 ): PriceData => {
   const priceData = { type };
-  const value = { min, max };
-  if (min || max) Object.assign(priceData, { value });
+  const value = { min, max: max ?? min };
+  if (min) Object.assign(priceData, { value });
   if (time) Object.assign(priceData, time);
   return priceData
 };

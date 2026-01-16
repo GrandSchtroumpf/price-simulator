@@ -428,7 +428,7 @@ export const finalStep: FinalStep = {
     let totalMaxPrice = 0;
     for (const item of cart) {
       const step = stepsRecord[item.stepKey];
-      const itemPrice = step.price && await step.price(item);
+      const itemPrice = await step.price?.(item);
       if (itemPrice?.min) {
         totalMinPrice += itemPrice.min;
         totalMaxPrice += itemPrice.max ?? itemPrice.min;

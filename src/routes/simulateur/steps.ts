@@ -194,7 +194,7 @@ const floor: Step = {
 }
 
 const interior: Step = {
-  label: "Aménagement/Isolation intérieur",
+  label: "Aménagement",
   price: $((item: Item) => getPrice(item)),
   controls: [
     number({

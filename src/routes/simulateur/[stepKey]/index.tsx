@@ -1,6 +1,6 @@
 import { component$, $, useContext, useComputed$ } from "@qwik.dev/core";
 import { StaticGenerateHandler, useLocation } from "@qwik.dev/router";
-import { Item, Step, StepKey, stepsRecord } from "../steps";
+import { displayPrice, Item, Step, StepKey, stepsRecord } from "../steps";
 import { DynamicControl } from "../controls";
 import { cartContext } from "../layout";
 import { unwrapStore, useSignal, useStyles$, useVisibleTask$ } from "@qwik.dev/core/internal";
@@ -62,7 +62,7 @@ export default component$(() => {
   useStyles$(styles);
   const cart = useContext(cartContext);
   const location = useLocation();
-  const stepPrice = useSignal(0);
+  const stepPrice = useSignal<string>('');
   const index = useSignal<undefined | number>(undefined)
   const { stepKey } = location.params;
   if (!(stepKey in stepsRecord)) return null;
@@ -103,14 +103,15 @@ export default component$(() => {
   const onInput = $(async (form: HTMLFormElement) => {
     const isValid = form.checkValidity();
     if (!isValid) {
-      stepPrice.value = 0;
+      stepPrice.value = '';
       return;
     };
     const formData = new FormData(form);
     const formObj = convertControls(formData, step);
     const item = { stepKey: stepKey as StepKey, data: formObj };
-    const price = step.price ? await step.price(item) : 0;
-    stepPrice.value = price;
+    const price = step.price?.(item);
+    if (!price) return;
+    stepPrice.value = await displayPrice(price);
   })
 
   return (
@@ -128,8 +129,8 @@ export default component$(() => {
           </header>
           <div class="step-price">
             {stepPrice.value
-              ? <p>Estimation: {stepPrice}€</p>
-              : <p>Remplissez les informations si dessous pour obtenir un prix indicatif</p>
+              ? <p>Estimation: {stepPrice}</p>
+              : <p>Remplissez les informations ci-dessous pour obtenir un prix indicatif</p>
             }
           </div>
           <form preventdefault:submit onsubmit$={(_, form) => onSubmit(form)} onInput$={(_, form) => onInput(form)}>

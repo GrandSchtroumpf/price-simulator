@@ -4,10 +4,14 @@ export type ControlTypes = CheckList | CheckBox | RadioGroup | InputNumber | Inp
 export type ControlKind = ControlTypes['kind'];
 export type StepKey = keyof typeof stepsRecord;
 export type InputTypes = string | string[] | number | number[] | boolean;
+export interface Range {
+  min: number;
+  max: number;
+}
 
 interface PriceData {
   type: 'multiplier' | 'addition';
-  value?: number;
+  value: Range;
   time?: number;
 }
 
@@ -19,11 +23,11 @@ export interface Item {
 export interface Step {
   controls: ControlTypes[];
   label: string;
-  price?: QRL<(cart: Item) => Promise<number>>;
+  price?: QRL<(cart: Item) => Range>;
 };
 
 interface FinalStep extends Omit<Step, 'price'> {
-  finalPrice?: QRL<(cart: Item[]) => Promise<number>>;
+  finalPrice?: QRL<(cart: Item[]) => Promise<Range>>;
 }
 
 export interface Control<T> {
@@ -94,7 +98,9 @@ const number = (p: Omit<InputNumber, 'kind' | 'type'>): InputNumber => ({
 
 const getPriceData = (control: ControlTypes, value: InputTypes) => {
   if (control.kind === "input" && control.type === 'number') {
-    if (control.priceData) return { ...control.priceData, value: Number(value) };
+    if (control.priceData) {
+      return { ...control.priceData, value: { min: Number(value), max: Number(value) } };
+    }
   };
   if (control.kind === 'radiogroup') {
     const option = control.options.find((option) => option.value === value);
@@ -102,30 +108,56 @@ const getPriceData = (control: ControlTypes, value: InputTypes) => {
   }
 };
 
-const getPrice = $((item: Item) => {
+const getPrice = (item: Item) => {
   const step = stepsRecord[item.stepKey];
-  const dataRecord: Record<string, number[]> = {};
+  let minAddition = 0;
+  let maxAddition = 0;
+  let minMultiplier = 1;
+  let maxMultiplier = 1;
   for (const [controlName, value] of Object.entries(item.data)) {
-    const control = step.controls.find((control) => control.name === controlName);
-    if (!control) return 0;
+    const control = step.controls.find(c => c.name === controlName);
+    if (!control) continue;
     const priceData = getPriceData(control, value);
-    if (!priceData || typeof priceData.value !== 'number') return 0;
-    if (!dataRecord[priceData.type]) dataRecord[priceData.type] = [];
-    dataRecord[priceData.type].push(priceData.value)
+    if (!priceData?.value) continue;
+    const { min, max } = priceData.value;
+    if (priceData.type === 'addition') {
+      minAddition += min ?? 0;
+      maxAddition += max ?? 0;
+    }
+    if (priceData.type === 'multiplier') {
+      minMultiplier *= min ?? 1;
+      maxMultiplier *= max ?? 1;
+    }
   }
-  const base = dataRecord['addition']?.reduce((a: number, b: number) => a + b, 0) || 1;
-  const multipliers = dataRecord['multiplier']?.reduce((a: number, b: number) => a * b, 1) || 1;
-  return Math.floor(base * multipliers);
-});
+  return {
+    min: Math.floor(minAddition * minMultiplier),
+    max: Math.floor(maxAddition * maxMultiplier),
+  };
+};
+
+const currency = new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
+export async function displayPrice(pricePromise?: Promise<Range>): Promise<string> {
+  const price = await pricePromise;
+  if (!price) return '';
+  if (price.min === price.max) return currency.format(price.min);
+  return (currency as any).formatRange(price.min, price.max);
+}
 
 
-const writePriceData = (type: PriceData['type'], value?: PriceData['value'], time?: PriceData['time']) => {
-  return { type, value, time };
+const writePriceData = (
+  type: PriceData['type'],
+  min: number,
+  max?: number,
+  time?: PriceData['time']
+): PriceData => {
+  const priceData = { type, value: { min, max: max ?? min } };
+  if (time) Object.assign(priceData, time);
+  return priceData
 };
 
 const floor: Step = {
   label: 'Sol',
-  price: $(async (item: Item) => getPrice(item)),
+  price: $((item: Item) => getPrice(item)),
   controls: [
     number({
       label: "Surface en m²",
@@ -133,7 +165,7 @@ const floor: Step = {
       required: true,
       value: 1,
       min: 1,
-      priceData: writePriceData('multiplier')
+      priceData: writePriceData('multiplier', 1)
     }),
     {
       legend: "Type de matériaux",
@@ -144,17 +176,17 @@ const floor: Step = {
         {
           label: "Massif",
           value: "hard",
-          priceData: writePriceData('addition', 200)
+          priceData: writePriceData('addition', 200, 250)
         },
         {
           label: "Stratifié",
           value: "plastic",
-          priceData: writePriceData('addition', 100)
+          priceData: writePriceData('addition', 100, 150)
         },
         {
           label: "Vinyle-PVC",
           value: "vinyl",
-          priceData: writePriceData('addition', 150)
+          priceData: writePriceData('addition', 150, 200)
         },
       ]
     }
@@ -163,14 +195,14 @@ const floor: Step = {
 
 const interior: Step = {
   label: "Aménagement/Isolation intérieur",
-  price: $(async (item: Item) => getPrice(item)),
+  price: $((item: Item) => getPrice(item)),
   controls: [
     number({
       label: "Surface en m²",
       name: "surface",
       value: 1,
       min: 1,
-      priceData: writePriceData('multiplier')
+      priceData: writePriceData('multiplier', 1)
     }),
     {
       legend: "Pièce",
@@ -181,17 +213,17 @@ const interior: Step = {
         {
           label: "Rez de chaussée",
           value: "groundLevel",
-          priceData: writePriceData('multiplier', 1)
+          priceData: writePriceData('multiplier', 1, 1.1)
         },
         {
           label: "Étage",
           value: "floorLevel",
-          priceData: writePriceData('multiplier', 1.1)
+          priceData: writePriceData('multiplier', 1.1, 1.2)
         },
         {
           label: "Combles",
           value: "attic",
-          priceData: writePriceData('multiplier', 1.2)
+          priceData: writePriceData('multiplier', 1.2, 1.3)
         },
       ]
     },
@@ -204,17 +236,17 @@ const interior: Step = {
         {
           label: "Laine de verre",
           value: "glass",
-          priceData: writePriceData('addition', 100)
+          priceData: writePriceData('addition', 100, 120)
         },
         {
           label: "Laine de roche",
           value: "rock",
-          priceData: writePriceData('addition', 150)
+          priceData: writePriceData('addition', 150, 180)
         },
         {
           label: "Laine de bois",
           value: "wood",
-          priceData: writePriceData('addition', 250)
+          priceData: writePriceData('addition', 250, 280)
         },
       ]
     }
@@ -223,14 +255,14 @@ const interior: Step = {
 
 const deck: Step = {
   label: "Terrasse",
-  price: $(async (item: Item) => getPrice(item)),
+  price: $((item: Item) => getPrice(item)),
   controls: [
     number({
       label: "Surface en m²",
       name: "surface",
       value: 1,
       min: 1,
-      priceData: writePriceData('multiplier')
+      priceData: writePriceData('multiplier', 1)
     }),
     {
       legend: "Niveau",
@@ -241,17 +273,17 @@ const deck: Step = {
         {
           label: "Sol",
           value: "groundLevel",
-          priceData: writePriceData('multiplier', 1)
+          priceData: writePriceData('multiplier', 1, 1.1)
         },
         {
           label: "Surélevé avec escalier",
           value: "elevatedWithStairs",
-          priceData: writePriceData('multiplier', 1.3)
+          priceData: writePriceData('multiplier', 1.3, 1.4)
         },
         {
-          label: "Surélevé avec escalier",
+          label: "Surélevé sans escalier",
           value: "elevatedWithoutStairs",
-          priceData: writePriceData('multiplier', 1.1)
+          priceData: writePriceData('multiplier', 1.1, 1.2)
         },
       ]
     },
@@ -264,17 +296,17 @@ const deck: Step = {
         {
           label: "Douglas",
           value: "douglas",
-          priceData: writePriceData('addition', 100)
+          priceData: writePriceData('addition', 100, 110)
         },
         {
           label: "Composite",
           value: "composite",
-          priceData: writePriceData('addition', 150)
+          priceData: writePriceData('addition', 150, 120)
         },
         {
           label: "Autoclave",
           value: "treated",
-          priceData: writePriceData('addition', 250)
+          priceData: writePriceData('addition', 250, 270)
         },
       ]
     },
@@ -287,17 +319,17 @@ const deck: Step = {
         {
           label: "Sans garde corps",
           value: "withoutGuard",
-          priceData: writePriceData('addition', 0)
+          priceData: writePriceData('addition', 0, 5)
         },
         {
           label: "Bois",
           value: "woodGuard",
-          priceData: writePriceData('addition', 10)
+          priceData: writePriceData('addition', 10, 15)
         },
         {
           label: "Alu",
           value: "aluminumGuard",
-          priceData: writePriceData('addition', 15)
+          priceData: writePriceData('addition', 15, 20)
         },
       ]
     }
@@ -307,7 +339,7 @@ const deck: Step = {
 
 const stairs: Step = {
   label: 'Escalier',
-  price: $(async (item: Item) => getPrice(item)),
+  price: $((item: Item) => getPrice(item)),
   controls: [
     {
       legend: "Contre marche",
@@ -318,12 +350,12 @@ const stairs: Step = {
         {
           label: "Avec contre-marche",
           value: "withStep",
-          priceData: writePriceData('addition', 100)
+          priceData: writePriceData('addition', 100, 120)
         },
         {
           label: "Sans contre-marche",
           value: "withoutStep",
-          priceData: writePriceData('addition', 0)
+          priceData: writePriceData('addition', 0, 20)
         }
       ]
     },
@@ -336,12 +368,12 @@ const stairs: Step = {
         {
           label: "Avec garde-corps",
           value: "withGuardrail",
-          priceData: writePriceData('addition', 300)
+          priceData: writePriceData('addition', 300, 330)
         },
         {
           label: "Sans garde-corps",
           value: "withoutGuardrail",
-          priceData: writePriceData('addition', 0)
+          priceData: writePriceData('addition', 0, 30)
         }
       ]
     },
@@ -354,12 +386,12 @@ const stairs: Step = {
         {
           label: "Droit",
           value: "straight",
-          priceData: writePriceData('addition', 1000)
+          priceData: writePriceData('addition', 1000, 1500)
         },
         {
           label: "Quart tournant",
           value: "quarter",
-          priceData: writePriceData('addition', 1500)
+          priceData: writePriceData('addition', 1500, 2000)
         }
       ]
     },
@@ -372,17 +404,17 @@ const stairs: Step = {
         {
           label: "Hêtre",
           value: "beech",
-          priceData: writePriceData('addition', 0)
+          priceData: writePriceData('addition', 0, 500)
         },
         {
           label: "Pin",
           value: "pine",
-          priceData: writePriceData('addition', 1000)
+          priceData: writePriceData('addition', 1000, 1500)
         },
         {
           label: "Limon",
           value: "stringer",
-          priceData: writePriceData('addition', 1500)
+          priceData: writePriceData('addition', 1500, 2000)
         },
       ]
     }
@@ -392,13 +424,20 @@ const stairs: Step = {
 export const finalStep: FinalStep = {
   label: "Informations complémentaires",
   finalPrice: $(async (cart: Item[]) => {
-    let totalPrice = 0;
+    let totalMinPrice = 0;
+    let totalMaxPrice = 0;
     for (const item of cart) {
       const step = stepsRecord[item.stepKey];
-      const itemPrice = step.price ? await step.price(item) : 0;
-      totalPrice += itemPrice;
+      const itemPrice = await step.price?.(item);
+      if (itemPrice?.min) {
+        totalMinPrice += itemPrice.min;
+        totalMaxPrice += itemPrice.max ?? itemPrice.min;
+      }
     }
-    return Math.floor(totalPrice);
+    return {
+      min: Math.floor(totalMinPrice),
+      max: Math.floor(totalMaxPrice)
+    };
   }),
   controls: [
     {

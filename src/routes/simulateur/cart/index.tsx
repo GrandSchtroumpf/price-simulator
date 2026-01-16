@@ -1,6 +1,6 @@
 import { $, component$, useContext, useSignal, useStyles$ } from "@qwik.dev/core";
 import { cartContext } from "../layout";
-import { type Step, stepsRecord, finalStep, InputTypes, Item } from "../steps";
+import { type Step, stepsRecord, finalStep, InputTypes, Item, displayPrice } from "../steps";
 import { DynamicControl } from "../controls";
 import styles from './index.css?inline';
 
@@ -50,13 +50,13 @@ const parseDisplayValue = (value: InputTypes, labels: Record<string, string>) =>
 export default component$(() => {
   useStyles$(styles);
   const cart = useContext(cartContext);
-  const finalEstimation = useSignal(0);
+  const finalEstimation = useSignal<string>('');
 
   const onSubmit = $(async (form: HTMLFormElement) => {
     const isValid = form.checkValidity();
     if (!isValid) return;
-    const price = finalStep.finalPrice ? await finalStep.finalPrice(cart) : 0;
-    if (price > 0) finalEstimation.value = Math.floor(price);
+    const price = finalStep.finalPrice?.(cart);
+    finalEstimation.value = await displayPrice(price);
   });
 
   return (
@@ -74,7 +74,7 @@ export default component$(() => {
           const { stepKey, data } = cart[i];
           const step = stepsRecord[stepKey];
           const labelList = getStepLabelList(stepKey, step);
-          const price = step.price ? step.price(cart[i]) : 0;
+          const price = step.price?.(cart[i]);
           return (
             <details key={i} name="cart">
               <summary>
@@ -105,7 +105,7 @@ export default component$(() => {
                 <tfoot>
                   <tr>
                     <th>Prix</th>
-                    <td>{price} €</td>
+                    <td>{displayPrice(price)}</td>
                   </tr>
                 </tfoot>
               </table>
@@ -124,9 +124,9 @@ export default component$(() => {
         ))}
         {!finalEstimation.value && <button type='submit'>Valider</button>}
       </form>
-      {finalEstimation.value > 0 && (
+      {finalEstimation.value && (
         <article id="final-estimation">
-          <h2>Votre estimation est de {finalEstimation} €</h2>
+          <h2>Votre estimation est de {finalEstimation}</h2>
           <p>NB: Le prix affiché est un prix indicatif et ne constitue pas un devis ferme et définitif</p>
           <a class="mailto" href={mailto(cart)}>Contacter Erwan Richard</a>
         </article>

@@ -45,6 +45,7 @@
         border-top-left-radius: var(--radius);
         border-top-right-radius: var(--radius);
         overflow: clip;
+        view-transition-name: var(--transition-img);
         view-transition-class: image;
       }
       & img {
@@ -66,13 +67,14 @@
           transition: background-color 300ms var(--ease-out);
           border-bottom-left-radius: var(--radius);
           border-bottom-right-radius: var(--radius);
-          view-transition-name: var(--transition-name);
+          view-transition-name: var(--transition-background);
           view-transition-class: background;
         }
       }
       & p {
         display: inline-block;
         font-size: 1.5rem;
+        view-transition-name: var(--transition-title);
         view-transition-class: title;
       }
     }

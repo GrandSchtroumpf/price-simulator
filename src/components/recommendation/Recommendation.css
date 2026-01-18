@@ -41,12 +41,12 @@
       --transform-in: scale(0.98);
       transform-origin: top;
       animation-name: transform;
-      animation-timeline: view(70% 0%);
+      animation-timeline: view(60% 0%);
 
       & img {
         --transform-in: scale(1.2);
         animation-name: transform;
-        animation-timeline: view(70% 0%);
+        animation-timeline: view(60% 0%);
       }
     }
     & li {
@@ -132,8 +132,12 @@
       grid-column: auto;
     }
     & .worker-img {
+      --transform-in: scale(0.90);
       position: unset;
       max-height: 300px;
+      & img {
+        --transform-in: scale(1.5);
+      }
     }
 
     & ul {

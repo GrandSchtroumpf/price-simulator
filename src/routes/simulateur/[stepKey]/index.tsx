@@ -127,13 +127,13 @@ export default component$(() => {
             </button>
             <h1 style={{ viewTransitionName: `${stepKey}-title` }} >{step.label}</h1>
           </header>
+          <form preventdefault:submit onsubmit$={(_, form) => onSubmit(form)} onInput$={(_, form) => onInput(form)}>
           <div class="step-price">
             {stepPrice.value
               ? <p>Estimation: {stepPrice}</p>
               : <p>Remplissez les informations ci-dessous pour obtenir un prix indicatif</p>
             }
           </div>
-          <form preventdefault:submit onsubmit$={(_, form) => onSubmit(form)} onInput$={(_, form) => onInput(form)}>
             {controls.value.map((control, i) => <DynamicControl key={i} control={control} />)}
             <button type='submit'>Ajouter au devis</button>
           </form>

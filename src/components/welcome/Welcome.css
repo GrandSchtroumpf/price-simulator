@@ -23,6 +23,7 @@
       justify-content: center;
       gap: 16px;
       font-size: clamp(1rem, 2.5vw, 1.4rem);
+      text-transform: uppercase;
       --base-delay: 600ms;
       @apply splitted-text;
     }
@@ -98,8 +99,7 @@
     --base-delay: 200ms;
     @apply splitted-text;
   }
-  & h2,
-  h3 {
+  & h2 {
     display: flex;
     font-size: clamp(1.4rem, 2.5vw, 4rem);
     font-weight: 200;

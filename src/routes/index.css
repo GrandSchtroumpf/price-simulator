@@ -56,6 +56,12 @@ main {
   }
 }
 
+@media (width < 798px) {
+  .wood-veins {
+    display: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .simulator-link {
     transition: background 150ms ease;

@@ -39,7 +39,8 @@
   }
 
   & input:checked + label {
-    color: var(--color-on-accent);
-    background-color: var(--color-secondary);
+    color: var(--color-on-contrast);
+    background-color: var(--color-contrast);
+    opacity: 0.7;
   }
 }

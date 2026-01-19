@@ -24,10 +24,9 @@ export const Welcome = component$(() => {
             />
           </h1>
         </hgroup>
-        <p style="--index: 3"><SplittedText
-          text="Intérieur · Extérieur"
-          mode="word"
-        /></p>
+        <p style="--index: 3">
+          <SplittedText text="Intérieur · Extérieur" mode="word" />
+        </p>
       </div>
       <a class="simulator-link" href="/simulateur" style="--index: 3">Simuler un devis</a>
     </section>

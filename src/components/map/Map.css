@@ -12,11 +12,15 @@
   height: var(--img-container-height);
   position: relative;
   padding: var(--padding);
-  overflow: clip;
   margin: auto;
-  @media (width < 600px) {
-    --img-container-height: 80dvh;
+  font-size: 1.3rem;
+  @media (width < 768px) {
     --padding: 8px;
+  }
+  
+  & .reference {
+    overflow: clip;
+    position: relative;
   }
 
   & img {
@@ -30,11 +34,9 @@
   & .location {
     position: absolute;
     color: var(--color-on-contrast);
-    overflow: clip;
     isolation: isolate;
-    padding: 8px 16px;
-    top: calc(var(--h) * var(--img-container-height));
-    left: calc(var(--w) * var(--img-width) - var(--delta));
+    top: calc(var(--h) * (var(--img-height)));
+    left: calc((var(--w) * var(--img-width)) - var(--delta));
     translate: -50% -50%;
     display: grid;
     grid-template-areas: "stack";
@@ -45,8 +47,9 @@
     grid-area: stack;
     display: flex;
   }
-  & .location p:first-child {
-    transform: translateY(0.8rem);
+  & .location p:last-child {
+    overflow: clip;
+    transform: translateY(-50%);
   }
   & .location .circle {
     grid-area: stack;
@@ -71,7 +74,7 @@
       animation-delay: calc(var(--delay, 0ms) + var(--index) * 100ms);
       animation-fill-mode: backwards, none;
       animation-timing-function: var(--ease-out), linear;
-      animation-iteration-count: none, infinite;
+      animation-iteration-count: 1, infinite;
     }
     & span {
       --opacity-in: 0;
@@ -93,9 +96,10 @@
     border: dotted 3px var(--color-outline);
     border-style: dashed;
 
-    @media (width < 600px) {
+    @media (width < 768px) {
       bottom: 16px;
       left: 16px;
+      font-size: 1.1rem;
     }
   }
 }

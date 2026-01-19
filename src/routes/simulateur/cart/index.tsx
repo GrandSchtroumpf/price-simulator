@@ -3,6 +3,7 @@ import { cartContext } from "../layout";
 import { type Step, stepsRecord, finalStep, InputTypes, Item, displayPrice } from "../steps";
 import { DynamicControl } from "../controls";
 import styles from './index.css?inline';
+import { useLocation, useNavigate } from "@qwik.dev/router";
 
 const mailto = (cart: Item[]) => {
   const list = [];
@@ -49,6 +50,8 @@ const parseDisplayValue = (value: InputTypes, labels: Record<string, string>) =>
 
 export default component$(() => {
   useStyles$(styles);
+  const location = useLocation();
+  const navigate = useNavigate();
   const cart = useContext(cartContext);
   const finalEstimation = useSignal<string>('');
 
@@ -62,7 +65,14 @@ export default component$(() => {
   return (
     <main id="cart">
       <header>
-        <button onClick$={() => history.back()} aria-label="Retour à la liste">
+        <button onClick$={() => {
+          const pathName = location.prevUrl?.pathname;
+          if (pathName?.endsWith('simulateur/')) {
+            history.back();
+          } else {
+            navigate('..');
+          }
+        }} aria-label="Retour à la liste">
           <svg width="24px" height="24px" viewBox="0 -960 960 960" fill="currentColor">
             <path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z" />
           </svg>

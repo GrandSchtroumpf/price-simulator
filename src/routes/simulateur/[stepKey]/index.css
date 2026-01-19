@@ -3,6 +3,13 @@ body:has(#form) {
   min-height: 100dvh;
 }
 
+.step-price {
+  padding-inline: 16px;
+
+  & p{
+    font-size: 1.2rem;
+  }
+} 
 
 #form {
   --radius: 16px;
@@ -61,6 +68,12 @@ body:has(#form) {
     display: inline-block;
     font-size: 2rem;
     view-transition-class: title;
+    flex: 1;
+  }
+  & output {
+    font-size: 1.5rem;
+    --opacity-in: 0;
+    animation: fade 300ms var(--ease-in);
   }
   & form {
     display: grid;
@@ -71,16 +84,31 @@ body:has(#form) {
     view-transition-name: form;
     view-transition-class: new-elements;
   }
+  & footer {
+    display: flex;
+    gap: 16px;
+  }
   & button[type="submit"] {
+    flex: 1;
     background-color: var(--color-accent);
     color: var(--color-on-accent);
     padding: 8px 16px;
     border-radius: 8px;
+  } & button[type="submit"]:first-child {
+    background-color: var(--color-surface-4);
   }
   @media (width < 800px) {
     --radius: 0px;
     & h1 {
       font-size: 1.2rem;
+    }
+    & output {
+    font-size: 1.1rem;
+    }
+    & .step-price {
+      p{
+        font-size: 0.9rem;
+      }
     }
     & img {
       height: 200px;

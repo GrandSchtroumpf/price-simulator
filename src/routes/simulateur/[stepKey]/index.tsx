@@ -1,9 +1,9 @@
 import { component$, $, useContext, useComputed$ } from "@qwik.dev/core";
-import { StaticGenerateHandler, useLocation } from "@qwik.dev/router";
+import { StaticGenerateHandler, useLocation, useNavigate } from "@qwik.dev/router";
 import { displayPrice, Item, Step, StepKey, stepsRecord } from "../steps";
 import { DynamicControl } from "../controls";
 import { cartContext } from "../layout";
-import { unwrapStore, useSignal, useStyles$, useVisibleTask$ } from "@qwik.dev/core/internal";
+import { unwrapStore, useId, useSignal, useStyles$, useVisibleTask$ } from "@qwik.dev/core/internal";
 import styles from './index.css?inline';
 
 const convertControls = (data: FormData, step: Step) => {
@@ -60,8 +60,10 @@ const writeControls = (editItem: Item, step: Step) => {
 
 export default component$(() => {
   useStyles$(styles);
+  const id = useId();
   const cart = useContext(cartContext);
   const location = useLocation();
+  const navigate = useNavigate();
   const stepPrice = useSignal<string>('');
   const index = useSignal<undefined | number>(undefined)
   const { stepKey } = location.params;
@@ -86,9 +88,10 @@ export default component$(() => {
     return step.controls;
   });
 
-  const onSubmit = $((form: HTMLFormElement) => {
+  const onSubmit = $((event: SubmitEvent, form: HTMLFormElement) => {
     const isValid = form.checkValidity();
     if (!isValid) return;
+    const submitter: HTMLButtonElement = event.submitter as HTMLButtonElement;
     const formData = new FormData(form);
     const formObj = convertControls(formData, step);
     const item = { stepKey: stepKey as StepKey, data: formObj };
@@ -97,7 +100,11 @@ export default component$(() => {
     } else {
       cart.push(item);
     }
-    history.back();
+    if (submitter.value === 'more') {
+      history.back();
+    } else {
+      navigate('../cart');
+    }
   });
 
   const onInput = $(async (form: HTMLFormElement) => {
@@ -126,16 +133,18 @@ export default component$(() => {
               </svg>
             </button>
             <h1 style={{ viewTransitionName: `${stepKey}-title` }} >{step.label}</h1>
-          </header>
-          <form preventdefault:submit onsubmit$={(_, form) => onSubmit(form)} onInput$={(_, form) => onInput(form)}>
-          <div class="step-price">
-            {stepPrice.value
-              ? <p>Estimation: {stepPrice}</p>
-              : <p>Remplissez les informations ci-dessous pour obtenir un prix indicatif</p>
+            {stepPrice.value && <output form={id} aria-label="Prix total">{stepPrice.value}</output>
             }
+          </header>
+          <div class="step-price">
+            <p>Estimation : Remplissez les informations ci-dessous pour obtenir un prix indicatif</p>
           </div>
+          <form id={id} preventdefault:submit onSubmit$={onSubmit} onInput$={(_, form) => onInput(form)}>
             {controls.value.map((control, i) => <DynamicControl key={i} control={control} />)}
-            <button type='submit'>Ajouter au devis</button>
+            <footer>
+              <button name="redirect" value='more' type='submit'>Autres travaux</button>
+              <button name="redirect" value='finalise' type='submit'>Voir devis</button>
+            </footer>
           </form>
         </div>
       </main>

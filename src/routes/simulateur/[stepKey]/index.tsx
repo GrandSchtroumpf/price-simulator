@@ -1,9 +1,9 @@
 import { component$, $, useContext, useComputed$ } from "@qwik.dev/core";
 import { StaticGenerateHandler, useLocation, useNavigate } from "@qwik.dev/router";
-import { displayPrice, Item, Step, StepKey, stepsRecord } from "../steps";
+import { ControlTypes, DependsOn, displayPrice, Item, Step, StepKey, stepsRecord } from "../steps";
 import { DynamicControl } from "../controls";
 import { cartContext } from "../layout";
-import { unwrapStore, useId, useSignal, useStyles$, useVisibleTask$ } from "@qwik.dev/core/internal";
+import { useAsyncComputed$, useId, useSignal, useStyles$, useVisibleTask$ } from "@qwik.dev/core/internal";
 import styles from './index.css?inline';
 
 const convertControls = (data: FormData, step: Step) => {
@@ -35,12 +35,10 @@ const convertControls = (data: FormData, step: Step) => {
   return formObj;
 };
 
-const writeControls = (editItem: Item, step: Step) => {
-  const controls = step.controls;
-  const copy = structuredClone(unwrapStore(controls));
-  if (!editItem) return step.controls;
+const writeControls = (editItem: Item, controls: ControlTypes[]) => {
+  if (!editItem) return controls;
   for (const [key, value] of Object.entries(editItem.data)) {
-    const control = copy.find(c => c.name === key);
+    const control = controls.find(c => c.name === key);
     if (control?.kind === 'input') control.value = value as string;
     if (control?.kind === 'checkbox') control.checked = !!value; // TODO: verify
     if (control?.kind === 'checklist') {
@@ -55,8 +53,12 @@ const writeControls = (editItem: Item, step: Step) => {
       }
     }
   }
-  return copy;
+  return controls;
 };
+
+function isIn<T>(array: T[], value: T) {
+  return array.includes(value);
+}
 
 export default component$(() => {
   useStyles$(styles);
@@ -64,11 +66,61 @@ export default component$(() => {
   const cart = useContext(cartContext);
   const location = useLocation();
   const navigate = useNavigate();
-  const stepPrice = useSignal<string>('');
   const index = useSignal<undefined | number>(undefined)
+  const item = useSignal<Item>();
   const { stepKey } = location.params;
   if (!(stepKey in stepsRecord)) return null;
   const step = stepsRecord[stepKey as StepKey];
+
+
+  const itemPrice = useAsyncComputed$(({ track }) => {
+    const next = track(item);
+    if (!next) return Promise.resolve('');
+    const stepPrice = stepsRecord[next.stepKey].price?.(next);
+    return displayPrice(stepPrice);
+  });
+
+  const controls = useComputed$(() => {
+    const shouldDisable = (item?: Item, dependsOn?: DependsOn) => {
+      if (!item && dependsOn) return true;
+      if (!dependsOn || !item) return false;
+      const [key, operator, value] = dependsOn;
+      if (operator === '=') return item.data[key] === value;
+      if (operator === '<') return item.data[key] < value;
+      if (operator === '<=') return item.data[key] <= value;
+      if (operator === 'in') {
+        if (!Array.isArray(value)) throw 'Value should be an array with in operator';
+        const itemValue = item.data[key];
+        if (typeof itemValue === 'string' || typeof itemValue === 'number') {
+          return isIn(value, itemValue);
+        }
+      }
+      throw 'Unsupported operator';
+    };
+    const next = item.value;
+    const copy = structuredClone(step.controls);
+    for (const control of copy) {
+      if (control.kind === 'radiogroup') {
+        for (const option of control.options) {
+          if (shouldDisable(next, option.dependsOn)) {
+            option.disabled = true;
+            option.checked = false;
+          } else {
+            option.disabled = false;
+          }
+        }
+      }
+      if (control.kind === 'input') {
+        control.disabled = shouldDisable(next, control.dependsOn);
+      }
+    };
+    if (typeof index.value === 'number') {
+      const editItem = cart[index.value];
+      const controls = writeControls(editItem, copy);
+      return controls;
+    }
+    return copy;
+  });
 
   useVisibleTask$(() => {
     const editIndex = location.url.searchParams.get('index');
@@ -79,26 +131,18 @@ export default component$(() => {
     }
   });
 
-  const controls = useComputed$(() => {
-    if (typeof index.value === 'number') {
-      const editItem = cart[index.value];
-      const controls = writeControls(editItem, step);
-      return controls;
-    }
-    return step.controls;
-  });
-
   const onSubmit = $((event: SubmitEvent, form: HTMLFormElement) => {
     const isValid = form.checkValidity();
     if (!isValid) return;
     const submitter: HTMLButtonElement = event.submitter as HTMLButtonElement;
     const formData = new FormData(form);
     const formObj = convertControls(formData, step);
-    const item = { stepKey: stepKey as StepKey, data: formObj };
+    const stepItem = { stepKey: stepKey as StepKey, data: formObj };
+    item.value = stepItem;
     if (typeof index === 'string') {
-      cart.splice(Number(index), 1, item);
+      cart.splice(Number(index), 1, stepItem);
     } else {
-      cart.push(item);
+      cart.push(stepItem);
     }
     if (submitter.value === 'more') {
       history.back();
@@ -108,17 +152,10 @@ export default component$(() => {
   });
 
   const onInput = $(async (form: HTMLFormElement) => {
-    const isValid = form.checkValidity();
-    if (!isValid) {
-      stepPrice.value = '';
-      return;
-    };
     const formData = new FormData(form);
     const formObj = convertControls(formData, step);
-    const item = { stepKey: stepKey as StepKey, data: formObj };
-    const price = step.price?.(item);
-    if (!price) return;
-    stepPrice.value = await displayPrice(price);
+    const stepItem = { stepKey: stepKey as StepKey, data: formObj };
+    item.value = stepItem;
   })
 
   return (
@@ -133,14 +170,14 @@ export default component$(() => {
               </svg>
             </button>
             <h1 style={{ viewTransitionName: `${stepKey}-title` }} >{step.label}</h1>
-            {stepPrice.value && <output form={id} aria-label="Prix total">{stepPrice.value}</output>
+            {itemPrice.value && <output form={id} aria-label="Prix total">{itemPrice.value}</output>
             }
           </header>
           <div class="step-price">
             <p>Estimation : Remplissez les informations ci-dessous pour obtenir un prix indicatif</p>
           </div>
           <form id={id} preventdefault:submit onSubmit$={onSubmit} onInput$={(_, form) => onInput(form)}>
-            {controls.value.map((control, i) => <DynamicControl key={i} control={control} />)}
+            {controls.value.map((control) => <DynamicControl key={JSON.stringify(control)} control={control} />)}
             <footer>
               <button name="redirect" value='more' type='submit'>Autres travaux</button>
               <button name="redirect" value='finalise' type='submit'>Voir devis</button>

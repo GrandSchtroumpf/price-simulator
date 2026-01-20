@@ -4,6 +4,9 @@ export type ControlTypes = CheckList | CheckBox | RadioGroup | InputNumber | Inp
 export type ControlKind = ControlTypes['kind'];
 export type StepKey = keyof typeof stepsRecord;
 export type InputTypes = string | string[] | number | number[] | boolean;
+type DependsOperators = '<' | '>' | '<=' | '>=' | '=' | 'in' | 'out';
+type DependsValue = string | number | string[] | number[];
+export type DependsOn = [string, DependsOperators, DependsValue];
 export interface Range {
   min: number;
   max: number;
@@ -44,6 +47,8 @@ interface Input extends Control<'input'> {
   readonly?: boolean
   placeholder?: string;
   priceData?: PriceData;
+  dependsOn?: DependsOn;
+  disabled?: boolean;
 }
 
 interface CheckBox extends Control<'checkbox'> {
@@ -51,6 +56,7 @@ interface CheckBox extends Control<'checkbox'> {
   required?: boolean;
   checked?: boolean;
   priceData?: PriceData;
+  dependsOn?: DependsOn;
 }
 
 interface InputNumber extends Input {
@@ -76,6 +82,7 @@ export interface CheckList extends Control<'checklist'> {
     value: string;
     checked?: boolean;
     priceData?: PriceData;
+    dependsOn?: DependsOn;
   }[];
 }
 
@@ -87,6 +94,8 @@ interface RadioGroup extends Control<'radiogroup'> {
     value: string;
     checked?: boolean;
     priceData?: PriceData;
+    dependsOn?: DependsOn;
+    disabled?: boolean;
   }[];
 }
 
@@ -163,7 +172,6 @@ const floor: Step = {
       label: "Surface en m²",
       name: "surface",
       required: true,
-      value: 1,
       min: 1,
       priceData: writePriceData('multiplier', 1)
     }),
@@ -174,20 +182,61 @@ const floor: Step = {
       required: true,
       options: [
         {
-          label: "Massif",
-          value: "hard",
+          label: "Stratifié",
+          value: "plastic",
+          priceData: writePriceData('addition', 54)
+        },
+        {
+          label: "Stratifié Premium",
+          value: "plasticPremium",
+          priceData: writePriceData('addition', 85)
+        },
+        {
+          label: "Contrecollé",
+          value: "laminated",
+          priceData: writePriceData('addition', 100)
+        },
+        {
+          label: "Contrecollé Premium",
+          value: "laminatedPremium",
+          priceData: writePriceData('addition', 140)
+        },
+        {
+          label: "Chêne Massif",
+          value: "hardOak",
           priceData: writePriceData('addition', 200, 250)
         },
         {
-          label: "Stratifié",
-          value: "plastic",
-          priceData: writePriceData('addition', 100, 150)
+          label: "Massif Premium",
+          value: "hardOakPremium",
+          priceData: writePriceData('addition', 225, 250)
+        },
+      ]
+    },
+    {
+      legend: "Type de pose",
+      name: "laidType",
+      kind: "radiogroup",
+      required: true,
+      options: [
+        {
+          label: "Flottant",
+          value: "floating",
+          priceData: writePriceData('multiplier', 1),
+          dependsOn: ['materials', '=', 'plastic']
         },
         {
-          label: "Vinyle-PVC",
-          value: "vinyl",
-          priceData: writePriceData('addition', 150, 200)
+          label: "Collé",
+          value: "glued",
+          priceData: writePriceData('multiplier', 1.15),
+          dependsOn: ['materials', 'in', ['hard', 'laminated']]
         },
+        {
+          label: "Cloué",
+          value: "nailed",
+          priceData: writePriceData('multiplier', 1.35),
+          dependsOn: ['materials', 'in', ['hard', 'laminatedPremium']]
+        }
       ]
     }
   ]
@@ -200,7 +249,6 @@ const interior: Step = {
     number({
       label: "Surface en m²",
       name: "surface",
-      value: 1,
       min: 1,
       priceData: writePriceData('multiplier', 1)
     }),
@@ -260,7 +308,6 @@ const deck: Step = {
     number({
       label: "Surface en m²",
       name: "surface",
-      value: 1,
       min: 1,
       priceData: writePriceData('multiplier', 1)
     }),

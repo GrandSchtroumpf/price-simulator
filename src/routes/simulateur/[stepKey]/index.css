@@ -70,10 +70,14 @@ body:has(#form) {
     view-transition-class: title;
     flex: 1;
   }
+  &:has(form:invalid) output {
+    display: none;
+  }
   & output {
     font-size: 1.5rem;
     --opacity-in: 0;
     animation: fade 300ms var(--ease-in);
+
   }
   & form {
     display: grid;

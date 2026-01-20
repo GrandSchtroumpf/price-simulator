@@ -43,4 +43,8 @@
     background-color: var(--color-contrast);
     opacity: 0.7;
   }
+
+  & input:disabled + label {
+    opacity: 0.3;
+  }
 }

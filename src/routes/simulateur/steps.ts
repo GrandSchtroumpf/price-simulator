@@ -238,6 +238,92 @@ const floor: Step = {
           dependsOn: ['materials', 'in', ['hard', 'laminatedPremium']]
         }
       ]
+    },
+    {
+      legend: "Format",
+      name: "format",
+      kind: "radiogroup",
+      required: true,
+      options: [
+        {
+          label: "Joint",
+          value: "join",
+          priceData: writePriceData('multiplier', 1),
+        },
+        {
+          label: "Bâtons rompu",
+          value: "fitsStarts",
+          priceData: writePriceData('multiplier', 1.35),
+        },
+        {
+          label: "Coupe de Pierre",
+          value: "stone",
+          priceData: writePriceData('multiplier', 1.35),
+        },
+        {
+          label: "En échelle",
+          value: "ladder",
+          priceData: writePriceData('multiplier', 1.35),
+        },
+        {
+          label: "Pointe de hongrie",
+          value: "arrow",
+          priceData: writePriceData('multiplier', 1.65),
+          dependsOn: ['materials', 'in', ['hard', 'laminated']]
+        },
+        {
+          label: "Fougère",
+          value: "fern",
+          priceData: writePriceData('multiplier', 1.65),
+          dependsOn: ['materials', 'in', ['hard', 'laminated']]
+        }
+      ]
+    },
+    {
+      legend: "État du support",
+      name: "supportState",
+      kind: "radiogroup",
+      required: true,
+      options: [
+        {
+          label: "Prêt à poser",
+          value: "ready",
+          priceData: writePriceData('addition', 1),
+        },
+        {
+          label: "Légèrement irrégulier",
+          value: "irregular",
+          priceData: writePriceData('addition', 18),
+        },
+        {
+          label: "Dégradé",
+          value: "deteriorated",
+          priceData: writePriceData('addition', 35),
+        }
+      ]
+    },
+    {
+      legend: "Options",
+      name: "options",
+      kind: "checklist",
+      required: true,
+      options: [
+        {
+          label: "Plinthe MDF",
+          value: "plinth",
+          priceData: writePriceData('addition', Math.sqrt(12)),
+        },
+        {
+          label: "Barre de seuil",
+          value: "bar",
+          priceData: writePriceData('addition', Math.sqrt(8)),
+        },
+        {
+          label: "Sous couche compatible plancher chauffant",
+          value: "heatTreated",
+          priceData: writePriceData('addition', 4.5),
+        }
+      ]
     }
   ]
 }

@@ -83,7 +83,8 @@ export default component$(() => {
   const controls = useComputed$(() => {
     const shouldDisable = (item?: Item, dependsOn?: DependsOn) => {
       if (!item && dependsOn) return true;
-      if (!dependsOn || !item) return false;
+      if (!dependsOn) return false;
+      if (!item) return false;
       const [key, operator, value] = dependsOn;
       if (operator === '=') return item.data[key] === value;
       if (operator === '<') return item.data[key] < value;
@@ -91,9 +92,7 @@ export default component$(() => {
       if (operator === 'in') {
         if (!Array.isArray(value)) throw 'Value should be an array with in operator';
         const itemValue = item.data[key];
-        if (typeof itemValue === 'string' || typeof itemValue === 'number') {
-          return isIn(value, itemValue);
-        }
+        return isIn(value, itemValue);
       }
       throw 'Unsupported operator';
     };

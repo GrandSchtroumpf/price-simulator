@@ -208,7 +208,7 @@ const floor: Step = {
         },
         {
           label: "Massif Premium",
-          value: "hardOakPremium",
+          value: "hardPremium",
           priceData: writePriceData('addition', 225, 250)
         },
       ]
@@ -223,19 +223,19 @@ const floor: Step = {
           label: "Flottant",
           value: "floating",
           priceData: writePriceData('multiplier', 1),
-          dependsOn: ['materials', '=', 'plastic']
+          dependsOn: ['materials', 'in', ['plastic', 'plasticPremium']]
         },
         {
           label: "Collé",
           value: "glued",
           priceData: writePriceData('multiplier', 1.15),
-          dependsOn: ['materials', 'in', ['hard', 'laminated']]
+          dependsOn: ['materials', 'in', ['hardOak', 'hardPremium', 'laminated', 'laminatedPremium']]
         },
         {
           label: "Cloué",
           value: "nailed",
           priceData: writePriceData('multiplier', 1.35),
-          dependsOn: ['materials', 'in', ['hard', 'laminatedPremium']]
+          dependsOn: ['materials', 'in', ['hardOak', 'hardPremium', 'laminatedPremium']]
         }
       ]
     },
@@ -269,13 +269,13 @@ const floor: Step = {
           label: "Pointe de hongrie",
           value: "arrow",
           priceData: writePriceData('multiplier', 1.65),
-          dependsOn: ['materials', 'in', ['hard', 'laminated']]
+          dependsOn: ['materials', 'in', ['hardOak', 'hardPremium', 'laminated', 'laminatedPremium']]
         },
         {
           label: "Fougère",
           value: "fern",
           priceData: writePriceData('multiplier', 1.65),
-          dependsOn: ['materials', 'in', ['hard', 'laminated']]
+          dependsOn: ['materials', 'in', ['hardOak', 'hardPremium', 'laminated', 'laminatedPremium']]
         }
       ]
     },

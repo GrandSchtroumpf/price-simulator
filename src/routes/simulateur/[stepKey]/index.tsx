@@ -81,10 +81,10 @@ export default component$(() => {
   });
 
   const controls = useComputed$(() => {
-    const shouldDisable = (item?: Item, dependsOn?: DependsOn) => {
-      if (!item && dependsOn) return true;
-      if (!dependsOn) return false;
-      if (!item) return false;
+    const enableControl = (item?: Item, dependsOn?: DependsOn) => {
+      if (!item && dependsOn) return false;
+      if (!dependsOn) return true;
+      if (!item) return true;
       const [key, operator, value] = dependsOn;
       if (operator === '=') return item.data[key] === value;
       if (operator === '<') return item.data[key] < value;
@@ -101,7 +101,7 @@ export default component$(() => {
     for (const control of copy) {
       if (control.kind === 'radiogroup') {
         for (const option of control.options) {
-          if (shouldDisable(next, option.dependsOn)) {
+          if (!enableControl(next, option.dependsOn)) {
             option.disabled = true;
             option.checked = false;
           } else {
@@ -110,7 +110,7 @@ export default component$(() => {
         }
       }
       if (control.kind === 'input') {
-        control.disabled = shouldDisable(next, control.dependsOn);
+        control.disabled = !enableControl(next, control.dependsOn);
       }
     };
     if (typeof index.value === 'number') {
@@ -138,7 +138,7 @@ export default component$(() => {
     const formObj = convertControls(formData, step);
     const stepItem = { stepKey: stepKey as StepKey, data: formObj };
     item.value = stepItem;
-    if (typeof index === 'string') {
+    if (typeof index.value === 'string') {
       cart.splice(Number(index), 1, stepItem);
     } else {
       cart.push(stepItem);
@@ -176,7 +176,13 @@ export default component$(() => {
             <p>Estimation : Remplissez les informations ci-dessous pour obtenir un prix indicatif</p>
           </div>
           <form id={id} preventdefault:submit onSubmit$={onSubmit} onInput$={(_, form) => onInput(form)}>
-            {controls.value.map((control) => <DynamicControl key={JSON.stringify(control)} control={control} />)}
+            {controls.value.map((control) => {
+              let dynamicKey = control.name;
+              if (control.kind === 'checklist' || control.kind === 'radiogroup') {
+                dynamicKey += control.options.join('');
+              }
+              return <DynamicControl key={dynamicKey} control={control} />
+            })}
             <footer>
               <button name="redirect" value='more' type='submit'>Autres travaux</button>
               <button name="redirect" value='finalise' type='submit'>Voir devis</button>

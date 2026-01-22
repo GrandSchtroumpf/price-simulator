@@ -6,16 +6,17 @@ export type StepKey = keyof typeof stepsRecord;
 export type InputTypes = string | string[] | number | number[] | boolean;
 type DependsOperators = '<' | '>' | '<=' | '>=' | '=' | 'in' | 'out';
 type DependsValue = string | number | string[] | number[];
-export type DependsOn = [string, DependsOperators, DependsValue];
+export type Conditions = [string, DependsOperators, DependsValue];
 export interface Range {
   min: number;
   max: number;
 }
 
 interface PriceData {
-  type: 'multiplier' | 'addition';
+  type: 'multiplier' | 'addition' | 'fix';
   value: Range;
   time?: number;
+  conditions?: Conditions;
 }
 
 export interface Item {
@@ -46,8 +47,8 @@ interface Input extends Control<'input'> {
   inputmode?: string;
   readonly?: boolean
   placeholder?: string;
-  priceData?: PriceData;
-  dependsOn?: DependsOn;
+  priceData?: PriceData | PriceData[];
+  dependsOn?: Conditions;
   disabled?: boolean;
 }
 
@@ -55,8 +56,8 @@ interface CheckBox extends Control<'checkbox'> {
   label: string;
   required?: boolean;
   checked?: boolean;
-  priceData?: PriceData;
-  dependsOn?: DependsOn;
+  priceData?: PriceData | PriceData[];
+  dependsOn?: Conditions;
 }
 
 interface InputNumber extends Input {
@@ -81,8 +82,9 @@ export interface CheckList extends Control<'checklist'> {
     label: string;
     value: string;
     checked?: boolean;
-    priceData?: PriceData;
-    dependsOn?: DependsOn;
+    priceData?: PriceData | PriceData[];
+    dependsOn?: Conditions;
+    disabled?: boolean;
   }[];
 }
 
@@ -93,8 +95,8 @@ interface RadioGroup extends Control<'radiogroup'> {
     label: string;
     value: string;
     checked?: boolean;
-    priceData?: PriceData;
-    dependsOn?: DependsOn;
+    priceData?: PriceData | PriceData[];
+    dependsOn?: Conditions;
     disabled?: boolean;
   }[];
 }
@@ -105,42 +107,84 @@ const number = (p: Omit<InputNumber, 'kind' | 'type'>): InputNumber => ({
   ...p
 });
 
+const toArray = <T>(value?: T | T[]) => {
+  if (!value) return [];
+  if (Array.isArray(value)) return value;
+  return [value];
+}
+
 const getPriceData = (control: ControlTypes, value: InputTypes) => {
   if (control.kind === "input" && control.type === 'number') {
-    if (control.priceData) {
-      return { ...control.priceData, value: { min: Number(value), max: Number(value) } };
-    }
+    const prices = toArray(control.priceData);
+    return prices.map((price) => ({
+      ...price,
+      value: {
+        min: Number(value) * price.value.min,
+        max: Number(value) * price.value.max,
+      }
+    }))
   };
   if (control.kind === 'radiogroup') {
     const option = control.options.find((option) => option.value === value);
-    if (option?.priceData) return option.priceData;
+    if (option?.priceData) return toArray(option.priceData);
   }
+};
+
+
+function isIn<T>(array: T[], value: T) {
+  return array.includes(value);
+}
+
+export const isConditionValid = (item?: Item, dependsOn?: Conditions) => {
+  if (!item && dependsOn) return false;
+  if (!dependsOn) return true;
+  if (!item) return true;
+  const [key, operator, value] = dependsOn;
+  if (operator === '=') return item.data[key] === value;
+  if (operator === '<') return item.data[key] < value;
+  if (operator === '<=') return item.data[key] <= value;
+  if (operator === 'in') {
+    if (!Array.isArray(value)) throw 'Value should be an array with in operator';
+    const itemValue = item.data[key];
+    return isIn(value, itemValue);
+  }
+  throw 'Unsupported operator';
 };
 
 const getPrice = (item: Item) => {
   const step = stepsRecord[item.stepKey];
-  let minAddition = 0;
-  let maxAddition = 0;
-  let minMultiplier = 1;
-  let maxMultiplier = 1;
+  const addition = { min: 0, max: 0 };
+  const multiplier = { min: 1, max: 1 };
+  const fix = { min: 0, max: 0 };
   for (const [controlName, value] of Object.entries(item.data)) {
     const control = step.controls.find(c => c.name === controlName);
     if (!control) continue;
     const priceData = getPriceData(control, value);
-    if (!priceData?.value) continue;
-    const { min, max } = priceData.value;
-    if (priceData.type === 'addition') {
-      minAddition += min ?? 0;
-      maxAddition += max ?? 0;
-    }
-    if (priceData.type === 'multiplier') {
-      minMultiplier *= min ?? 1;
-      maxMultiplier *= max ?? 1;
+    const prices = Array.isArray(priceData) ? priceData : [priceData];
+    for (const price of prices) {
+      if (price?.conditions) {
+        if (!isConditionValid(item, price.conditions)) continue;
+      }
+      if (!price?.value) continue;
+      const { min, max } = price.value;
+      if (price.type === 'fix') {
+        fix.min += min ?? 0;
+        fix.max += max ?? 0;
+      }
+      if (price.type === 'addition') {
+        addition.min += min ?? 0;
+        addition.max += max ?? 0;
+      }
+      if (price.type === 'multiplier') {
+        multiplier.min *= min ?? 1;
+        multiplier.max *= max ?? 1;
+      }
     }
   }
+  console.log(addition.min, multiplier.min);
   return {
-    min: Math.floor(minAddition * minMultiplier),
-    max: Math.floor(maxAddition * maxMultiplier),
+    min: Math.floor(addition.min * multiplier.min + fix.min),
+    max: Math.floor(addition.max * multiplier.max + fix.max),
   };
 };
 
@@ -155,13 +199,13 @@ export async function displayPrice(pricePromise?: Promise<Range>): Promise<strin
 
 const writePriceData = (
   type: PriceData['type'],
-  min: number,
-  max?: number,
-  time?: PriceData['time']
+  range: number | Range,
+  conditions?: Conditions
 ): PriceData => {
-  const priceData = { type, value: { min, max: max ?? min } };
-  if (time) Object.assign(priceData, time);
-  return priceData
+  const value = typeof range === 'number'
+    ? { min: range, max: range }
+    : range;
+  return { type, value, conditions }
 };
 
 const floor: Step = {
@@ -204,12 +248,12 @@ const floor: Step = {
         {
           label: "Chêne Massif",
           value: "hardOak",
-          priceData: writePriceData('addition', 200, 250)
+          priceData: writePriceData('addition', { min: 200, max: 250 })
         },
         {
           label: "Massif Premium",
           value: "hardPremium",
-          priceData: writePriceData('addition', 225, 250)
+          priceData: writePriceData('addition', { min: 225, max: 250 })
         },
       ]
     },
@@ -328,8 +372,8 @@ const floor: Step = {
   ]
 }
 
-const walls: Step = {
-  label: "Murs",
+const interior: Step = {
+  label: "Aménagement intérieur",
   price: $((item: Item) => getPrice(item)),
   controls: [
     number({
@@ -347,27 +391,27 @@ const walls: Step = {
         {
           label: "RDC Neuf",
           value: "groundLevelNew",
-          priceData: writePriceData('multiplier', 1)
+          priceData: writePriceData('addition', 152)
         },
         {
           label: "RDC rénovation",
           value: "groundLevelRenovation",
-          priceData: writePriceData('multiplier', 1.1)
+          priceData: writePriceData('addition', 174)
         },
         {
           label: "Étage",
           value: "floorLevel",
-          priceData: writePriceData('multiplier', 1.1)
+          priceData: writePriceData('addition', 174)
         },
         {
           label: "Combles",
           value: "attic",
-          priceData: writePriceData('multiplier', 1.2)
+          priceData: writePriceData('addition', 216)
         },
         {
           label: "Combles complexes",
           value: "atticComplex",
-          priceData: writePriceData('addition', 1.3)
+          priceData: writePriceData('addition', 234)
         },
       ]
     },
@@ -380,57 +424,46 @@ const walls: Step = {
         {
           label: "Laine de verre",
           value: "glass",
-          priceData: writePriceData('addition', 152)
         },
         {
           label: "Laine de roche",
-          value: "rock",
-          priceData: writePriceData('addition', 174)
+          value: "stone",
         },
         {
           label: "Laine de bois",
           value: "wood",
-          priceData: writePriceData('addition', 216)
         },
       ]
     },
     {
       legend: "Épaisseur isolant mur (millimètres)",
-      name: "thickness",
+      name: "wallThickness",
       kind: "radiogroup",
       required: true,
-      options: [
-        {
-          label: "100",
-          value: "100",
-          priceData: writePriceData('multiplier', 1)
-        },
-        {
-          label: "120",
-          value: "120",
-          priceData: writePriceData('multiplier', 1.05)
-        },
-        {
-          label: "140",
-          value: "140",
-          priceData: writePriceData('multiplier', 1.10)
-        },
-        {
-          label: "160",
-          value: "160",
-          priceData: writePriceData('multiplier', 1.15)
-        },
-        {
-          label: "180",
-          value: "180",
-          priceData: writePriceData('multiplier', 1.20)
-        },
-        {
-          label: "200",
-          value: "200",
-          priceData: writePriceData('multiplier', 1.25)
-        },
-      ]
+      options: [100, 120, 140, 160, 180, 200].map((mm, i) => ({
+        label: `${mm} mm`,
+        value: `wallThickness${mm}`,
+        priceData: [
+          writePriceData('multiplier', 1 + 0.05 * i, ['materials', '=', 'glass']),
+          writePriceData('multiplier', 1.1 + 0.05 * i, ['materials', '=', 'stone']),
+          writePriceData('multiplier', 1.3 + 0.05 * i, ['materials', '=', 'wood']),
+        ]
+      }))
+    },
+    {
+      legend: "Épaisseur isolant plafond (millimètres)",
+      name: "ceilThickness",
+      kind: "radiogroup",
+      required: true,
+      options: [240, 260, 280, 300, 320, 340].map((mm, i) => ({
+        label: `${mm} mm`,
+        value: `ceilingThickness${mm}`,
+        priceData: [
+          writePriceData('multiplier', 1 + 0.05 * i, ['materials', '=', 'glass']),
+          writePriceData('multiplier', 1.1 + 0.05 * i, ['materials', '=', 'stone']),
+          writePriceData('multiplier', 1.35 + 0.05 * i, ['materials', '=', 'wood']),
+        ]
+      }))
     },
     {
       legend: "Hauteur sous plafond",
@@ -440,22 +473,22 @@ const walls: Step = {
       options: [
         {
           label: "Jusqu'à 2m60",
-          value: "260",
+          value: "height260",
           priceData: writePriceData('multiplier', 1)
         },
         {
           label: "Entre 2m60 et 3m50",
-          value: "350",
+          value: "height350",
           priceData: writePriceData('multiplier', 1.10)
         },
         {
           label: "Entre 3m50 et 4m50",
-          value: "450",
+          value: "height450",
           priceData: writePriceData('multiplier', 1.20)
         },
         {
           label: "Au delà de 4m50",
-          value: "more",
+          value: "heightMore",
           priceData: writePriceData('multiplier', 1.35)
         }
       ]
@@ -469,17 +502,26 @@ const walls: Step = {
         {
           label: "Chambre",
           value: "bedroom",
-          priceData: writePriceData('multiplier', 0.05)
+          priceData: [
+            writePriceData('multiplier', 1.05),
+            writePriceData('fix', 300)
+          ]
         },
         {
           label: "Salle de bain",
           value: "bathroom",
-          priceData: writePriceData('multiplier', 0.10)
+          priceData: [
+            writePriceData('multiplier', 1.10),
+            writePriceData('fix', 300)
+          ]
         },
         {
           label: "WC",
           value: "lavatory",
-          priceData: writePriceData('multiplier', 0.05)
+          priceData: [
+            writePriceData('multiplier', 1.05),
+            writePriceData('fix', 300)
+          ]
         }
       ]
     },
@@ -509,160 +551,112 @@ const walls: Step = {
   ]
 }
 
-const ceiling: Step = {
-  label: "Plafond",
-  price: $((item: Item) => getPrice(item)),
-  controls: [
-    number({
-      label: "Surface de la pièce en m²",
-      name: "surface",
-      min: 1,
-      priceData: writePriceData('multiplier', 1)
-    }),
-    {
-      legend: "Pièce",
-      name: "room",
-      kind: "radiogroup",
-      required: true,
-      options: [
-        {
-          label: "RDC",
-          value: "groundLevel",
-          priceData: writePriceData('multiplier', 1)
-        },
-        {
-          label: "Étage",
-          value: "floorLevel",
-          priceData: writePriceData('multiplier', 1.1)
-        },
-        {
-          label: "Combles",
-          value: "attic",
-          priceData: writePriceData('multiplier', 1.2)
-        },
-        {
-          label: "Combles complexes",
-          value: "atticComplex",
-          priceData: writePriceData('addition', 1.3)
-        },
-      ]
-    },
-    {
-      legend: "Type de plafond",
-      name: "ceilingType",
-      kind: "radiogroup",
-      required: true,
-      options: [
-        {
-          label: "Droit",
-          value: "straight",
-          priceData: writePriceData('multiplier', 1)
-        },
-        {
-          label: "Mono pente",
-          value: "sloped",
-          priceData: writePriceData('multiplier', 1.15)
-        },
-        {
-          label: "Pente jusqu'au faitage",
-          value: "completeSloped",
-          priceData: writePriceData('multiplier', 1.25)
-        },
-        {
-          label: "Mixte",
-          value: "mixt",
-          priceData: writePriceData('multiplier', 1.20)
-        }
-      ]
-    },
-    {
-      legend: "Types d'isolant",
-      name: "materials",
-      kind: "radiogroup",
-      required: true,
-      options: [
-        {
-          label: "Laine de verre",
-          value: "glass",
-          priceData: writePriceData('addition', 152)
-        },
-        {
-          label: "Laine de roche",
-          value: "rock",
-          priceData: writePriceData('addition', 174)
-        },
-        {
-          label: "Laine de bois",
-          value: "wood",
-          priceData: writePriceData('addition', 216)
-        },
-      ]
-    },
-    {
-      legend: "Épaisseur isolant (millimètres)",
-      name: "thickness",
-      kind: "radiogroup",
-      required: true,
-      options: [
-        {
-          label: "240",
-          value: "240",
-          priceData: writePriceData('multiplier', 1)
-        },
-        {
-          label: "260",
-          value: "260",
-          priceData: writePriceData('multiplier', 1.05)
-        },
-        {
-          label: "280",
-          value: "280",
-          priceData: writePriceData('multiplier', 1.10)
-        },
-        {
-          label: "300",
-          value: "300",
-          priceData: writePriceData('multiplier', 1.15)
-        },
-        {
-          label: "320",
-          value: "320",
-          priceData: writePriceData('multiplier', 1.20)
-        },
-        {
-          label: "340",
-          value: "340",
-          priceData: writePriceData('multiplier', 1.25)
-        },
-      ]
-    },
-    {
-      legend: "Finitions",
-      name: "finish",
-      kind: "checklist",
-      required: true,
-      options: [
-        {
-          label: "Bandes",
-          value: "bands",
-          priceData: writePriceData('addition', 40)
-        },
-        {
-          label: "Ponçage des bandes",
-          value: "bandSanding",
-          priceData: writePriceData('addition', 25),
-          dependsOn: ['finish', 'in', ['bands']]
-        },
-        {
-          label: "Peinture",
-          value: "paint",
-          priceData: writePriceData('addition', 65),
-          dependsOn: ['finish', 'in', ['bandSanding']]
-        }
-      ]
-    }
-  ]
-}
+// const ceiling: Step = {
+//   label: "Plafond",
+//   price: $((item: Item) => getPrice(item)),
+//   controls: [
+//     number({
+//       label: "Surface de la pièce en m²",
+//       name: "surface",
+//       min: 1,
+//       priceData: writePriceData('multiplier', 1)
+//     }),
+//     {
+//       legend: "Pièce",
+//       name: "room",
+//       kind: "radiogroup",
+//       required: true,
+//       options: [
+//         {
+//           label: "RDC",
+//           value: "groundLevel",
+//           priceData: writePriceData('multiplier', 1)
+//         },
+//         {
+//           label: "Étage",
+//           value: "floorLevel",
+//           priceData: writePriceData('multiplier', 1.1)
+//         },
+//         {
+//           label: "Combles",
+//           value: "attic",
+//           priceData: writePriceData('multiplier', 1.2)
+//         },
+//         {
+//           label: "Combles complexes",
+//           value: "atticComplex",
+//           priceData: writePriceData('addition', 1.3)
+//         },
+//       ]
+//     },
+//     {
+//       legend: "Type de plafond",
+//       name: "ceilingType",
+//       kind: "radiogroup",
+//       required: true,
+//       options: [
+//         {
+//           label: "Droit",
+//           value: "straight",
+//           priceData: writePriceData('multiplier', 1)
+//         },
+//         {
+//           label: "Mono pente",
+//           value: "sloped",
+//           priceData: writePriceData('multiplier', 1.15)
+//         },
+//         {
+//           label: "Pente jusqu'au faitage",
+//           value: "completeSloped",
+//           priceData: writePriceData('multiplier', 1.25)
+//         },
+//         {
+//           label: "Mixte",
+//           value: "mixt",
+//           priceData: writePriceData('multiplier', 1.20)
+//         }
+//       ]
+//     },
+//     {
+//       legend: "Types d'isolant",
+//       name: "materials",
+//       kind: "radiogroup",
+//       required: true,
+//       options: [
+//         {
+//           label: "Laine de verre",
+//           value: "glass",
+//           priceData: writePriceData('addition', 152)
+//         },
+//         {
+//           label: "Laine de roche",
+//           value: "stone",
+//           priceData: writePriceData('addition', 174)
+//         },
+//         {
+//           label: "Laine de bois",
+//           value: "wood",
+//           priceData: writePriceData('addition', 216)
+//         },
+//       ]
+//     },
+//     {
+//       legend: "Épaisseur isolant (millimètres)",
+//       name: "thickness",
+//       kind: "radiogroup",
+//       required: true,
+//       options: [240, 260, 280, 300, 320, 340].map((mm, i) => ({
+//         label: `${mm} mm`,
+//         value: String(mm),
+//         priceData: [
+//           writePriceData('multiplier', 1 + 0.05 * i, ['materials', '=', 'glass']),
+//           writePriceData('multiplier', 1.1 + 0.05 * i, ['materials', '=', 'stone']),
+//           writePriceData('multiplier', 1.35 + 0.05 * i, ['materials', '=', 'wood']),
+//         ]
+//       }))
+//     }
+//   ]
+// }
 // const interior: Step = {
 //   label: "Aménagement",
 //   price: $((item: Item) => getPrice(item)),
@@ -709,7 +703,7 @@ const ceiling: Step = {
 //         },
 //         {
 //           label: "Laine de roche",
-//           value: "rock",
+//           value: "stone",
 //           priceData: writePriceData('addition', 150, 180)
 //         },
 //         {
@@ -741,17 +735,17 @@ const deck: Step = {
         {
           label: "Sol",
           value: "groundLevel",
-          priceData: writePriceData('multiplier', 1, 1.1)
+          priceData: writePriceData('multiplier', { min: 1, max: 1.1 })
         },
         {
           label: "Surélevé avec escalier",
           value: "elevatedWithStairs",
-          priceData: writePriceData('multiplier', 1.3, 1.4)
+          priceData: writePriceData('multiplier', { min: 1.3, max: 1.4 })
         },
         {
           label: "Surélevé sans escalier",
           value: "elevatedWithoutStairs",
-          priceData: writePriceData('multiplier', 1.1, 1.2)
+          priceData: writePriceData('multiplier', { min: 1.1, max: 1.2 })
         },
       ]
     },
@@ -764,17 +758,17 @@ const deck: Step = {
         {
           label: "Douglas",
           value: "douglas",
-          priceData: writePriceData('addition', 100, 110)
+          priceData: writePriceData('addition', { min: 100, max: 110 })
         },
         {
           label: "Composite",
           value: "composite",
-          priceData: writePriceData('addition', 150, 120)
+          priceData: writePriceData('addition', { min: 120, max: 150 })
         },
         {
           label: "Autoclave",
           value: "treated",
-          priceData: writePriceData('addition', 250, 270)
+          priceData: writePriceData('addition', { min: 250, max: 270 })
         },
       ]
     },
@@ -787,17 +781,17 @@ const deck: Step = {
         {
           label: "Sans garde corps",
           value: "withoutGuard",
-          priceData: writePriceData('addition', 0, 5)
+          priceData: writePriceData('addition', { min: 0, max: 5 })
         },
         {
           label: "Bois",
           value: "woodGuard",
-          priceData: writePriceData('addition', 10, 15)
+          priceData: writePriceData('addition', { min: 10, max: 15 })
         },
         {
           label: "Alu",
           value: "aluminumGuard",
-          priceData: writePriceData('addition', 15, 20)
+          priceData: writePriceData('addition', { min: 15, max: 20 })
         },
       ]
     }
@@ -812,8 +806,33 @@ const doors: Step = {
       label: "Nombre de portes intérieurs",
       name: "interiorDoor",
       min: 1,
-      priceData: writePriceData('multiplier', 1)
-    }),
+      priceData: writePriceData('addition', 300)
+    })
+  ]
+}
+
+const test: Step = {
+  label: 'Test',
+  price: $((item: Item) => getPrice(item)),
+  controls: [
+    {
+      legend: "Start",
+      name: "start",
+      kind: "radiogroup",
+      required: true,
+      options: [
+        {
+          label: "Avec start",
+          value: "withStart",
+          priceData: writePriceData('addition', 300)
+        },
+        {
+          label: "Sans start",
+          value: "withoutStart",
+          priceData: writePriceData('addition', 300)
+        }
+      ]
+    },
     {
       legend: "Finitions",
       name: "finish",
@@ -823,12 +842,12 @@ const doors: Step = {
         {
           label: "Avec finitions",
           value: "withFinish",
-          priceData: writePriceData('addition', 300)
+          priceData: [writePriceData('multiplier', 1.3, ['start', 'in', ['withStart']]), writePriceData('addition', 1)]
         },
         {
           label: "Sans finitions",
           value: "withoutFinish",
-          priceData: writePriceData('addition', 450)
+          priceData: writePriceData('addition', 2)
         }
       ]
     }
@@ -849,12 +868,12 @@ const stairs: Step = {
         {
           label: "Avec contre-marche",
           value: "withStep",
-          priceData: writePriceData('addition', 100, 120)
+          priceData: writePriceData('addition', { min: 100, max: 120 })
         },
         {
           label: "Sans contre-marche",
           value: "withoutStep",
-          priceData: writePriceData('addition', 0, 20)
+          priceData: writePriceData('addition', { min: 0, max: 20 })
         }
       ]
     },
@@ -867,12 +886,12 @@ const stairs: Step = {
         {
           label: "Avec garde-corps",
           value: "withGuardrail",
-          priceData: writePriceData('addition', 300, 330)
+          priceData: writePriceData('addition', { min: 300, max: 330 })
         },
         {
           label: "Sans garde-corps",
           value: "withoutGuardrail",
-          priceData: writePriceData('addition', 0, 30)
+          priceData: writePriceData('addition', { min: 0, max: 30 })
         }
       ]
     },
@@ -885,12 +904,12 @@ const stairs: Step = {
         {
           label: "Droit",
           value: "straight",
-          priceData: writePriceData('addition', 1000, 1500)
+          priceData: writePriceData('addition', { min: 1000, max: 1500 })
         },
         {
           label: "Quart tournant",
           value: "quarter",
-          priceData: writePriceData('addition', 1500, 2000)
+          priceData: writePriceData('addition', { min: 1500, max: 2000 })
         }
       ]
     },
@@ -903,17 +922,17 @@ const stairs: Step = {
         {
           label: "Hêtre",
           value: "beech",
-          priceData: writePriceData('addition', 0, 500)
+          priceData: writePriceData('addition', { min: 0, max: 500 })
         },
         {
           label: "Pin",
           value: "pine",
-          priceData: writePriceData('addition', 1000, 1500)
+          priceData: writePriceData('addition', { min: 1000, max: 1500 })
         },
         {
           label: "Limon",
           value: "stringer",
-          priceData: writePriceData('addition', 1500, 2000)
+          priceData: writePriceData('addition', { min: 1500, max: 2000 })
         },
       ]
     }
@@ -968,10 +987,10 @@ export const finalStep: FinalStep = {
 
 
 export const stepsRecord = {
-  walls,
-  ceiling,
+  interior,
   deck,
   doors,
   stairs,
   floor,
+  test
 }

@@ -1,6 +1,6 @@
 import { component$, $, useContext, useComputed$ } from "@qwik.dev/core";
 import { StaticGenerateHandler, useLocation, useNavigate } from "@qwik.dev/router";
-import { ControlTypes, DependsOn, displayPrice, Item, Step, StepKey, stepsRecord } from "../steps";
+import { ControlTypes, displayPrice, Item, Step, StepKey, stepsRecord, isConditionValid } from "../steps";
 import { DynamicControl } from "../controls";
 import { cartContext } from "../layout";
 import { useAsyncComputed$, useId, useSignal, useStyles$, useVisibleTask$ } from "@qwik.dev/core/internal";
@@ -56,9 +56,6 @@ const writeControls = (editItem: Item, controls: ControlTypes[]) => {
   return controls;
 };
 
-function isIn<T>(array: T[], value: T) {
-  return array.includes(value);
-}
 
 export default component$(() => {
   useStyles$(styles);
@@ -81,27 +78,12 @@ export default component$(() => {
   });
 
   const controls = useComputed$(() => {
-    const enableControl = (item?: Item, dependsOn?: DependsOn) => {
-      if (!item && dependsOn) return false;
-      if (!dependsOn) return true;
-      if (!item) return true;
-      const [key, operator, value] = dependsOn;
-      if (operator === '=') return item.data[key] === value;
-      if (operator === '<') return item.data[key] < value;
-      if (operator === '<=') return item.data[key] <= value;
-      if (operator === 'in') {
-        if (!Array.isArray(value)) throw 'Value should be an array with in operator';
-        const itemValue = item.data[key];
-        return isIn(value, itemValue);
-      }
-      throw 'Unsupported operator';
-    };
     const next = item.value;
     const copy = structuredClone(step.controls);
     for (const control of copy) {
       if (control.kind === 'radiogroup') {
         for (const option of control.options) {
-          if (!enableControl(next, option.dependsOn)) {
+          if (!isConditionValid(next, option.dependsOn)) {
             option.disabled = true;
             option.checked = false;
           } else {
@@ -109,8 +91,18 @@ export default component$(() => {
           }
         }
       }
+      // if (control.kind === 'checklist') {
+      //   for (const option of control.options) {
+      //     if (!isConditionValid(next, option.dependsOn)) {
+      //       option.disabled = true;
+      //       option.checked = false;
+      //     } else {
+      //       option.disabled = false;
+      //     }
+      //   }
+      // }
       if (control.kind === 'input') {
-        control.disabled = !enableControl(next, control.dependsOn);
+        control.disabled = !isConditionValid(next, control.dependsOn);
       }
     };
     if (typeof index.value === 'number') {
@@ -149,7 +141,6 @@ export default component$(() => {
       navigate('../cart');
     }
   });
-
   const onInput = $(async (form: HTMLFormElement) => {
     const formData = new FormData(form);
     const formObj = convertControls(formData, step);

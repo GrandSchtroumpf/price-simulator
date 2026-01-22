@@ -328,12 +328,193 @@ const floor: Step = {
   ]
 }
 
-const interior: Step = {
-  label: "Aménagement",
+const walls: Step = {
+  label: "Murs",
   price: $((item: Item) => getPrice(item)),
   controls: [
     number({
       label: "Surface en m²",
+      name: "surface",
+      min: 1,
+      priceData: writePriceData('multiplier', 1)
+    }),
+    {
+      legend: "Étage",
+      name: "room",
+      kind: "radiogroup",
+      required: true,
+      options: [
+        {
+          label: "RDC Neuf",
+          value: "groundLevelNew",
+          priceData: writePriceData('multiplier', 1)
+        },
+        {
+          label: "RDC rénovation",
+          value: "groundLevelRenovation",
+          priceData: writePriceData('multiplier', 1.1)
+        },
+        {
+          label: "Étage",
+          value: "floorLevel",
+          priceData: writePriceData('multiplier', 1.1)
+        },
+        {
+          label: "Combles",
+          value: "attic",
+          priceData: writePriceData('multiplier', 1.2)
+        },
+        {
+          label: "Combles complexes",
+          value: "atticComplex",
+          priceData: writePriceData('addition', 1.3)
+        },
+      ]
+    },
+    {
+      legend: "Types d'isolant",
+      name: "materials",
+      kind: "radiogroup",
+      required: true,
+      options: [
+        {
+          label: "Laine de verre",
+          value: "glass",
+          priceData: writePriceData('addition', 152)
+        },
+        {
+          label: "Laine de roche",
+          value: "rock",
+          priceData: writePriceData('addition', 174)
+        },
+        {
+          label: "Laine de bois",
+          value: "wood",
+          priceData: writePriceData('addition', 216)
+        },
+      ]
+    },
+    {
+      legend: "Épaisseur isolant mur (millimètres)",
+      name: "thickness",
+      kind: "radiogroup",
+      required: true,
+      options: [
+        {
+          label: "100",
+          value: "100",
+          priceData: writePriceData('multiplier', 1)
+        },
+        {
+          label: "120",
+          value: "120",
+          priceData: writePriceData('multiplier', 1.05)
+        },
+        {
+          label: "140",
+          value: "140",
+          priceData: writePriceData('multiplier', 1.10)
+        },
+        {
+          label: "160",
+          value: "160",
+          priceData: writePriceData('multiplier', 1.15)
+        },
+        {
+          label: "180",
+          value: "180",
+          priceData: writePriceData('multiplier', 1.20)
+        },
+        {
+          label: "200",
+          value: "200",
+          priceData: writePriceData('multiplier', 1.25)
+        },
+      ]
+    },
+    {
+      legend: "Hauteur sous plafond",
+      name: "height",
+      kind: "radiogroup",
+      required: true,
+      options: [
+        {
+          label: "Jusqu'à 2m60",
+          value: "260",
+          priceData: writePriceData('multiplier', 1)
+        },
+        {
+          label: "Entre 2m60 et 3m50",
+          value: "350",
+          priceData: writePriceData('multiplier', 1.10)
+        },
+        {
+          label: "Entre 3m50 et 4m50",
+          value: "450",
+          priceData: writePriceData('multiplier', 1.20)
+        },
+        {
+          label: "Au delà de 4m50",
+          value: "more",
+          priceData: writePriceData('multiplier', 1.35)
+        }
+      ]
+    },
+    {
+      legend: "Création de pièce",
+      name: "roomCreation",
+      kind: "radiogroup",
+      required: true,
+      options: [
+        {
+          label: "Chambre",
+          value: "bedroom",
+          priceData: writePriceData('multiplier', 0.05)
+        },
+        {
+          label: "Salle de bain",
+          value: "bathroom",
+          priceData: writePriceData('multiplier', 0.10)
+        },
+        {
+          label: "WC",
+          value: "lavatory",
+          priceData: writePriceData('multiplier', 0.05)
+        }
+      ]
+    },
+    {
+      legend: "Finitions",
+      name: "finish",
+      kind: "checklist",
+      required: true,
+      options: [
+        {
+          label: "Bandes",
+          value: "bands",
+          priceData: writePriceData('addition', 40)
+        },
+        {
+          label: "Ponçage des bandes",
+          value: "bandSanding",
+          priceData: writePriceData('addition', 25)
+        },
+        {
+          label: "Peinture",
+          value: "paint",
+          priceData: writePriceData('addition', 65)
+        }
+      ]
+    }
+  ]
+}
+
+const ceiling: Step = {
+  label: "Plafond",
+  price: $((item: Item) => getPrice(item)),
+  controls: [
+    number({
+      label: "Surface de la pièce en m²",
       name: "surface",
       min: 1,
       priceData: writePriceData('multiplier', 1)
@@ -345,24 +526,57 @@ const interior: Step = {
       required: true,
       options: [
         {
-          label: "Rez de chaussée",
+          label: "RDC",
           value: "groundLevel",
-          priceData: writePriceData('multiplier', 1, 1.1)
+          priceData: writePriceData('multiplier', 1)
         },
         {
           label: "Étage",
           value: "floorLevel",
-          priceData: writePriceData('multiplier', 1.1, 1.2)
+          priceData: writePriceData('multiplier', 1.1)
         },
         {
           label: "Combles",
           value: "attic",
-          priceData: writePriceData('multiplier', 1.2, 1.3)
+          priceData: writePriceData('multiplier', 1.2)
+        },
+        {
+          label: "Combles complexes",
+          value: "atticComplex",
+          priceData: writePriceData('addition', 1.3)
         },
       ]
     },
     {
-      legend: "Types de matériaux",
+      legend: "Type de plafond",
+      name: "ceilingType",
+      kind: "radiogroup",
+      required: true,
+      options: [
+        {
+          label: "Droit",
+          value: "straight",
+          priceData: writePriceData('multiplier', 1)
+        },
+        {
+          label: "Mono pente",
+          value: "sloped",
+          priceData: writePriceData('multiplier', 1.15)
+        },
+        {
+          label: "Pente jusqu'au faitage",
+          value: "completeSloped",
+          priceData: writePriceData('multiplier', 1.25)
+        },
+        {
+          label: "Mixte",
+          value: "mixt",
+          priceData: writePriceData('multiplier', 1.20)
+        }
+      ]
+    },
+    {
+      legend: "Types d'isolant",
       name: "materials",
       kind: "radiogroup",
       required: true,
@@ -370,22 +584,143 @@ const interior: Step = {
         {
           label: "Laine de verre",
           value: "glass",
-          priceData: writePriceData('addition', 100, 120)
+          priceData: writePriceData('addition', 152)
         },
         {
           label: "Laine de roche",
           value: "rock",
-          priceData: writePriceData('addition', 150, 180)
+          priceData: writePriceData('addition', 174)
         },
         {
           label: "Laine de bois",
           value: "wood",
-          priceData: writePriceData('addition', 250, 280)
+          priceData: writePriceData('addition', 216)
         },
+      ]
+    },
+    {
+      legend: "Épaisseur isolant (millimètres)",
+      name: "thickness",
+      kind: "radiogroup",
+      required: true,
+      options: [
+        {
+          label: "240",
+          value: "240",
+          priceData: writePriceData('multiplier', 1)
+        },
+        {
+          label: "260",
+          value: "260",
+          priceData: writePriceData('multiplier', 1.05)
+        },
+        {
+          label: "280",
+          value: "280",
+          priceData: writePriceData('multiplier', 1.10)
+        },
+        {
+          label: "300",
+          value: "300",
+          priceData: writePriceData('multiplier', 1.15)
+        },
+        {
+          label: "320",
+          value: "320",
+          priceData: writePriceData('multiplier', 1.20)
+        },
+        {
+          label: "340",
+          value: "340",
+          priceData: writePriceData('multiplier', 1.25)
+        },
+      ]
+    },
+    {
+      legend: "Finitions",
+      name: "finish",
+      kind: "checklist",
+      required: true,
+      options: [
+        {
+          label: "Bandes",
+          value: "bands",
+          priceData: writePriceData('addition', 40)
+        },
+        {
+          label: "Ponçage des bandes",
+          value: "bandSanding",
+          priceData: writePriceData('addition', 25),
+          dependsOn: ['finish', 'in', ['bands']]
+        },
+        {
+          label: "Peinture",
+          value: "paint",
+          priceData: writePriceData('addition', 65),
+          dependsOn: ['finish', 'in', ['bandSanding']]
+        }
       ]
     }
   ]
 }
+// const interior: Step = {
+//   label: "Aménagement",
+//   price: $((item: Item) => getPrice(item)),
+//   controls: [
+//     number({
+//       label: "Surface en m²",
+//       name: "surface",
+//       min: 1,
+//       priceData: writePriceData('multiplier', 1)
+//     }),
+//     {
+//       legend: "Pièce",
+//       name: "room",
+//       kind: "radiogroup",
+//       required: true,
+//       options: [
+//         {
+//           label: "Rez de chaussée",
+//           value: "groundLevel",
+//           priceData: writePriceData('multiplier', 1, 1.1)
+//         },
+//         {
+//           label: "Étage",
+//           value: "floorLevel",
+//           priceData: writePriceData('multiplier', 1.1, 1.2)
+//         },
+//         {
+//           label: "Combles",
+//           value: "attic",
+//           priceData: writePriceData('multiplier', 1.2, 1.3)
+//         },
+//       ]
+//     },
+//     {
+//       legend: "Types de matériaux",
+//       name: "materials",
+//       kind: "radiogroup",
+//       required: true,
+//       options: [
+//         {
+//           label: "Laine de verre",
+//           value: "glass",
+//           priceData: writePriceData('addition', 100, 120)
+//         },
+//         {
+//           label: "Laine de roche",
+//           value: "rock",
+//           priceData: writePriceData('addition', 150, 180)
+//         },
+//         {
+//           label: "Laine de bois",
+//           value: "wood",
+//           priceData: writePriceData('addition', 250, 280)
+//         },
+//       ]
+//     }
+//   ]
+// }
 
 const deck: Step = {
   label: "Terrasse",
@@ -464,6 +799,37 @@ const deck: Step = {
           value: "aluminumGuard",
           priceData: writePriceData('addition', 15, 20)
         },
+      ]
+    }
+  ]
+}
+
+const doors: Step = {
+  label: 'Portes',
+  price: $((item: Item) => getPrice(item)),
+  controls: [
+    number({
+      label: "Nombre de portes intérieurs",
+      name: "interiorDoor",
+      min: 1,
+      priceData: writePriceData('multiplier', 1)
+    }),
+    {
+      legend: "Finitions",
+      name: "finish",
+      kind: "radiogroup",
+      required: true,
+      options: [
+        {
+          label: "Avec finitions",
+          value: "withFinish",
+          priceData: writePriceData('addition', 300)
+        },
+        {
+          label: "Sans finitions",
+          value: "withoutFinish",
+          priceData: writePriceData('addition', 450)
+        }
       ]
     }
   ]
@@ -602,8 +968,10 @@ export const finalStep: FinalStep = {
 
 
 export const stepsRecord = {
-  interior,
+  walls,
+  ceiling,
   deck,
+  doors,
   stairs,
   floor,
 }

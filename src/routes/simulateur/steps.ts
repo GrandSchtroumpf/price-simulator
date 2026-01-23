@@ -128,6 +128,15 @@ const getPriceData = (control: ControlTypes, value: InputTypes) => {
     const option = control.options.find((option) => option.value === value);
     if (option?.priceData) return toArray(option.priceData);
   }
+  if (control.kind === 'checklist') {
+    const priceData = [];
+    const values = Array.isArray(value) ? value : [value];
+    for (const v of values) {
+      const option = control.options.find((option) => option.value === v);
+      priceData.push(...toArray(option?.priceData));
+    }
+    return priceData;
+  }
 };
 
 
@@ -181,7 +190,6 @@ const getPrice = (item: Item) => {
       }
     }
   }
-  console.log(addition.min, multiplier.min);
   return {
     min: Math.floor(addition.min * multiplier.min + fix.min),
     max: Math.floor(addition.max * multiplier.max + fix.max),
@@ -818,8 +826,7 @@ const test: Step = {
     {
       legend: "Start",
       name: "start",
-      kind: "radiogroup",
-      required: true,
+      kind: "checklist",
       options: [
         {
           label: "Avec start",
@@ -829,25 +836,7 @@ const test: Step = {
         {
           label: "Sans start",
           value: "withoutStart",
-          priceData: writePriceData('addition', 300)
-        }
-      ]
-    },
-    {
-      legend: "Finitions",
-      name: "finish",
-      kind: "radiogroup",
-      required: true,
-      options: [
-        {
-          label: "Avec finitions",
-          value: "withFinish",
-          priceData: [writePriceData('multiplier', 1.3, ['start', 'in', ['withStart']]), writePriceData('addition', 1)]
-        },
-        {
-          label: "Sans finitions",
-          value: "withoutFinish",
-          priceData: writePriceData('addition', 2)
+          priceData: writePriceData('multiplier', 2)
         }
       ]
     }

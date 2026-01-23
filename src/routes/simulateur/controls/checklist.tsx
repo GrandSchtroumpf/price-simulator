@@ -16,7 +16,7 @@ export default component$<CheckListProps>(({ control }) => {
         {control.options.map((option) => (
           <div key={option.value}>
             <input type="checkbox" id={option.value} name={control.name} value={option.value} checked={option.checked} required={control.required} disabled={option.disabled} />
-            <label for={option.value}>{option.label} {JSON.stringify(option)}</label>
+            <label for={option.value}>{option.label}</label>
           </div>
         ))}
       </div>

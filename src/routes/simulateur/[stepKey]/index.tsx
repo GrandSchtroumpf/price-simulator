@@ -85,7 +85,8 @@ export default component$(() => {
         for (const option of control.options) {
           if (!isConditionValid(next, option.dependsOn)) {
             option.disabled = true;
-            option.checked = '';
+            //Try to understand why this works
+            (option as any).checked = '';
           } else {
             option.disabled = false;
           }
@@ -95,7 +96,8 @@ export default component$(() => {
         for (const option of control.options) {
           if (!isConditionValid(next, option.dependsOn)) {
             option.disabled = true;
-            option.checked = '';
+            //Try to understand why this works
+            (option as any).checked = '';
           } else {
             option.disabled = false;
           }
@@ -168,11 +170,7 @@ export default component$(() => {
           </div>
           <form id={id} preventdefault:submit onSubmit$={onSubmit} onInput$={(_, form) => onInput(form)}>
             {controls.value.map((control) => {
-              let dynamicKey = control.name;
-              if (control.kind === 'checklist' || control.kind === 'radiogroup') {
-                dynamicKey += control.options.join('');
-              }
-              return <DynamicControl key={dynamicKey} control={control} />
+              return <DynamicControl key={control.name} control={control} />
             })}
             <footer>
               <button name="redirect" value='more' type='submit'>Autres travaux</button>

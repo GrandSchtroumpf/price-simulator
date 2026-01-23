@@ -144,7 +144,7 @@ function isIn<T>(array: T[], value: T) {
   if (Array.isArray(value)) {
     for (const v of value) {
       const included = array.includes(v);
-      if(included) return true;
+      if (included) return true;
     }
   } else {
     return array.includes(value);
@@ -163,6 +163,11 @@ export const isConditionValid = (item?: Item, dependsOn?: Conditions) => {
     if (!Array.isArray(value)) throw 'Value should be an array with in operator';
     const itemValue = item.data[key];
     return isIn(value, itemValue);
+  }
+  if (operator === 'out') {
+    if (!Array.isArray(value)) throw 'Value should be an array with in operator';
+    const itemValue = item.data[key];
+    return !isIn(value, itemValue);
   }
   throw 'Unsupported operator';
 };
@@ -466,6 +471,34 @@ const interior: Step = {
       }))
     },
     {
+      legend: "Type de plafond",
+      name: "ceilingType",
+      kind: "radiogroup",
+      required: true,
+      options: [
+        {
+          label: "Plafond droit",
+          value: "straight",
+          priceData: writePriceData('multiplier', 1)
+        },
+        {
+          label: "Pente",
+          value: "sloped",
+          priceData: writePriceData('multiplier', 1.15)
+        },
+        {
+          label: "Mixte (Droit et pente)",
+          value: "mixte",
+          priceData: writePriceData('multiplier', 1.20)
+        },
+        {
+          label: "Pente jusqu'au faitage",
+          value: "fullySoped",
+          priceData: writePriceData('multiplier', 1.25)
+        }
+      ]
+    },
+    {
       legend: "Épaisseur isolant plafond (millimètres)",
       name: "ceilingThickness",
       kind: "radiogroup",
@@ -544,22 +577,32 @@ const interior: Step = {
       legend: "Finitions",
       name: "finish",
       kind: "checklist",
-      required: true,
       options: [
         {
           label: "Bandes",
           value: "bands",
-          priceData: writePriceData('addition', 40)
+          priceData: [
+            writePriceData('addition', 40),
+            writePriceData('multiplier', 1.20, ['ceilingType', 'out', ['straight']]),
+          ]
         },
         {
           label: "Ponçage des bandes",
           value: "bandSanding",
-          priceData: writePriceData('addition', 25)
+          dependsOn: ['finish', 'in', ['bands']],
+          priceData: [
+            writePriceData('addition', 25),
+            writePriceData('multiplier', 1.20, ['ceilingType', 'out', ['straight']]),
+          ]
         },
         {
           label: "Peinture",
           value: "paint",
-          priceData: writePriceData('addition', 65)
+          dependsOn: ['finish', 'in', ['bandSanding']],
+          priceData: [
+            writePriceData('addition', 65),
+            writePriceData('multiplier', 1.20, ['ceilingType', 'out', ['straight']]),
+          ]
         }
       ]
     }

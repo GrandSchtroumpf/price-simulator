@@ -1,6 +1,6 @@
 import { component$, $, useContext, useComputed$ } from "@qwik.dev/core";
 import { StaticGenerateHandler, useLocation, useNavigate } from "@qwik.dev/router";
-import { ControlTypes, displayPrice, Item, Step, StepKey, stepsRecord, isConditionValid } from "../steps";
+import { displayPrice, Item, Step, StepKey, stepsRecord, isConditionValid } from "../steps";
 import { DynamicControl } from "../controls";
 import { cartContext } from "../layout";
 import { useAsyncComputed$, useId, useSignal, useStyles$, useVisibleTask$ } from "@qwik.dev/core/internal";
@@ -35,26 +35,26 @@ const convertControls = (data: FormData, step: Step) => {
   return formObj;
 };
 
-const writeControls = (editItem: Item, controls: ControlTypes[]) => {
-  if (!editItem) return controls;
-  for (const [key, value] of Object.entries(editItem.data)) {
-    const control = controls.find(c => c.name === key);
-    if (control?.kind === 'input') control.value = value as string;
-    if (control?.kind === 'checkbox') control.checked = !!value; // TODO: verify
-    if (control?.kind === 'checklist') {
-      const values = value as string[];
-      for (const option of control.options) {
-        if (values.includes(option.value)) option.checked = true;
-      }
-    }
-    if (control?.kind === 'radiogroup') {
-      for (const option of control.options) {
-        if (value === option.value) option.checked = true;
-      }
-    }
-  }
-  return controls;
-};
+// const writeControls = (editItem: Item, controls: ControlTypes[]) => {
+//   if (!editItem) return controls;
+//   for (const [key, value] of Object.entries(editItem.data)) {
+//     const control = controls.find(c => c.name === key);
+//     if (control?.kind === 'input') control.value = value as string;
+//     if (control?.kind === 'checkbox') control.checked = !!value; // TODO: verify
+//     if (control?.kind === 'checklist') {
+//       const values = value as string[];
+//       for (const option of control.options) {
+//         if (values.includes(option.value)) option.checked = true;
+//       }
+//     }
+//     if (control?.kind === 'radiogroup') {
+//       for (const option of control.options) {
+//         if (value === option.value) option.checked = true;
+//       }
+//     }
+//   }
+//   return controls;
+// };
 
 
 export default component$(() => {
@@ -85,7 +85,7 @@ export default component$(() => {
         for (const option of control.options) {
           if (!isConditionValid(next, option.dependsOn)) {
             option.disabled = true;
-            option.checked = false;
+            option.checked = '';
           } else {
             option.disabled = false;
           }
@@ -95,7 +95,7 @@ export default component$(() => {
         for (const option of control.options) {
           if (!isConditionValid(next, option.dependsOn)) {
             option.disabled = true;
-            option.checked = false;
+            option.checked = '';
           } else {
             option.disabled = false;
           }
@@ -105,11 +105,11 @@ export default component$(() => {
         control.disabled = !isConditionValid(next, control.dependsOn);
       }
     };
-    if (typeof index.value === 'number') {
-      const editItem = cart[index.value];
-      const controls = writeControls(editItem, copy);
-      return controls;
-    }
+    // if (typeof index.value === 'number') {
+    //   const editItem = cart[index.value];
+    //   const controls = writeControls(editItem, copy);
+    //   return controls;
+    // }
     return copy;
   });
 

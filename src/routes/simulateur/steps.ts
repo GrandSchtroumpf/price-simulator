@@ -144,7 +144,7 @@ function isIn<T>(array: T[], value: T) {
   if (Array.isArray(value)) {
     for (const v of value) {
       const included = array.includes(v);
-      if (included) return true;
+      if(included) return true;
     }
   } else {
     return array.includes(value);

@@ -141,7 +141,14 @@ const getPriceData = (control: ControlTypes, value: InputTypes) => {
 
 
 function isIn<T>(array: T[], value: T) {
-  return array.includes(value);
+  if (Array.isArray(value)) {
+    for (const v of value) {
+      const included = array.includes(v);
+      if (included) return true;
+    }
+  } else {
+    return array.includes(value);
+  }
 }
 
 export const isConditionValid = (item?: Item, dependsOn?: Conditions) => {
@@ -460,7 +467,7 @@ const interior: Step = {
     },
     {
       legend: "Épaisseur isolant plafond (millimètres)",
-      name: "ceilThickness",
+      name: "ceilingThickness",
       kind: "radiogroup",
       required: true,
       options: [240, 260, 280, 300, 320, 340].map((mm, i) => ({
@@ -558,171 +565,6 @@ const interior: Step = {
     }
   ]
 }
-
-// const ceiling: Step = {
-//   label: "Plafond",
-//   price: $((item: Item) => getPrice(item)),
-//   controls: [
-//     number({
-//       label: "Surface de la pièce en m²",
-//       name: "surface",
-//       min: 1,
-//       priceData: writePriceData('multiplier', 1)
-//     }),
-//     {
-//       legend: "Pièce",
-//       name: "room",
-//       kind: "radiogroup",
-//       required: true,
-//       options: [
-//         {
-//           label: "RDC",
-//           value: "groundLevel",
-//           priceData: writePriceData('multiplier', 1)
-//         },
-//         {
-//           label: "Étage",
-//           value: "floorLevel",
-//           priceData: writePriceData('multiplier', 1.1)
-//         },
-//         {
-//           label: "Combles",
-//           value: "attic",
-//           priceData: writePriceData('multiplier', 1.2)
-//         },
-//         {
-//           label: "Combles complexes",
-//           value: "atticComplex",
-//           priceData: writePriceData('addition', 1.3)
-//         },
-//       ]
-//     },
-//     {
-//       legend: "Type de plafond",
-//       name: "ceilingType",
-//       kind: "radiogroup",
-//       required: true,
-//       options: [
-//         {
-//           label: "Droit",
-//           value: "straight",
-//           priceData: writePriceData('multiplier', 1)
-//         },
-//         {
-//           label: "Mono pente",
-//           value: "sloped",
-//           priceData: writePriceData('multiplier', 1.15)
-//         },
-//         {
-//           label: "Pente jusqu'au faitage",
-//           value: "completeSloped",
-//           priceData: writePriceData('multiplier', 1.25)
-//         },
-//         {
-//           label: "Mixte",
-//           value: "mixt",
-//           priceData: writePriceData('multiplier', 1.20)
-//         }
-//       ]
-//     },
-//     {
-//       legend: "Types d'isolant",
-//       name: "materials",
-//       kind: "radiogroup",
-//       required: true,
-//       options: [
-//         {
-//           label: "Laine de verre",
-//           value: "glass",
-//           priceData: writePriceData('addition', 152)
-//         },
-//         {
-//           label: "Laine de roche",
-//           value: "stone",
-//           priceData: writePriceData('addition', 174)
-//         },
-//         {
-//           label: "Laine de bois",
-//           value: "wood",
-//           priceData: writePriceData('addition', 216)
-//         },
-//       ]
-//     },
-//     {
-//       legend: "Épaisseur isolant (millimètres)",
-//       name: "thickness",
-//       kind: "radiogroup",
-//       required: true,
-//       options: [240, 260, 280, 300, 320, 340].map((mm, i) => ({
-//         label: `${mm} mm`,
-//         value: String(mm),
-//         priceData: [
-//           writePriceData('multiplier', 1 + 0.05 * i, ['materials', '=', 'glass']),
-//           writePriceData('multiplier', 1.1 + 0.05 * i, ['materials', '=', 'stone']),
-//           writePriceData('multiplier', 1.35 + 0.05 * i, ['materials', '=', 'wood']),
-//         ]
-//       }))
-//     }
-//   ]
-// }
-// const interior: Step = {
-//   label: "Aménagement",
-//   price: $((item: Item) => getPrice(item)),
-//   controls: [
-//     number({
-//       label: "Surface en m²",
-//       name: "surface",
-//       min: 1,
-//       priceData: writePriceData('multiplier', 1)
-//     }),
-//     {
-//       legend: "Pièce",
-//       name: "room",
-//       kind: "radiogroup",
-//       required: true,
-//       options: [
-//         {
-//           label: "Rez de chaussée",
-//           value: "groundLevel",
-//           priceData: writePriceData('multiplier', 1, 1.1)
-//         },
-//         {
-//           label: "Étage",
-//           value: "floorLevel",
-//           priceData: writePriceData('multiplier', 1.1, 1.2)
-//         },
-//         {
-//           label: "Combles",
-//           value: "attic",
-//           priceData: writePriceData('multiplier', 1.2, 1.3)
-//         },
-//       ]
-//     },
-//     {
-//       legend: "Types de matériaux",
-//       name: "materials",
-//       kind: "radiogroup",
-//       required: true,
-//       options: [
-//         {
-//           label: "Laine de verre",
-//           value: "glass",
-//           priceData: writePriceData('addition', 100, 120)
-//         },
-//         {
-//           label: "Laine de roche",
-//           value: "stone",
-//           priceData: writePriceData('addition', 150, 180)
-//         },
-//         {
-//           label: "Laine de bois",
-//           value: "wood",
-//           priceData: writePriceData('addition', 250, 280)
-//         },
-//       ]
-//     }
-//   ]
-// }
 
 const deck: Step = {
   label: "Terrasse",
@@ -836,7 +678,8 @@ const test: Step = {
         {
           label: "Sans start",
           value: "withoutStart",
-          priceData: writePriceData('multiplier', 2)
+          priceData: writePriceData('multiplier', 2),
+          dependsOn: ['start', 'in', ['withStart']]
         }
       ]
     }

@@ -91,16 +91,16 @@ export default component$(() => {
           }
         }
       }
-      // if (control.kind === 'checklist') {
-      //   for (const option of control.options) {
-      //     if (!isConditionValid(next, option.dependsOn)) {
-      //       option.disabled = true;
-      //       option.checked = false;
-      //     } else {
-      //       option.disabled = false;
-      //     }
-      //   }
-      // }
+      if (control.kind === 'checklist') {
+        for (const option of control.options) {
+          if (!isConditionValid(next, option.dependsOn)) {
+            option.disabled = true;
+            option.checked = false;
+          } else {
+            option.disabled = false;
+          }
+        }
+      }
       if (control.kind === 'input') {
         control.disabled = !isConditionValid(next, control.dependsOn);
       }

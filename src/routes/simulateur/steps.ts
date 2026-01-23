@@ -648,7 +648,7 @@ const deck: Step = {
   ]
 }
 
-const doors: Step = {
+const door: Step = {
   label: 'Portes',
   price: $((item: Item) => getPrice(item)),
   controls: [
@@ -660,32 +660,6 @@ const doors: Step = {
     })
   ]
 }
-
-const test: Step = {
-  label: 'Test',
-  price: $((item: Item) => getPrice(item)),
-  controls: [
-    {
-      legend: "Start",
-      name: "start",
-      kind: "checklist",
-      options: [
-        {
-          label: "Avec start",
-          value: "withStart",
-          priceData: writePriceData('addition', 300)
-        },
-        {
-          label: "Sans start",
-          value: "withoutStart",
-          priceData: writePriceData('multiplier', 2),
-          dependsOn: ['start', 'in', ['withStart']]
-        }
-      ]
-    }
-  ]
-}
-
 
 const stairs: Step = {
   label: 'Escalier',
@@ -821,8 +795,7 @@ export const finalStep: FinalStep = {
 export const stepsRecord = {
   interior,
   deck,
-  doors,
+  door,
   stairs,
-  floor,
-  test
+  floor
 }

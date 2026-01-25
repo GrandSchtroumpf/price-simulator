@@ -6,6 +6,25 @@
   gap: 40px;
   min-height: 90dvh;
   position: relative;
+  isolation: isolate;
+  
+  &::after, &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+  }
+  &::before {
+    z-index: -2;
+    background-image: radial-gradient(transparent 20%, var(--color-accent) 90%);
+  }
+  &::after {
+    z-index: -1;
+    background-color: var(--color-surface-0);
+    mask-image: url('backgrounds/dots.svg');
+    mask-mode: luminance;
+  }
+
+
   @supports (animation-timeline: view()) {
     --opacity-out: 0;
     animation-name: fade;
@@ -105,17 +124,22 @@
     font-weight: 200;
     @apply splitted-text;
   }
-  & a {
-    place-self: center;
-    font-size: clamp(1.2rem, 1.5vw, 2rem);
-    --transform-in: scale(0.9);
-    --opacity-in: 0;
-    --opacity-out: 1;
-    animation-name: transform, fade;
-    animation-fill-mode: backwards;
-    animation-duration: 400ms;
-    animation-timing-function: var(--ease-in-out);
-    animation-delay: var(--logo-duration);
+  .actions {
+    display: grid;
+    justify-items: center;
+    position: relative;
+    & a {
+      align-self: start;
+      font-size: clamp(1.2rem, 1.5vw, 2rem);
+      --transform-in: scale(0.9);
+      --opacity-in: 0;
+      --opacity-out: 1;
+      animation-name: transform, fade;
+      animation-fill-mode: backwards;
+      animation-duration: 400ms;
+      animation-timing-function: var(--ease-in-out);
+      animation-delay: var(--logo-duration);
+    }
   }
 }
 

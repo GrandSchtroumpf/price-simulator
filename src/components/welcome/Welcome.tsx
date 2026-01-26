@@ -10,7 +10,7 @@ export const Welcome = component$(() => {
   return (
     <section id="welcome">
       {/*eslint-disable-next-line qwik/jsx-img*/}
-      <img src="/imgs/wood-board.svg" class="wood-board" aria-hidden="true" alt="Planche de bois" fetchPriority="high" />
+      {/* <img src="/imgs/wood-board.svg" class="wood-board" aria-hidden="true" alt="Planche de bois" fetchPriority="high" /> */}
       <div class="calling-card">
         <AnimatedLogo />
         <hgroup>
@@ -28,7 +28,9 @@ export const Welcome = component$(() => {
           <SplittedText text="Intérieur · Extérieur" mode="word" />
         </p>
       </div>
-      <a class="simulator-link" href="/simulateur" style="--index: 3">Simuler un devis</a>
+      <div class="actions">
+        <a class="simulator-link" href="/simulateur" style="--index: 3">Simuler un devis</a>
+      </div>
     </section>
   )
 })

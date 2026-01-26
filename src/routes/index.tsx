@@ -7,7 +7,6 @@ import Recommendation from "~/components/recommendation/Recommendation";
 import Estimate from "~/components/estimate/Estimate";
 import Footer from "~/components/footer/Footer";
 
-import WoodVeins from '~/media/wood-veins.svg?jsx';
 import style from './index.css?inline';
 import homeSchema from "~/schemas/home-schemas.json?raw";
 import speculationRules from "~/schemas/home-speculationrules.json?raw";
@@ -33,15 +32,15 @@ export default component$(() => {
     <>
       <main>
         <Welcome />
-        <Map />
         <Gallery />
         <Recommendation />
+        <Map />
         <Estimate />
       </main>
       <Footer />
-      <div class="wood-background" aria-hidden="true">
+      {/* <div class="wood-background" aria-hidden="true">
         <WoodVeins class="wood-veins" />
-      </div>
+      </div> */}
       <script type="speculationrules" dangerouslySetInnerHTML={speculationRules}></script>
     </>
   )

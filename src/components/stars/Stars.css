@@ -1,16 +1,16 @@
-#stars {
+.stars {
   display: grid;
   grid-template-areas: "text stack";
   place-content: center;
   gap: 4px;
 }
 
-#stars p {
+.stars p {
   grid-area: text;
   padding: 1px;
 }
 
-#stars > div {
+.stars > div {
   position: relative;
   grid-area: stack;
   transform: translateX(0);

@@ -5,6 +5,10 @@ export default component$(() => {
 	useStyles$(style);
 	return (
 		<section id="gallery">
+			<div class="scroll-indicator">
+          <div class="line"></div>
+          <div class="diamonds"></div>
+			</div>
 			<figure style="--index:1">
 				<figcaption>Terrasse bois</figcaption>
 				<img loading="lazy" src="/imgs/home/photo-1.webp" alt="Ouvrage de menuiserie" height="300" />

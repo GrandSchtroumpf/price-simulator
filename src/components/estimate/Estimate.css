@@ -4,10 +4,15 @@
   display: grid;
   gap: 24px;
   place-content: center;
-  height: 100dvh;
+  min-height: 90dvh;
+
+  @media (width < 768px) {
+    min-height: 70dvh;
+  }
 
   &.is-visible {
     & h2 {
+      --transform-in: translateX(150%) scale(0.8); 
       @apply splitted-text;
     }
     & p {
@@ -19,7 +24,7 @@
   @supports (animation-timeline: view()) {
     & hgroup,
     & a {
-      --transform-in: translateY(calc(250px + var(--index) * 50px));
+      --transform-in: translateY(calc(var(--index) * 50px));
       animation-name: transform;
       animation-timeline: view(40% 20%);
       animation-fill-mode: backwards;

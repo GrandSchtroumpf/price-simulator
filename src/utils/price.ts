@@ -1,4 +1,4 @@
-import { ControlTypes, InputTypes, Item, PriceData, Conditions, Range, DynamicForm } from "~/types/simulator";
+import type { ControlTypes, InputTypes, Item, PriceData, Conditions, Range, DynamicForm } from "~/types/simulator";
 import { isConditionValid } from "./conditions";
 import { toArray } from "./helpers";
 import { dynamicFormRecord } from "../routes/simulateur/forms/index";

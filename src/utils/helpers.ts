@@ -1,5 +1,5 @@
 import { dynamicFormRecord } from "~/routes/simulateur/forms";
-import { DynamicForm, InputNumber, InputTypes, Item } from "~/types/simulator";
+import type { DynamicForm, InputNumber, InputTypes, Item } from "~/types/simulator";
 
 export const number = (p: Omit<InputNumber, 'kind' | 'type'>): InputNumber => ({
   kind: 'input',

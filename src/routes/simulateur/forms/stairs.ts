@@ -1,5 +1,5 @@
 import { $ } from "@qwik.dev/core";
-import { DynamicForm, Item } from "~/types/simulator";
+import type { DynamicForm, Item } from "~/types/simulator";
 import { getPrice, writePriceData } from "~/utils/price";
 
 export const stairs: DynamicForm = {

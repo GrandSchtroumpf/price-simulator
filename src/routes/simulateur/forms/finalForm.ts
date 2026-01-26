@@ -1,5 +1,5 @@
 import { $ } from "@qwik.dev/core";
-import { FinalDynamicForm, Item } from "~/types/simulator";
+import type { FinalDynamicForm, Item } from "~/types/simulator";
 import { dynamicFormRecord } from ".";
 
 export const finalForm: FinalDynamicForm = {

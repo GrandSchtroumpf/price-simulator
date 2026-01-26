@@ -1,5 +1,5 @@
 import { component$, useStyles$ } from '@qwik.dev/core';
-import { ControlTypes } from '../../routes/simulateur/forms';
+import type { ControlTypes } from '~/types/simulator';
 import styles from './input.css?inline';
 
 interface InputNumberProps {

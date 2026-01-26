@@ -1,6 +1,6 @@
 import { component$, $, useContext, useComputed$ } from "@qwik.dev/core";
 import { StaticGenerateHandler, useLocation, useNavigate } from "@qwik.dev/router";
-import { DynamicForm, Item, DynamicFormKey } from "~/types/simulator";
+import type { DynamicForm, Item, DynamicFormKey } from "~/types/simulator";
 import { dynamicFormRecord } from "../forms/index";
 import { displayPrice } from "~/utils/price";
 import { isConditionValid } from "~/utils/conditions";

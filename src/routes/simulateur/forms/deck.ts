@@ -1,4 +1,4 @@
-import { DynamicForm, Item } from "~/types/simulator"
+import type { DynamicForm, Item } from "~/types/simulator"
 import { getPrice, writePriceData } from "~/utils/price"
 import { number } from "~/utils/helpers"
 import { $ } from "@qwik.dev/core"

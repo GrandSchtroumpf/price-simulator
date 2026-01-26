@@ -1,5 +1,5 @@
 import { component$, useId } from '@qwik.dev/core';
-import { ControlTypes } from '../../routes/simulateur/forms';
+import type { ControlTypes } from '~/types/simulator';
 
 interface CheckListProps {
   control: ControlTypes;

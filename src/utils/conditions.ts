@@ -1,4 +1,4 @@
-import { Item, Conditions } from "~/types/simulator";
+import type { Item, Conditions } from "~/types/simulator";
 import { isIn } from "./helpers";
 
 export const isConditionValid = (item?: Item, dependsOn?: Conditions) => {

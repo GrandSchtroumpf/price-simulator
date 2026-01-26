@@ -10,12 +10,16 @@
   );
   display: grid;
   height: var(--img-container-height);
-  position: relative;
   padding: var(--padding);
   margin: auto;
   font-size: 1.3rem;
+  grid-template-areas: "stack";
   @media (width < 768px) {
     --padding: 8px;
+  }
+
+  & > * {
+    grid-area: stack;
   }
   
   & .reference {

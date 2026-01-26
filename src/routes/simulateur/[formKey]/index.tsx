@@ -87,8 +87,7 @@ export default component$(() => {
         for (const option of control.options) {
           if (!isConditionValid(next, option.dependsOn)) {
             option.disabled = true;
-            //Try to understand why this works
-            (option as any).checked = '';
+            option.checked = false;
           } else {
             option.disabled = false;
           }
@@ -98,8 +97,7 @@ export default component$(() => {
         for (const option of control.options) {
           if (!isConditionValid(next, option.dependsOn)) {
             option.disabled = true;
-            //Try to understand why this works
-            (option as any).checked = '';
+            option.checked = false;
           } else {
             option.disabled = false;
           }
@@ -145,7 +143,8 @@ export default component$(() => {
       navigate('../cart');
     }
   });
-  const onInput = $(async (form: HTMLFormElement) => {
+  const onInput = $(async (_: Event, form: HTMLFormElement) => {
+    await Promise.resolve();
     const formData = new FormData(form);
     const formObj = convertControls(formData, dynamicForm);
     const dynamicFormItem = { dynamicFormKey: formKey as DynamicFormKey, data: formObj };
@@ -170,7 +169,7 @@ export default component$(() => {
           <div class="step-price">
             <p>Estimation : Remplissez les informations ci-dessous pour obtenir un prix indicatif</p>
           </div>
-          <form id={id} preventdefault:submit onSubmit$={onSubmit} onInput$={(_, form) => onInput(form)}>
+          <form id={id} preventdefault:submit onSubmit$={onSubmit} onChange$={onInput} onInput$={onInput}>
             {controls.value.map((control) => {
               return <DynamicControl key={control.name} control={control} />
             })}

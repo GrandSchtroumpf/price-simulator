@@ -14,6 +14,12 @@ export const isConditionValid = (item?: Item, dependsOn?: Conditions) => {
     const itemValue = item.data[key];
     return isIn(value, itemValue);
   }
+  if (operator === 'array-contains') {
+    if (!Array.isArray(value)) throw 'Value should be an array with array-contains operator';
+    if (!Array.isArray(item.data[key])) throw 'Value of the item should be an array with array-contains operator';
+    const itemValue = item.data[key];
+    return value.every((v) => isIn(itemValue, v));
+  }
   if (operator === 'out') {
     if (!Array.isArray(value)) throw 'Value should be an array with in operator';
     const itemValue = item.data[key];

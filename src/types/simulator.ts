@@ -5,7 +5,7 @@ export type ControlTypes = CheckList | CheckBox | RadioGroup | InputNumber | Inp
 export type ControlKind = ControlTypes['kind'];
 export type DynamicFormKey = keyof typeof dynamicFormRecord;
 export type InputTypes = string | string[] | number | number[] | boolean;
-type DependsOperators = '<' | '>' | '<=' | '>=' | '=' | 'in' | 'out';
+type DependsOperators = '<' | '>' | '<=' | '>=' | '=' | 'in' | 'out' | 'array-contains';
 type DependsValue = string | number | string[] | number[];
 export type Conditions = [string, DependsOperators, DependsValue];
 export interface Range {

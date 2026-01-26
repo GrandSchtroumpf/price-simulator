@@ -209,7 +209,7 @@ export const interior: DynamicForm = {
         {
           label: "Peinture",
           value: "paint",
-          dependsOn: ['finish', 'in', ['bandSanding']],
+          dependsOn: ['finish', 'array-contains', ['bands', 'bandSanding']],
           priceData: [
             writePriceData('addition', 65),
             writePriceData('multiplier', 1.20, ['ceilingType', 'out', ['straight']]),

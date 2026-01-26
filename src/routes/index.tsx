@@ -94,7 +94,7 @@ export const head: DocumentHead = {
   scripts: [
     {
       type: "application/ld+json",
-      script: homeSchema
+      dangerouslySetInnerHTML: homeSchema,
     }
   ],
 };

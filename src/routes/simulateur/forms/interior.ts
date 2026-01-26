@@ -75,9 +75,9 @@ export const interior: DynamicForm = {
         label: `${mm} mm`,
         value: `wallThickness${mm}`,
         priceData: [
-          writePriceData('multiplier', 1 + 0.05 * i, ['materials', '=', 'glass']),
-          writePriceData('multiplier', 1.1 + 0.05 * i, ['materials', '=', 'stone']),
-          writePriceData('multiplier', 1.3 + 0.05 * i, ['materials', '=', 'wood']),
+          writePriceData('multiplier', 1 + 0.05 * i, ['materials', '==', 'glass']),
+          writePriceData('multiplier', 1.1 + 0.05 * i, ['materials', '==', 'stone']),
+          writePriceData('multiplier', 1.3 + 0.05 * i, ['materials', '==', 'wood']),
         ]
       }))
     },
@@ -118,9 +118,9 @@ export const interior: DynamicForm = {
         label: `${mm} mm`,
         value: `ceilingThickness${mm}`,
         priceData: [
-          writePriceData('multiplier', 1 + 0.05 * i, ['materials', '=', 'glass']),
-          writePriceData('multiplier', 1.1 + 0.05 * i, ['materials', '=', 'stone']),
-          writePriceData('multiplier', 1.35 + 0.05 * i, ['materials', '=', 'wood']),
+          writePriceData('multiplier', 1 + 0.05 * i, ['materials', '==', 'glass']),
+          writePriceData('multiplier', 1.1 + 0.05 * i, ['materials', '==', 'stone']),
+          writePriceData('multiplier', 1.35 + 0.05 * i, ['materials', '==', 'wood']),
         ]
       }))
     },

@@ -6,7 +6,7 @@ export const isConditionValid = (item?: Item, dependsOn?: Conditions) => {
   if (!dependsOn) return true;
   if (!item) return true;
   const [key, operator, value] = dependsOn;
-  if (operator === '=') return item.data[key] === value;
+  if (operator === '==') return item.data[key] === value;
   if (operator === '<') return item.data[key] < value;
   if (operator === '<=') return item.data[key] <= value;
   if (operator === 'in') {

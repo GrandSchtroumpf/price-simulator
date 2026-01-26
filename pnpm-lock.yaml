@@ -12,11 +12,11 @@ importers:
         specifier: latest
         version: 9.39.1
       '@qwik.dev/core':
-        specifier: 2.0.0-beta.16
-        version: 2.0.0-beta.16(prettier@3.6.2)(vite@7.1.11(@types/node@20.19.0)(jiti@2.6.1)(less@4.4.2)(lightningcss@1.30.2)(sass@1.96.0)(stylus@0.62.0)(yaml@2.8.2))
+        specifier: 2.0.0-beta.17
+        version: 2.0.0-beta.17(prettier@3.6.2)(vite@7.1.11(@types/node@20.19.0)(jiti@2.6.1)(less@4.4.2)(lightningcss@1.30.2)(sass@1.96.0)(stylus@0.62.0)(yaml@2.8.2))
       '@qwik.dev/router':
-        specifier: 2.0.0-beta.16
-        version: 2.0.0-beta.16(@qwik.dev/core@2.0.0-beta.16(prettier@3.6.2)(vite@7.1.11(@types/node@20.19.0)(jiti@2.6.1)(less@4.4.2)(lightningcss@1.30.2)(sass@1.96.0)(stylus@0.62.0)(yaml@2.8.2)))(rollup@4.53.3)(typescript@5.9.3)(vite@7.1.11(@types/node@20.19.0)(jiti@2.6.1)(less@4.4.2)(lightningcss@1.30.2)(sass@1.96.0)(stylus@0.62.0)(yaml@2.8.2))
+        specifier: 2.0.0-beta.17
+        version: 2.0.0-beta.17(@qwik.dev/core@2.0.0-beta.17(prettier@3.6.2)(vite@7.1.11(@types/node@20.19.0)(jiti@2.6.1)(less@4.4.2)(lightningcss@1.30.2)(sass@1.96.0)(stylus@0.62.0)(yaml@2.8.2)))(rollup@4.53.3)(typescript@5.9.3)(vite@7.1.11(@types/node@20.19.0)(jiti@2.6.1)(less@4.4.2)(lightningcss@1.30.2)(sass@1.96.0)(stylus@0.62.0)(yaml@2.8.2))
       '@tailwindcss/vite':
         specifier: ^4.1.4
         version: 4.1.18(vite@7.1.11(@types/node@20.19.0)(jiti@2.6.1)(less@4.4.2)(lightningcss@1.30.2)(sass@1.96.0)(stylus@0.62.0)(yaml@2.8.2))
@@ -27,8 +27,8 @@ importers:
         specifier: 9.32.0
         version: 9.32.0(jiti@2.6.1)
       eslint-plugin-qwik:
-        specifier: 2.0.0-beta.16
-        version: 2.0.0-beta.16(eslint@9.32.0(jiti@2.6.1))(typescript@5.9.3)
+        specifier: 2.0.0-beta.17
+        version: 2.0.0-beta.17(eslint@9.32.0(jiti@2.6.1))(typescript@5.9.3)
       globals:
         specifier: 16.4.0
         version: 16.4.0
@@ -740,8 +740,8 @@ packages:
     resolution: {integrity: sha512-dfUnCxiN9H4ap84DvD2ubjw+3vUNpstxa0TneY/Paat8a3R4uQZDLSvWjmznAY/DoahqTHl9V46HF/Zs3F29pg==}
     engines: {node: '>= 10.0.0'}
 
-  '@qwik.dev/core@2.0.0-beta.16':
-    resolution: {integrity: sha512-8sxEZX8WTcRZaFQq3R6/WZGKVviD6RD8L0sFin1jFnbP+G5ZdMZ0ONVB5vBS1mO+NYCezkXpX+L59D0Bxr/C5w==}
+  '@qwik.dev/core@2.0.0-beta.17':
+    resolution: {integrity: sha512-YcXbkW+/7g7G/oGnWZ2FhEiQtIOv1bl9PKBZoXIDopTRP+v74HwJn88d44UE9oYDvGCtJo0GD9O8jfWwRM0gtg==}
     engines: {node: ^18.17.0 || ^20.3.0 || >=21.0.0}
     hasBin: true
     peerDependencies:
@@ -754,11 +754,11 @@ packages:
       vitest:
         optional: true
 
-  '@qwik.dev/router@2.0.0-beta.16':
-    resolution: {integrity: sha512-7Fo1RbPddhV/gmZ6DEC+9yalI1udboehKlNzQxhzn0QhMqS9Q5Jsl3lFHFZpkgLU+GivGn5uEZyrTJxvrYPh6A==}
+  '@qwik.dev/router@2.0.0-beta.17':
+    resolution: {integrity: sha512-orRORG+yymjanZO/EMv9H/4wqZ62Xm4PY6rHVe+h47eiQ7BbK9rPGw5vvE9a+kG68LarM321OeHzU+mPiEvnPw==}
     engines: {node: ^18.17.0 || ^20.3.0 || >=21.0.0}
     peerDependencies:
-      '@qwik.dev/core': ^2.0.0-beta.16
+      '@qwik.dev/core': ^2.0.0-beta.17
       vite: '>=5 <8'
 
   '@rollup/pluginutils@5.3.0':
@@ -1492,8 +1492,8 @@ packages:
     resolution: {integrity: sha512-/veY75JbMK4j1yjvuUxuVsiS/hr/4iHs9FTT6cgTexxdE0Ly/glccBAkloH/DofkjRbZU3bnoj38mOmhkZ0lHw==}
     engines: {node: '>=12'}
 
-  eslint-plugin-qwik@2.0.0-beta.16:
-    resolution: {integrity: sha512-uRidefTSlKaOzei2XWmJYbIEyMBzM2ZA1IgdgV4B8qje9gAsgKtjUhO3Abp3A/ir1At63GegMV5PAuG3prSS8w==}
+  eslint-plugin-qwik@2.0.0-beta.17:
+    resolution: {integrity: sha512-BSE2gjn9UDahZ34/VFOJ85cxqqx8N2asdz0e0zGcE8Q0494g/JTX9dtTjlENWl4e3rvs+6MVJSE9fY6lfElWrA==}
     engines: {node: ^18.17.0 || ^20.3.0 || >=21.0.0}
     peerDependencies:
       eslint: ^8.57.0 || ^9.0.0
@@ -2873,6 +2873,7 @@ packages:
   tar@7.5.2:
     resolution: {integrity: sha512-7NyxrTE4Anh8km8iEy7o0QYPs+0JKBTj5ZaqHg6B39erLg0qYXN3BijtShwbsNSvQ+LN75+KV+C4QR/f6Gwnpg==}
     engines: {node: '>=18'}
+    deprecated: Old versions of tar are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exhorbitant rates) by contacting i@izs.me
 
   tinyglobby@0.2.15:
     resolution: {integrity: sha512-j2Zq4NyQYG5XMST4cbs02Ak8iJUdxRM0XI5QyxXuZOzKOINmWurp3smXu3y5wDcJrptwpSjgXHzIQxR0omXljQ==}
@@ -3669,7 +3670,7 @@ snapshots:
       '@parcel/watcher-win32-x64': 2.5.1
     optional: true
 
-  '@qwik.dev/core@2.0.0-beta.16(prettier@3.6.2)(vite@7.1.11(@types/node@20.19.0)(jiti@2.6.1)(less@4.4.2)(lightningcss@1.30.2)(sass@1.96.0)(stylus@0.62.0)(yaml@2.8.2))':
+  '@qwik.dev/core@2.0.0-beta.17(prettier@3.6.2)(vite@7.1.11(@types/node@20.19.0)(jiti@2.6.1)(less@4.4.2)(lightningcss@1.30.2)(sass@1.96.0)(stylus@0.62.0)(yaml@2.8.2))':
     dependencies:
       csstype: 3.2.3
       launch-editor: 2.12.0
@@ -3679,12 +3680,12 @@ snapshots:
     optionalDependencies:
       prettier: 3.6.2
 
-  '@qwik.dev/router@2.0.0-beta.16(@qwik.dev/core@2.0.0-beta.16(prettier@3.6.2)(vite@7.1.11(@types/node@20.19.0)(jiti@2.6.1)(less@4.4.2)(lightningcss@1.30.2)(sass@1.96.0)(stylus@0.62.0)(yaml@2.8.2)))(rollup@4.53.3)(typescript@5.9.3)(vite@7.1.11(@types/node@20.19.0)(jiti@2.6.1)(less@4.4.2)(lightningcss@1.30.2)(sass@1.96.0)(stylus@0.62.0)(yaml@2.8.2))':
+  '@qwik.dev/router@2.0.0-beta.17(@qwik.dev/core@2.0.0-beta.17(prettier@3.6.2)(vite@7.1.11(@types/node@20.19.0)(jiti@2.6.1)(less@4.4.2)(lightningcss@1.30.2)(sass@1.96.0)(stylus@0.62.0)(yaml@2.8.2)))(rollup@4.53.3)(typescript@5.9.3)(vite@7.1.11(@types/node@20.19.0)(jiti@2.6.1)(less@4.4.2)(lightningcss@1.30.2)(sass@1.96.0)(stylus@0.62.0)(yaml@2.8.2))':
     dependencies:
       '@azure/functions': 3.5.1
       '@mdx-js/mdx': 3.1.1
       '@netlify/edge-functions': 2.19.0
-      '@qwik.dev/core': 2.0.0-beta.16(prettier@3.6.2)(vite@7.1.11(@types/node@20.19.0)(jiti@2.6.1)(less@4.4.2)(lightningcss@1.30.2)(sass@1.96.0)(stylus@0.62.0)(yaml@2.8.2))
+      '@qwik.dev/core': 2.0.0-beta.17(prettier@3.6.2)(vite@7.1.11(@types/node@20.19.0)(jiti@2.6.1)(less@4.4.2)(lightningcss@1.30.2)(sass@1.96.0)(stylus@0.62.0)(yaml@2.8.2))
       '@types/mdx': 2.0.13
       estree-util-value-to-estree: 3.5.0
       github-slugger: 2.0.0
@@ -4549,7 +4550,7 @@ snapshots:
 
   escape-string-regexp@5.0.0: {}
 
-  eslint-plugin-qwik@2.0.0-beta.16(eslint@9.32.0(jiti@2.6.1))(typescript@5.9.3):
+  eslint-plugin-qwik@2.0.0-beta.17(eslint@9.32.0(jiti@2.6.1))(typescript@5.9.3):
     dependencies:
       '@typescript-eslint/utils': 8.49.0(eslint@9.32.0(jiti@2.6.1))(typescript@5.9.3)
       eslint: 9.32.0(jiti@2.6.1)

@@ -153,7 +153,7 @@ export const interior: DynamicForm = {
       ]
     },
     {
-      legend: "Création de pièce",
+      legend: "Création de pièce (avec pose porte)",
       name: "roomCreation",
       kind: "radiogroup",
       required: true,

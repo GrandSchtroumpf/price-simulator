@@ -1,5 +1,5 @@
 import { component$, useId, useStyles$ } from '@qwik.dev/core';
-import { ControlTypes } from '../steps';
+import type { ControlTypes } from '~/types/simulator';
 import styles from './radio.css?inline';
 
 interface CheckListProps {

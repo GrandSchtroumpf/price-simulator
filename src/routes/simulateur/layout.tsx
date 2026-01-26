@@ -1,6 +1,6 @@
 import { component$, createContextId, Slot, useContextProvider, useStore, useVisibleTask$ } from "@qwik.dev/core";
 import { unwrapStore, useStyles$ } from "@qwik.dev/core/internal";
-import type { Item } from "./steps";
+import { Item } from "~/types/simulator";
 import styles from './layout.css?inline';
 
 

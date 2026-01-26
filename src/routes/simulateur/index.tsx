@@ -1,6 +1,6 @@
 import { sync$, component$, useContext, useStyles$ } from "@qwik.dev/core";
 import { DocumentHead, Link } from "@qwik.dev/router";
-import { stepsRecord } from "./steps";
+import { dynamicFormRecord } from "./forms/index";
 import { cartContext } from "./layout";
 import styles from "./index.css?inline";
 
@@ -21,13 +21,13 @@ export default component$(() => {
         <p>Il s'agit d'une estimation basé vos critères, une visite sera nécessaire pour créer un devis définitif</p>
       </hgroup>
       <nav aria-label="travaux à réaliser">
-        {Object.entries(stepsRecord).map(([key, step]) => (
+        {Object.entries(dynamicFormRecord).map(([key, form]) => (
           <Link key={key} href={key} onClick$={setViewTransition} data-key={key}>
             <div class="img-container">
               <img src={`/imgs/simulator/${key}.webp`} width="1344" height="756" />
             </div>
             <div class="card-content">
-              <p>{step.label}</p>
+              <p>{form.label}</p>
             </div>
           </Link>
         ))}

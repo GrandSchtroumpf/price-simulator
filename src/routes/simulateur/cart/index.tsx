@@ -1,52 +1,13 @@
 import { $, component$, useContext, useSignal, useStyles$ } from "@qwik.dev/core";
 import { cartContext } from "../layout";
-import { type Step, stepsRecord, finalStep, InputTypes, Item, displayPrice } from "../steps";
-import { DynamicControl } from "../controls";
+import { dynamicFormRecord } from "../forms/index";
+import { finalForm } from "../forms/finalForm"
+import { displayPrice } from "~/utils/price";
+import { DynamicControl } from "../../../components/controls";
 import styles from './index.css?inline';
+import { getDynamicFormLabelList, parseDisplayValue, mailto } from "~/utils/helpers";
 import { useLocation, useNavigate } from "@qwik.dev/router";
 
-const mailto = (cart: Item[]) => {
-  const list = [];
-  for (const item of cart) {
-    const { stepKey, data } = item;
-    const step = stepsRecord[stepKey];
-    const labelList = getStepLabelList(stepKey, step);
-    list.push(`${step.label}:`)
-    for (const [key, value] of Object.entries(data)) {
-      list.push(`- ${labelList[key]}: ${parseDisplayValue(value, labelList)}`);
-    }
-    list.push('');
-  }
-  const mailto = 'erwanrichard.lpm@gmail.com';
-  const subject = encodeURIComponent('Estimation - Devis');
-  const body = encodeURIComponent(list.join('\n'));
-  return `mailto:${mailto}?subject=${subject}&body=${body}`;
-}
-
-const getStepLabelList = (stepKey: string, step: Step) => {
-  const labelList: Record<string, string> = {};
-  labelList[stepKey] = step.label;
-  for (const control of step.controls) {
-    if (control.kind === 'input' || control.kind === 'checkbox') {
-      labelList[control.name] = control.label || control.name;
-    }
-    if (control.kind === 'checklist' || control.kind === 'radiogroup') {
-      labelList[control.name] = control.legend || control.name;
-      for (const option of control.options) {
-        labelList[option.value] = option.label;
-      }
-    }
-  }
-  return labelList;
-}
-
-const parseDisplayValue = (value: InputTypes, labels: Record<string, string>) => {
-  let parsedValue = value;
-  if (typeof value === 'string') parsedValue = labels[value];
-  if (typeof value === 'boolean') parsedValue = value ? 'Oui' : 'Non';
-  if (value instanceof Array) parsedValue = value.map((answer) => labels[answer]).join(' / ');
-  return parsedValue;
-};
 
 export default component$(() => {
   useStyles$(styles);
@@ -58,7 +19,7 @@ export default component$(() => {
   const onSubmit = $(async (form: HTMLFormElement) => {
     const isValid = form.checkValidity();
     if (!isValid) return;
-    const price = finalStep.finalPrice?.(cart);
+    const price = finalForm.finalPrice?.(cart);
     finalEstimation.value = await displayPrice(price);
   });
 
@@ -81,18 +42,18 @@ export default component$(() => {
       </header>
       <div>
         {cart.map((_, i) => {
-          const { stepKey, data } = cart[i];
-          const step = stepsRecord[stepKey];
-          const labelList = getStepLabelList(stepKey, step);
-          const price = step.price?.(cart[i]);
+          const { dynamicFormKey, data } = cart[i];
+          const dynamicForm = dynamicFormRecord[dynamicFormKey];
+          const labelList = getDynamicFormLabelList(dynamicFormKey, dynamicForm);
+          const price = dynamicForm.price?.(cart[i]);
           return (
             <details key={i} name="cart">
               <summary>
                 <svg class="chevron" height="24px" width="24px" viewBox="0 -960 960 960" fill="currentColor">
                   <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
                 </svg>
-                <h3>{step.label}</h3>
-                <a href={`/simulateur/${stepKey}?index=${i}`} aria-label="modifier">
+                <h3>{dynamicForm.label}</h3>
+                <a href={`/simulateur/${dynamicFormKey}?index=${i}`} aria-label="modifier">
                   <svg aria-hidden height="24px" width="24px" viewBox="0 -960 960 960" fill="currentColor">
                     <path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z" />
                   </svg>
@@ -129,7 +90,7 @@ export default component$(() => {
         <p>Ces informations sont nécessaires à la réalisation du devis</p>
       </hgroup>
       <form preventdefault:submit onsubmit$={(_, form) => onSubmit(form)}>
-        {finalStep.controls.map((control) => (
+        {finalForm.controls.map((control) => (
           <DynamicControl key={control.name} control={control} />
         ))}
         {!finalEstimation.value && <button type='submit'>Valider</button>}

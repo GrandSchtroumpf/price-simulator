@@ -1,5 +1,5 @@
 import { component$, useId } from '@qwik.dev/core';
-import { ControlTypes } from '../steps';
+import type { ControlTypes } from '~/types/simulator';
 
 interface CheckListProps {
   control: ControlTypes;
@@ -15,7 +15,7 @@ export default component$<CheckListProps>(({ control }) => {
       <div role='group' aria-labelledby={id}>
         {control.options.map((option) => (
           <div key={option.value}>
-            <input type="checkbox" id={option.value} name={control.name} value={option.value} checked={option.checked} required={control.required} />
+            <input type="checkbox" id={option.value} name={control.name} value={option.value} checked={option.checked} required={control.required} disabled={option.disabled} />
             <label for={option.value}>{option.label}</label>
           </div>
         ))}

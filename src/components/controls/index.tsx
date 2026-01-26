@@ -1,5 +1,5 @@
 import { component$, JSXOutput } from "@qwik.dev/core";
-import type { ControlTypes, ControlKind } from "../steps";
+import type { ControlTypes, ControlKind } from "../../routes/simulateur/forms";
 import Checklist from "./checklist";
 import Checkbox from "./checkbox";
 import Input from "./input";

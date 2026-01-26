@@ -1,14 +1,17 @@
 import { component$, $, useContext, useComputed$ } from "@qwik.dev/core";
 import { StaticGenerateHandler, useLocation, useNavigate } from "@qwik.dev/router";
-import { displayPrice, Item, Step, StepKey, stepsRecord, isConditionValid } from "../steps";
-import { DynamicControl } from "../controls";
+import { DynamicForm, Item, DynamicFormKey } from "~/types/simulator";
+import { dynamicFormRecord } from "../forms/index";
+import { displayPrice } from "~/utils/price";
+import { isConditionValid } from "~/utils/conditions";
+import { DynamicControl } from "../../../components/controls";
 import { cartContext } from "../layout";
 import { useAsyncComputed$, useId, useSignal, useStyles$, useVisibleTask$ } from "@qwik.dev/core/internal";
 import styles from './index.css?inline';
 
-const convertControls = (data: FormData, step: Step) => {
+const convertControls = (data: FormData, form: DynamicForm) => {
   const formObj: Record<string, any> = {};
-  for (const control of step.controls) {
+  for (const control of form.controls) {
     switch (control.kind) {
       case 'checkbox': {
         formObj[control.name] = !!data.get(control.name);
@@ -65,21 +68,20 @@ export default component$(() => {
   const navigate = useNavigate();
   const index = useSignal<undefined | number>(undefined)
   const item = useSignal<Item>();
-  const { stepKey } = location.params;
-  if (!(stepKey in stepsRecord)) return null;
-  const step = stepsRecord[stepKey as StepKey];
-
+  const { formKey } = location.params;
+  if (!(formKey in dynamicFormRecord)) return null;
+  const dynamicForm = dynamicFormRecord[formKey as DynamicFormKey];
 
   const itemPrice = useAsyncComputed$(({ track }) => {
     const next = track(item);
     if (!next) return Promise.resolve('');
-    const stepPrice = stepsRecord[next.stepKey].price?.(next);
-    return displayPrice(stepPrice);
+    const dynamicFormPrice = dynamicFormRecord[next.dynamicFormKey].price?.(next);
+    return displayPrice(dynamicFormPrice);
   });
 
   const controls = useComputed$(() => {
     const next = item.value;
-    const copy = structuredClone(step.controls);
+    const copy = structuredClone(dynamicForm.controls);
     for (const control of copy) {
       if (control.kind === 'radiogroup') {
         for (const option of control.options) {
@@ -129,13 +131,13 @@ export default component$(() => {
     if (!isValid) return;
     const submitter: HTMLButtonElement = event.submitter as HTMLButtonElement;
     const formData = new FormData(form);
-    const formObj = convertControls(formData, step);
-    const stepItem = { stepKey: stepKey as StepKey, data: formObj };
-    item.value = stepItem;
+    const formObj = convertControls(formData, dynamicForm);
+    const formItem = { dynamicFormKey: formKey as DynamicFormKey, data: formObj };
+    item.value = formItem;
     if (typeof index.value === 'string') {
-      cart.splice(Number(index), 1, stepItem);
+      cart.splice(Number(index), 1, formItem);
     } else {
-      cart.push(stepItem);
+      cart.push(formItem);
     }
     if (submitter.value === 'more') {
       history.back();
@@ -145,15 +147,15 @@ export default component$(() => {
   });
   const onInput = $(async (form: HTMLFormElement) => {
     const formData = new FormData(form);
-    const formObj = convertControls(formData, step);
-    const stepItem = { stepKey: stepKey as StepKey, data: formObj };
-    item.value = stepItem;
+    const formObj = convertControls(formData, dynamicForm);
+    const dynamicFormItem = { dynamicFormKey: formKey as DynamicFormKey, data: formObj };
+    item.value = dynamicFormItem;
   })
 
   return (
     <>
-      <main id="form" style={{ ['--transition-name']: `${stepKey}-background` }}>
-        <img src={`/imgs/simulator/${stepKey}.webp`} width="1344" height="756" style={{ viewTransitionName: `${stepKey}-img` }} />
+      <main id="form" style={{ ['--transition-name']: `${formKey}-background` }}>
+        <img src={`/imgs/simulator/${formKey}.webp`} width="1344" height="756" style={{ viewTransitionName: `${formKey}-img` }} />
         <div class="card-content">
           <header>
             <button onClick$={() => history.back()} aria-label="Retour à la liste sans enregistrer">
@@ -161,7 +163,7 @@ export default component$(() => {
                 <path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z" />
               </svg>
             </button>
-            <h1 style={{ viewTransitionName: `${stepKey}-title` }} >{step.label}</h1>
+            <h1 style={{ viewTransitionName: `${formKey}-title` }} >{dynamicForm.label}</h1>
             {itemPrice.value && <output form={id} aria-label="Prix total">{itemPrice.value}</output>
             }
           </header>
@@ -185,6 +187,6 @@ export default component$(() => {
 
 export const onStaticGenerate: StaticGenerateHandler = () => {
   return {
-    params: Object.keys(stepsRecord).map(stepKey => ({ stepKey })),
+    params: Object.keys(dynamicFormRecord).map(formKey => ({ formKey })),
   };
 };

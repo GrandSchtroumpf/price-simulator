@@ -19,11 +19,9 @@ export default component$(() => {
   return (
     <main id="simulator">
       <header>
-        <div>
-          <a href="/" aria-label="Accueil">
-            <Logo />
-          </a>
-        </div>
+        <a href="/" aria-label="Accueil">
+          <Logo />
+        </a>
         <hgroup>
           <h1>Estimation de devis</h1>
           <p>Il s'agit d'une estimation basé vos critères, une visite sera nécessaire pour créer un devis définitif</p>

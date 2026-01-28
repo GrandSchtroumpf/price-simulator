@@ -22,7 +22,7 @@ export default component$(() => {
       </hgroup>
       <nav aria-label="travaux à réaliser">
         {Object.entries(dynamicFormRecord).map(([key, form]) => (
-          <Link key={key} href={key} onClick$={setViewTransition} data-key={key}>
+          <Link key={key} href={`${key}/create`} onClick$={setViewTransition} data-key={key}>
             <div class="img-container">
               <img src={`/imgs/simulator/${key}.webp`} width="1344" height="756" />
             </div>

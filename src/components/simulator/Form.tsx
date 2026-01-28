@@ -1,13 +1,13 @@
 import { component$, $, useContext, useComputed$ } from "@qwik.dev/core";
 import { StaticGenerateHandler, useLocation, useNavigate } from "@qwik.dev/router";
 import type { DynamicForm, Item, DynamicFormKey, ControlTypes } from "~/types/simulator";
-import { dynamicFormRecord } from "../forms/index";
+import { dynamicFormRecord } from "~/routes/simulateur/forms";
 import { displayPrice } from "~/utils/price";
 import { isConditionValid } from "~/utils/conditions";
-import { DynamicControl } from "../../../components/controls";
-import { cartContext } from "../layout";
+import { DynamicControl } from "../controls";
+import { cartContext } from "~/routes/simulateur/layout";
 import { unwrapStore, useAsyncComputed$, useId, useSignal, useStyles$, useVisibleTask$ } from "@qwik.dev/core/internal";
-import styles from './index.css?inline';
+import styles from './Form.css?inline';
 
 const convertControls = (data: FormData, form: DynamicForm) => {
   const formObj: Record<string, any> = {};
@@ -117,10 +117,7 @@ export default component$(() => {
 
   useVisibleTask$(({ track }) => {
     track(location);
-    const editIndex = location.url.searchParams.get('index');
-    console.log("URL", location.url.href);
-    console.log("index", editIndex);
-    console.log("cart", cart);
+    const editIndex = location.params['index'];
     if (editIndex) {
       index.value = Number(editIndex);
       item.value = unwrapStore(cart[index.value]);
@@ -146,7 +143,7 @@ export default component$(() => {
     if (submitter.value === 'more') {
       history.back();
     } else {
-      navigate('../cart');
+      navigate('/simulateur/cart');
     }
   });
   const onInput = $(async (_: Event, form: HTMLFormElement) => {

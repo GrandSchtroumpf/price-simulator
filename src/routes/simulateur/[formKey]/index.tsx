@@ -121,6 +121,9 @@ export default component$(() => {
     if (editIndex) {
       index.value = Number(editIndex);
       item.value = unwrapStore(cart[index.value]);
+      console.log("URL", location.url.href);
+      console.log("index", editIndex);
+      console.log("cart", cart);
     } else {
       index.value = undefined;
     }

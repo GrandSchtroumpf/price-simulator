@@ -1,12 +1,12 @@
 import { component$, $, useContext, useComputed$ } from "@qwik.dev/core";
 import { StaticGenerateHandler, useLocation, useNavigate } from "@qwik.dev/router";
-import type { DynamicForm, Item, DynamicFormKey } from "~/types/simulator";
+import type { DynamicForm, Item, DynamicFormKey, ControlTypes } from "~/types/simulator";
 import { dynamicFormRecord } from "../forms/index";
 import { displayPrice } from "~/utils/price";
 import { isConditionValid } from "~/utils/conditions";
 import { DynamicControl } from "../../../components/controls";
 import { cartContext } from "../layout";
-import { useAsyncComputed$, useId, useSignal, useStyles$, useVisibleTask$ } from "@qwik.dev/core/internal";
+import { unwrapStore, useAsyncComputed$, useId, useSignal, useStyles$, useVisibleTask$ } from "@qwik.dev/core/internal";
 import styles from './index.css?inline';
 
 const convertControls = (data: FormData, form: DynamicForm) => {
@@ -38,26 +38,26 @@ const convertControls = (data: FormData, form: DynamicForm) => {
   return formObj;
 };
 
-// const writeControls = (editItem: Item, controls: ControlTypes[]) => {
-//   if (!editItem) return controls;
-//   for (const [key, value] of Object.entries(editItem.data)) {
-//     const control = controls.find(c => c.name === key);
-//     if (control?.kind === 'input') control.value = value as string;
-//     if (control?.kind === 'checkbox') control.checked = !!value; // TODO: verify
-//     if (control?.kind === 'checklist') {
-//       const values = value as string[];
-//       for (const option of control.options) {
-//         if (values.includes(option.value)) option.checked = true;
-//       }
-//     }
-//     if (control?.kind === 'radiogroup') {
-//       for (const option of control.options) {
-//         if (value === option.value) option.checked = true;
-//       }
-//     }
-//   }
-//   return controls;
-// };
+const writeControls = (editItem: Item, controls: ControlTypes[]) => {
+  if (!editItem) return controls;
+  for (const [key, value] of Object.entries(editItem.data)) {
+    const control = controls.find(c => c.name === key);
+    if (control?.kind === 'input') control.value = value as string;
+    if (control?.kind === 'checkbox') control.checked = !!value; // TODO: verify
+    if (control?.kind === 'checklist') {
+      const values = value as string[];
+      for (const option of control.options) {
+        if (values.includes(option.value)) option.checked = true;
+      }
+    }
+    if (control?.kind === 'radiogroup') {
+      for (const option of control.options) {
+        if (value === option.value) option.checked = true;
+      }
+    }
+  }
+  return controls;
+};
 
 
 export default component$(() => {
@@ -72,8 +72,10 @@ export default component$(() => {
   if (!(formKey in dynamicFormRecord)) return null;
   const dynamicForm = dynamicFormRecord[formKey as DynamicFormKey];
 
+
   const itemPrice = useAsyncComputed$(({ track }) => {
-    const next = track(item);
+    track(item);
+    const next = item.value;
     if (!next) return Promise.resolve('');
     const dynamicFormPrice = dynamicFormRecord[next.dynamicFormKey].price?.(next);
     return displayPrice(dynamicFormPrice);
@@ -107,22 +109,23 @@ export default component$(() => {
         control.disabled = !isConditionValid(next, control.dependsOn);
       }
     };
-    // if (typeof index.value === 'number') {
-    //   const editItem = cart[index.value];
-    //   const controls = writeControls(editItem, copy);
-    //   return controls;
-    // }
+    if (typeof index.value === 'number' && next) {
+      return writeControls(next, copy);
+    }
     return copy;
   });
 
-  useVisibleTask$(() => {
+  useVisibleTask$(({ track }) => {
+    track(location);
     const editIndex = location.url.searchParams.get('index');
     if (editIndex) {
       index.value = Number(editIndex);
+      item.value = unwrapStore(cart[index.value]);
     } else {
       index.value = undefined;
     }
   });
+
 
   const onSubmit = $((event: SubmitEvent, form: HTMLFormElement) => {
     const isValid = form.checkValidity();
@@ -132,7 +135,7 @@ export default component$(() => {
     const formObj = convertControls(formData, dynamicForm);
     const formItem = { dynamicFormKey: formKey as DynamicFormKey, data: formObj };
     item.value = formItem;
-    if (typeof index.value === 'string') {
+    if (typeof index.value === 'number') {
       cart.splice(Number(index), 1, formItem);
     } else {
       cart.push(formItem);
@@ -144,7 +147,6 @@ export default component$(() => {
     }
   });
   const onInput = $(async (_: Event, form: HTMLFormElement) => {
-    await Promise.resolve();
     const formData = new FormData(form);
     const formObj = convertControls(formData, dynamicForm);
     const dynamicFormItem = { dynamicFormKey: formKey as DynamicFormKey, data: formObj };

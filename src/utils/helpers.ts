@@ -1,7 +1,6 @@
-import { dynamicFormRecord } from "~/routes/simulateur/forms";
-import type { DynamicForm, InputNumber, InputTypes, Item } from "~/types/simulator";
+import type { DynamicForm, DynamicFormKey, InputNumber, InputTypes, Item } from "~/types/simulator";
 
-export const number = (p: Omit<InputNumber, 'kind' | 'type'>): InputNumber => ({
+export const inputNumber = (p: Omit<InputNumber, 'kind' | 'type'>): InputNumber => ({
   kind: 'input',
   type: 'number',
   ...p
@@ -49,7 +48,7 @@ export const parseDisplayValue = (value: InputTypes, labels: Record<string, stri
   return parsedValue;
 };
 
-export const mailto = (cart: Item[]) => {
+export const mailto = (cart: Item[], dynamicFormRecord: Record<DynamicFormKey, DynamicForm>) => {
   const list = [];
   for (const item of cart) {
     const { dynamicFormKey, data } = item;

@@ -1,10 +1,11 @@
 import { $ } from "@qwik.dev/core";
 import type { DynamicForm, Item } from "~/types/simulator";
 import { getPrice, writePriceData } from "~/utils/price";
+import { dynamicFormRecord } from ".";
 
 export const stairs: DynamicForm = {
   label: 'Escalier',
-  price: $((item: Item) => getPrice(item)),
+  price: $((item: Item) => getPrice(item, dynamicFormRecord)),
   controls: [
     {
       legend: "Contre marche",

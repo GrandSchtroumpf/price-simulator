@@ -99,7 +99,7 @@ export default component$(() => {
         <article id="final-estimation">
           <h2>Votre estimation est de {finalEstimation}</h2>
           <p>NB: Le prix affiché est un prix indicatif et ne constitue pas un devis ferme et définitif</p>
-          <a class="mailto" href={mailto(cart)}>Contacter Erwan Richard</a>
+          <a class="mailto" href={mailto(cart, dynamicFormRecord)}>Contacter Erwan Richard</a>
         </article>
       )}
     </main>

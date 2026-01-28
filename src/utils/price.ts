@@ -1,7 +1,6 @@
-import type { ControlTypes, InputTypes, Item, PriceData, Conditions, Range, DynamicForm } from "~/types/simulator";
+import type { ControlTypes, InputTypes, Item, PriceData, Conditions, Range, DynamicForm, DynamicFormKey } from "~/types/simulator";
 import { isConditionValid } from "./conditions";
 import { toArray } from "./helpers";
-import { dynamicFormRecord } from "../routes/simulateur/forms/index";
 
 const getPriceData = (control: ControlTypes, value: InputTypes) => {
   if (control.kind === "input" && control.type === 'number') {
@@ -29,7 +28,7 @@ const getPriceData = (control: ControlTypes, value: InputTypes) => {
   }
 };
 
-export const getPrice = (item: Item) => {
+export const getPrice = (item: Item, dynamicFormRecord: Record<DynamicFormKey, DynamicForm>) => {
   const form: DynamicForm = dynamicFormRecord[item.dynamicFormKey];
   const addition = { min: 0, max: 0 };
   const multiplier = { min: 1, max: 1 };

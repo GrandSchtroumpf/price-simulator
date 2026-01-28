@@ -1,13 +1,14 @@
 import type { DynamicForm, Item } from "~/types/simulator"
+import { dynamicFormRecord } from "."
 import { getPrice, writePriceData } from "~/utils/price"
-import { number } from "~/utils/helpers"
-import { $ } from "@qwik.dev/core"
+import { inputNumber } from "~/utils/helpers"
+import { $ } from "@qwik.dev/core";
 
 export const deck: DynamicForm = {
   label: "Terrasse",
-  price: $((item: Item) => getPrice(item)),
+  price: $((item: Item) => getPrice(item, dynamicFormRecord)),
   controls: [
-    number({
+    inputNumber({
       label: "Surface en m²",
       name: "surface",
       min: 1,

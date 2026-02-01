@@ -4,9 +4,9 @@ import { dynamicFormRecord } from "../forms/index";
 import { finalForm } from "../forms/finalForm"
 import { displayPrice } from "~/utils/price";
 import { DynamicControl } from "../../../components/controls";
-import styles from './index.css?inline';
 import { getDynamicFormLabelList, parseDisplayValue, mailto } from "~/utils/helpers";
 import { useLocation, useNavigate } from "@qwik.dev/router";
+import styles from './index.css?inline';
 
 
 export default component$(() => {
@@ -15,6 +15,15 @@ export default component$(() => {
   const navigate = useNavigate();
   const cart = useContext(cartContext);
   const finalEstimation = useSignal<string>('');
+
+  const back = $(() => {
+    const pathName = location.prevUrl?.pathname;
+    if (pathName?.endsWith('simulateur/')) {
+      history.back();
+    } else {
+      navigate('..');
+    }
+  });
 
   const onSubmit = $(async (form: HTMLFormElement) => {
     const isValid = form.checkValidity();
@@ -26,14 +35,7 @@ export default component$(() => {
   return (
     <main id="cart">
       <header>
-        <button onClick$={() => {
-          const pathName = location.prevUrl?.pathname;
-          if (pathName?.endsWith('simulateur/')) {
-            history.back();
-          } else {
-            navigate('..');
-          }
-        }} aria-label="Retour à la liste">
+        <button onClick$={back} aria-label="Retour à la liste">
           <svg width="24px" height="24px" viewBox="0 -960 960 960" fill="currentColor">
             <path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z" />
           </svg>

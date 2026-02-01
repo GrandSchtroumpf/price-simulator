@@ -2,6 +2,9 @@ import { component$, useStyles$ } from "@qwik.dev/core";
 import style from './Recommendation.css?inline';
 import scrollAnimation from './ScrollAnimation.css?raw';
 import Stars from "../stars/Stars";
+// @ts-expect-error see vite-imagetools doc: https://github.com/JonasKruckenberg/imagetools/blob/main/docs/_media/directives.md
+import profileMobile from '~/media/profile-mobile.webp?as=srcset';
+import ImgProfile from '~/media/profile-desktop.webp?jsx';
 
 export default component$(() => {
 	/** Remove when lightningcss > 1.30.2 */
@@ -13,7 +16,10 @@ export default component$(() => {
 			<h2>Avis clients</h2>
 
 			<div class="worker-img">
-				<img loading="lazy" src="/imgs/home/worker.webp" alt="Photographie de Erwan Richard travaillant le bois dans son atelier" />
+				<picture>
+					<source srcset={profileMobile} media="(width < 768px)" />
+					<ImgProfile alt="Photographie de Erwan Richard travaillant le bois dans son atelier" />
+				</picture>
 			</div>
 
 			<ul style="--index: 0">

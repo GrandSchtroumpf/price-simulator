@@ -18,7 +18,7 @@
     background-image: radial-gradient(transparent 20%, var(--color-accent) 90%);
     --opacity-in: 0;
     --opacity-out: 1;
-    animation: fade 1000ms 100ms backwards;
+    animation: fade 1000ms 200ms backwards;
   }
   &::after {
     z-index: -1;

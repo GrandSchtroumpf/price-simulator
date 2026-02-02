@@ -7,10 +7,10 @@ import Stars from "../stars/Stars";
 import profileMobile from '~/media/recommendations/profile-mobile.webp?as=srcset';
 import ImgProfile from '~/media/recommendations/profile-desktop.webp?jsx';
 import AvatarV from '~/media/recommendations/avatar-v.png?jsx';
-import AvatarN from '~/media/recommendations/avatar-N.png?jsx';
-import AvatarF from '~/media/recommendations/avatar-F.png?jsx';
-import AvatarG from '~/media/recommendations/avatar-G.png?jsx';
-import AvatarW from '~/media/recommendations/avatar-W.png?jsx';
+import AvatarN from '~/media/recommendations/avatar-n.png?jsx';
+import AvatarF from '~/media/recommendations/avatar-f.png?jsx';
+import AvatarG from '~/media/recommendations/avatar-g.png?jsx';
+import AvatarW from '~/media/recommendations/avatar-w.png?jsx';
 
 export default component$(() => {
 	/** Remove when lightningcss > 1.30.2 */

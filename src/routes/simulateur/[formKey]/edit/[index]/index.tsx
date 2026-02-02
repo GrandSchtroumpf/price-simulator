@@ -1,15 +1,20 @@
 import { component$ } from "@qwik.dev/core";
-import { StaticGenerateHandler } from "@qwik.dev/router";
 import Form from "~/components/simulator/Form";
-import { dynamicFormRecord } from "~/routes/simulateur/forms";
+import { routeLoader$ } from "@qwik.dev/router";
 
-export default component$(() => <Form />);
+export const useLoaderParams = routeLoader$(({ params }) => {
+  const index = Number(params.index);
+  const formKey = params.formKey;
 
-export const onStaticGenerate: StaticGenerateHandler = () => {
+  if (Number.isNaN(index) || !formKey) return null;
+
   return {
-    params: Object.keys(dynamicFormRecord).map(formKey => ({
-      formKey,
-      index: "0"
-    })),
+    index,
+    formKey,
   };
-};
+});
+
+export default component$(() => {
+  const params = useLoaderParams();
+  return <Form params={params} />
+});

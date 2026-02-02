@@ -1,5 +1,5 @@
 import { component$, $, useContext, useComputed$ } from "@qwik.dev/core";
-import { StaticGenerateHandler, useLocation, useNavigate } from "@qwik.dev/router";
+import { LoaderSignal, useLocation, useNavigate } from "@qwik.dev/router";
 import type { DynamicForm, Item, DynamicFormKey, ControlTypes } from "~/types/simulator";
 import { dynamicFormRecord } from "~/routes/simulateur/forms";
 import { displayPrice } from "~/utils/price";
@@ -59,16 +59,22 @@ const writeControls = (editItem: Item, controls: ControlTypes[]) => {
   return controls;
 };
 
+interface Props {
+  params?: LoaderSignal<{
+    index: number;
+    formKey: string;
+  } | null>
+}
 
-export default component$(() => {
+export default component$<Props>((props) => {
   useStyles$(styles);
   const id = useId();
   const cart = useContext(cartContext);
   const location = useLocation();
   const navigate = useNavigate();
-  const index = useSignal<undefined | number>(undefined)
+  const index = useSignal<undefined | number>(props.params?.value?.index)
   const item = useSignal<Item>();
-  const { formKey } = location.params;
+  const formKey = props.params?.value?.formKey || location.params['formKey'];
   if (!(formKey in dynamicFormRecord)) return null;
   const dynamicForm = dynamicFormRecord[formKey as DynamicFormKey];
 
@@ -114,15 +120,8 @@ export default component$(() => {
     return copy;
   });
 
-  useVisibleTask$(({ track }) => {
-    track(location);
-    const editIndex = location.params['index'];
-    if (editIndex) {
-      index.value = Number(editIndex);
-      item.value = unwrapStore(cart[index.value]);
-    } else {
-      index.value = undefined;
-    }
+  useVisibleTask$(() => {
+    if (typeof index.value === 'number') item.value = unwrapStore(cart[index.value]);
   });
 
 
@@ -154,7 +153,7 @@ export default component$(() => {
 
   return (
     <main id="form">
-      <img src={`/imgs/simulator/${formKey}.webp`} width="1344" height="756"/>
+      <img src={`/imgs/simulator/${formKey}.webp`} width="1344" height="756" />
       <div class="card-content">
         <header>
           <button onClick$={() => history.back()} aria-label="Retour à la liste sans enregistrer">
@@ -181,9 +180,3 @@ export default component$(() => {
     </main>
   )
 });
-
-export const onStaticGenerate: StaticGenerateHandler = () => {
-  return {
-    params: Object.keys(dynamicFormRecord).map(formKey => ({ formKey })),
-  };
-};

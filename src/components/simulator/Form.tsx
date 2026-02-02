@@ -65,13 +65,13 @@ export default component$(() => {
   const id = useId();
   const cart = useContext(cartContext);
   const location = useLocation();
+  console.log("In form", location, location.params);
   const navigate = useNavigate();
   const index = useSignal<undefined | number>(undefined)
   const item = useSignal<Item>();
   const { formKey } = location.params;
   if (!(formKey in dynamicFormRecord)) return null;
   const dynamicForm = dynamicFormRecord[formKey as DynamicFormKey];
-
 
   const itemPrice = useAsyncComputed$(({ track }) => {
     track(item);

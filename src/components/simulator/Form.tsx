@@ -1,12 +1,12 @@
 import { component$, $, useContext, useComputed$ } from "@qwik.dev/core";
-import { LoaderSignal, useLocation, useNavigate } from "@qwik.dev/router";
+import { useLocation, useNavigate } from "@qwik.dev/router";
 import type { DynamicForm, Item, DynamicFormKey, ControlTypes } from "~/types/simulator";
 import { dynamicFormRecord } from "~/routes/simulateur/forms";
 import { displayPrice } from "~/utils/price";
 import { isConditionValid } from "~/utils/conditions";
 import { DynamicControl } from "../controls";
 import { cartContext } from "~/routes/simulateur/layout";
-import { unwrapStore, useAsyncComputed$, useId, useSignal, useStyles$, useVisibleTask$ } from "@qwik.dev/core/internal";
+import { useAsyncComputed$, useId, useSignal, useStyles$, useVisibleTask$ } from "@qwik.dev/core/internal";
 import styles from './Form.css?inline';
 
 const convertControls = (data: FormData, form: DynamicForm) => {
@@ -59,22 +59,16 @@ const writeControls = (editItem: Item, controls: ControlTypes[]) => {
   return controls;
 };
 
-interface Props {
-  params?: LoaderSignal<{
-    index: number;
-    formKey: string;
-  } | null>
-}
 
-export default component$<Props>((props) => {
+export default component$(() => {
   useStyles$(styles);
   const id = useId();
   const cart = useContext(cartContext);
   const location = useLocation();
   const navigate = useNavigate();
-  const index = useSignal<undefined | number>(props.params?.value?.index)
+  const index = useSignal<undefined | number>(undefined)
   const item = useSignal<Item>();
-  const formKey = props.params?.value?.formKey || location.params['formKey'];
+  const formKey = location.params['formKey'];
   if (!(formKey in dynamicFormRecord)) return null;
   const dynamicForm = dynamicFormRecord[formKey as DynamicFormKey];
 
@@ -121,8 +115,12 @@ export default component$<Props>((props) => {
   });
 
   useVisibleTask$(() => {
-    if (typeof index.value === 'number') item.value = unwrapStore(cart[index.value]);
-  });
+    const editIndex = location.params['index'];
+    if (typeof editIndex === 'string') {
+      index.value = Number(editIndex);
+      item.value = cart[index.value];
+    }
+  })
 
 
   const onSubmit = $((event: SubmitEvent, form: HTMLFormElement) => {

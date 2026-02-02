@@ -41,7 +41,8 @@
       width: var(--thickness);
       position: relative;
       overflow: clip;
-      &::before, &::after {
+      &::before,
+      &::after {
         content: "";
         position: absolute;
         inset: 0;
@@ -54,7 +55,7 @@
         animation-name: transform;
         animation-duration: 1000ms;
         animation-delay: calc(var(--logo-duration) + 300ms);
-        animation-timing-function: (--ease-in-out); 
+        animation-timing-function: (--ease-in-out);
         animation-fill-mode: backwards;
       }
       &::after {
@@ -67,7 +68,7 @@
         animation-timeline: --scroll-indicator;
       }
     }
-    
+
     & .diamonds {
       width: var(--width);
       aspect-ratio: 1/1;
@@ -79,7 +80,8 @@
       animation-fill-mode: both;
       animation-timing-function: ease-out;
       animation-timeline: --scroll-indicator;
-      &::before, &::after {
+      &::before,
+      &::after {
         content: "";
         position: absolute;
         inset: 0;
@@ -88,7 +90,7 @@
         animation-name: transform, fade;
         animation-duration: 300ms;
         animation-delay: var(--logo-duration);
-        animation-timing-function: var(--ease-in-out); 
+        animation-timing-function: var(--ease-in-out);
         animation-fill-mode: backwards;
       }
       &::before {
@@ -98,7 +100,7 @@
       }
       &::after {
         transform: scale(0.5);
-        background-color: currentColor;
+        background-color: oklch(0.75 0.04 82);
         box-shadow: 0 0 3px 3px var(--color-accent);
         animation-delay: calc(var(--logo-duration) + 300ms);
         --transform-in: scale(0.2);

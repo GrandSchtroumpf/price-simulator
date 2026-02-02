@@ -26,7 +26,7 @@ export default component$(() => {
         <meta name="theme-color" content="#080501" media="(prefers-color-scheme: dark)" />
         <RouterHead />
       </head>
-      <body lang="en">
+      <body lang="fr">
         <RouterOutlet />
       </body>
     </QwikRouterProvider>

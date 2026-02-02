@@ -4,7 +4,6 @@ import Form from "~/components/simulator/Form";
 import { dynamicFormRecord } from "~/routes/simulateur/forms";
 
 export default component$(() => {
-  console.log("HOWDY")
   const { params } = useLocation();
   const index = Number(params.index);
   return <Form index={index} />;

@@ -16,9 +16,12 @@
   grid-template-areas: "stack";
   @media (width < 768px) {
     --padding: 8px;
-    --img-container-height: 70dvh;
     font-size: 0.8rem;
+    @media (orientation: portrait) {
+      --img-container-height: 70dvh;
+    }
   }
+  
 
   & > * {
     grid-area: stack;

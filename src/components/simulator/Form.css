@@ -29,8 +29,6 @@ body:has(#form) {
       background-color: var(--background);
       border-bottom-left-radius: var(--radius);
       border-bottom-right-radius: var(--radius);
-      view-transition-name: var(--transition-name);
-      view-transition-class: background;
     }
   }
   & img {
@@ -39,7 +37,6 @@ body:has(#form) {
     width: 100%;
     height: 300px;
     object-fit: cover;
-    view-transition-class: image;
   }
   & header {
     padding: 16px;
@@ -56,18 +53,11 @@ body:has(#form) {
       z-index: -1;
       inset: 0;
       background-color: var(--background);
-      view-transition-name: match-element;
-      view-transition-class: new-elements;
-    }
-    & svg {
-      view-transition-name: arrow;
-      view-transition-class: new-elements;
     }
   }
   & h1 {
     display: inline-block;
     font-size: 2rem;
-    view-transition-class: title;
     flex: 1;
   }
   &:has(form:invalid) output {
@@ -85,8 +75,6 @@ body:has(#form) {
     padding: 16px;
     border-bottom-left-radius: var(--radius);
     border-bottom-right-radius: var(--radius);
-    view-transition-name: form;
-    view-transition-class: new-elements;
   }
   & footer {
     display: flex;

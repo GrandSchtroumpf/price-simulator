@@ -153,35 +153,32 @@ export default component$(() => {
   })
 
   return (
-    <>
-      <main id="form" style={{ ['--transition-name']: `${formKey}-background` }}>
-        <img src={`/imgs/simulator/${formKey}.webp`} width="1344" height="756" style={{ viewTransitionName: `${formKey}-img` }} />
-        <div class="card-content">
-          <header>
-            <button onClick$={() => history.back()} aria-label="Retour à la liste sans enregistrer">
-              <svg width="24px" height="24px" viewBox="0 -960 960 960" fill="currentColor">
-                <path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z" />
-              </svg>
-            </button>
-            <h1 style={{ viewTransitionName: `${formKey}-title` }} >{dynamicForm.label}</h1>
-            {itemPrice.value && <output form={id} aria-label="Prix total">{itemPrice.value}</output>
-            }
-          </header>
-          <div class="step-price">
-            <p>Estimation : Remplissez les informations ci-dessous pour obtenir un prix indicatif</p>
-          </div>
-          <form id={id} preventdefault:submit onSubmit$={onSubmit} onChange$={onInput} onInput$={onInput}>
-            {controls.value.map((control) => {
-              return <DynamicControl key={control.name} control={control} />
-            })}
-            <footer>
-              <button name="redirect" value='more' type='submit'>Autres travaux</button>
-              <button name="redirect" value='finalise' type='submit'>Voir devis</button>
-            </footer>
-          </form>
+    <main id="form">
+      <img src={`/imgs/simulator/${formKey}.webp`} width="1344" height="756"/>
+      <div class="card-content">
+        <header>
+          <button onClick$={() => history.back()} aria-label="Retour à la liste sans enregistrer">
+            <svg width="24px" height="24px" viewBox="0 -960 960 960" fill="currentColor">
+              <path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z" />
+            </svg>
+          </button>
+          <h1>{dynamicForm.label}</h1>
+          {itemPrice.value && <output form={id} aria-label="Prix total">{itemPrice.value}</output>}
+        </header>
+        <div class="step-price">
+          <p>Estimation : Remplissez les informations ci-dessous pour obtenir un prix indicatif</p>
         </div>
-      </main>
-    </>
+        <form id={id} preventdefault:submit onSubmit$={onSubmit} onChange$={onInput} onInput$={onInput}>
+          {controls.value.map((control) => {
+            return <DynamicControl key={control.name} control={control} />
+          })}
+          <footer>
+            <button name="redirect" value='more' type='submit'>Autres travaux</button>
+            <button name="redirect" value='finalise' type='submit'>Voir devis</button>
+          </footer>
+        </form>
+      </div>
+    </main>
   )
 });
 

@@ -1,4 +1,4 @@
-import { sync$, component$, useContext, useStyles$ } from "@qwik.dev/core";
+import { component$, useContext, useStyles$ } from "@qwik.dev/core";
 import { DocumentHead, Link } from "@qwik.dev/router";
 import { dynamicFormRecord } from "./forms/index";
 import { cartContext } from "./layout";
@@ -8,11 +8,6 @@ export default component$(() => {
   useStyles$(styles);
   const cart = useContext(cartContext);
 
-  const setViewTransition = sync$((e: Event, el: HTMLAnchorElement) => {
-    el.style.setProperty('--transition-background', `${el.dataset.key}-background`);
-    el.style.setProperty('--transition-img', `${el.dataset.key}-img`);
-    el.style.setProperty('--transition-title', `${el.dataset.key}-title`);
-  })
 
   return (
     <main id="simulator">
@@ -22,7 +17,7 @@ export default component$(() => {
       </hgroup>
       <nav aria-label="travaux à réaliser">
         {Object.entries(dynamicFormRecord).map(([key, form]) => (
-          <Link key={key} href={`${key}/create`} onClick$={setViewTransition} data-key={key}>
+          <Link key={key} href={`${key}/create`} data-key={key}>
             <div class="img-container">
               <img src={`/imgs/simulator/${key}.webp`} width="1344" height="756" />
             </div>

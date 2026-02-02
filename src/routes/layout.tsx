@@ -6,7 +6,7 @@ export default component$(() => {
   useOnDocument('qidle', $(async () => {
     if ("serviceWorker" in navigator) {
       try {
-        const registration = await navigator.serviceWorker.register(swUrl, { scope: '/assets/' });
+        const registration = await navigator.serviceWorker.register(swUrl, { scope: '/', type: 'module' });
         if (registration.installing) {
           console.log("Service worker installing");
         } else if (registration.waiting) {

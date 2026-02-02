@@ -23,6 +23,16 @@ export default defineConfig(({ command, mode }): UserConfig => {
   return {
     build: {
       cssMinify: 'lightningcss',
+      rollupOptions: {
+        output: {
+          assetFileNames: (assetInfo) => {
+            if (assetInfo.names[0] === 'service-worker.js') {
+              return '[name]-[hash][extname]';
+            }
+            return 'assets/[name]-[hash][extname]';
+          }
+        }
+      },
     },
     plugins: [
       qwikRouter(),

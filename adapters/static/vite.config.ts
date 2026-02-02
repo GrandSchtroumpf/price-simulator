@@ -13,7 +13,7 @@ export default extendConfig(baseConfig, () => {
     plugins: [
       ssgAdapter({
         origin: "https://price-simulator-orpin.vercel.app/",
-        exclude: ["https://price-simulator-orpin.vercel.app/*/edit/*"]
+        exclude: ["/simulateur/*/edit/*"]
       }),
     ],
   };

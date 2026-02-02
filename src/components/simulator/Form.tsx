@@ -9,6 +9,10 @@ import { cartContext } from "~/routes/simulateur/layout";
 import { unwrapStore, useAsyncComputed$, useId, useSignal, useStyles$, useVisibleTask$ } from "@qwik.dev/core/internal";
 import styles from './Form.css?inline';
 
+interface FormProps {
+  index?: number;
+}
+
 const convertControls = (data: FormData, form: DynamicForm) => {
   const formObj: Record<string, any> = {};
   for (const control of form.controls) {
@@ -60,14 +64,14 @@ const writeControls = (editItem: Item, controls: ControlTypes[]) => {
 };
 
 
-export default component$(() => {
+export default component$<FormProps>((props) => {
   useStyles$(styles);
   const id = useId();
   const cart = useContext(cartContext);
   const location = useLocation();
-  console.log("In form", location, location.params);
   const navigate = useNavigate();
-  const index = useSignal<undefined | number>(undefined)
+  const index = useSignal(props.index);
+  console.log("this is index", index.value)
   const item = useSignal<Item>();
   const { formKey } = location.params;
   if (!(formKey in dynamicFormRecord)) return null;
@@ -115,15 +119,8 @@ export default component$(() => {
     return copy;
   });
 
-  useVisibleTask$(({ track }) => {
-    track(location);
-    const editIndex = location.params['index'];
-    if (editIndex) {
-      index.value = Number(editIndex);
-      item.value = unwrapStore(cart[index.value]);
-    } else {
-      index.value = undefined;
-    }
+  useVisibleTask$(() => {
+    if (typeof index.value === 'number') item.value = unwrapStore(cart[index.value]);
   });
 
 

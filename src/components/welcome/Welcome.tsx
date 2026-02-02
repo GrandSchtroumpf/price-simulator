@@ -9,8 +9,6 @@ export const Welcome = component$(() => {
 
   return (
     <section id="welcome">
-      {/*eslint-disable-next-line qwik/jsx-img*/}
-      {/* <img src="/imgs/wood-board.svg" class="wood-board" aria-hidden="true" alt="Planche de bois" fetchPriority="high" /> */}
       <div class="calling-card">
         <AnimatedLogo />
         <hgroup>

@@ -18,12 +18,13 @@
     background-image: radial-gradient(transparent 20%, var(--color-accent) 90%);
     --opacity-in: 0;
     --opacity-out: 1;
-    animation: fade 1000ms 200ms backwards;
+    animation: fade 1000ms 100ms backwards;
   }
   &::after {
     z-index: -1;
     background-color: var(--color-surface-0);
-    mask-image: url('backgrounds/dots.svg');
+    /* Use base64 to avoid network call */
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Crect x='0' y='0' width='100%25' height='100%25' fill='white' /%3E%3Ccircle cx='20' cy='20' r='1' /%3E%3C/svg%3E");
     mask-mode: luminance;
   }
 

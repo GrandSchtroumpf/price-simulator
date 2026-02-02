@@ -1,5 +1,6 @@
 import { component$, useStyles$ } from "@qwik.dev/core";
 import style from './Footer.css?inline';
+import { Logo } from "../logo/Logo";
 
 export default component$(() => {
 	useStyles$(style);
@@ -7,12 +8,7 @@ export default component$(() => {
 		<footer class="main-footer">
 			<section class="footer-top">
 				<figure>
-					<img
-						src="/favicon.svg"
-						width="80"
-						height="80"
-						alt="Représentation d'un blason contenant deux marteaux"
-					/>
+					<Logo width="80" height="80"/>
 					<figcaption>Erwan RICHARD Menuisier</figcaption>
 				</figure>
 

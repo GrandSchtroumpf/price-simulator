@@ -1,75 +1,80 @@
 const CACHE_NAME = 'v1';
 
-// 1. INSTALL: Cache the root document immediately
 self.addEventListener('install', (event) => {
+  // Cache the root page immediately
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      // Assuming '/' is your main entry point. 
-      // If your app is at '/app/', change this string.
-      return cache.add('/');
-    })
+    caches.open(CACHE_NAME).then(cache => cache.add('/'))
   );
   self.skipWaiting();
 });
 
-// 2. ACTIVATE: Enable Navigation Preload
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     (async () => {
-      // Check if navigationPreload is supported
       if (self.registration.navigationPreload) {
         await self.registration.navigationPreload.enable();
       }
-      // Delete old caches if needed here
       await self.clients.claim();
     })()
   );
 });
 
-// 3. FETCH: The Strategy
 self.addEventListener('fetch', (event) => {
-  // We only care about Navigation requests (HTML documents)
   if (event.request.mode === 'navigate') {
     event.respondWith(
       (async () => {
         try {
-          // A. Try Navigation Preload first (Fastest & Fresh)
-          // This promise resolves if the browser already started fetching
-          const preloadResponse = await event.preloadResponse;
-          if (preloadResponse) {
-            // It's fresh, so we update the cache and return it
-            const cache = await caches.open(CACHE_NAME);
-            cache.put(event.request, preloadResponse.clone());
-            return preloadResponse;
-          }
+          // 1. Try to find the page in the cache first
+          const cachedResponse = await caches.match(event.request);
 
-          // B. Try the Cache (Fast but potentially stale)
-          const cache = await caches.open(CACHE_NAME);
-          const cachedResponse = await cache.match(event.request);
+          // 2. Define the network logic (Preload OR Fetch)
+          // We wrap this in a function so we can call it later safely
+          const getNetworkResponse = async () => {
+            // A. Use Preload if available
+            const preloadResponse = await event.preloadResponse;
+            if (preloadResponse) {
+              return preloadResponse;
+            }
+            // B. Otherwise, fetch from network
+            return fetch(event.request);
+          };
 
-          // Prepare the network fetch to update the cache in the background
-          const networkFetch = fetch(event.request).then((networkRes) => {
-            const clone = networkRes.clone();
-            cache.put(event.request, clone);
-            return networkRes;
-          });
-
+          // 3. CASE A: We have the document in cache (Offline or Fast Load)
           if (cachedResponse) {
-            // If we have a cache, return it immediately.
-            // We attach a catch() here so the background failure doesn't log a scary red error.
+            // Return the cached page IMMEDIATELY
+            
+            // KICK OFF BACKGROUND UPDATE:
+            // We use event.waitUntil to keep the SW alive, but we attach a .catch()
+            // so if it fails (offline), it doesn't break the page load.
             event.waitUntil(
-              networkFetch.catch(() => console.log('Background update failed (offline)')) 
+              (async () => {
+                try {
+                  const networkResponse = await getNetworkResponse();
+                  // Only update cache if we got a valid 200 response
+                  if (networkResponse && networkResponse.status === 200) {
+                    const cache = await caches.open(CACHE_NAME);
+                    await cache.put(event.request, networkResponse.clone());
+                  }
+                } catch {
+                   // Squelch the error here. We are offline, but the user 
+                   // got the cached page, so this error doesn't matter.
+                   console.log('Background update failed (offline mode)');
+                }
+              })()
             );
+
             return cachedResponse;
           }
 
-          // C. Network Fallback (Slowest)
-          // If no preload and no cache, wait for the network
-          return await networkFetch;
-          
+          // 4. CASE B: No cache found (First visit) -> Go to network
+          const networkResponse = await getNetworkResponse();
+          const cache = await caches.open(CACHE_NAME);
+          cache.put(event.request, networkResponse.clone());
+          return networkResponse;
+
         } catch (error) {
-          console.error('Fetch failed:', error);
-          // Optional: Return an offline.html here
+          console.error('Fetch failed completely:', error);
+          // Optional: Return a dedicated offline.html fallback here if you have one
         }
       })()
     );

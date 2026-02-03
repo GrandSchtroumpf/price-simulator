@@ -19,10 +19,10 @@ export default component$(() => {
 					<figcaption>Terrasse et garde corps</figcaption>
 					<Img1 alt="Ouvrage de menuiserie" height="300" />
 				</figure>
-				<p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Pariatur unde architecto ducimus in sapiente deserunt obcaecati voluptate, quas saepe placeat cum id soluta iusto et officiis, esse reprehenderit ipsum earum. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Commodi, amet natus vel labore laboriosam et officia, maxime repellat numquam temporibus facere dolores voluptatem deleniti dolore quis! Odit facere culpa illo!</p>
+				<p>Menuisier passionné, je conçois et réalise des terrasses en bois sur mesure, adaptées à votre espace et à vos usages. J'y associe des garde-corps sécurisés et esthétiques, pensés pour durer dans le temps, tout en valorisant l'architecture de votre extérieur.</p>
 			</div>
 			<div class="slot" style="--index:2">
-				<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus vitae officiis voluptate error molestias, quia harum atque a quibusdam quae odio, quidem saepe obcaecati accusamus perferendis minus molestiae commodi tenetur. Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor in illo sed obcaecati excepturi modi sequi, architecto voluptatem numquam molestias dolores esse, debitis nulla nam, similique consequatur amet incidunt iusto.</p>
+				<p>Je réalise des ouvrages de soutènement en bois et des structures de charpente robustes, adaptés aux contraintes du terrain. Chaque projet est conçu pour garantir stabilité, longévité et intégration naturelle, tout en respectant les règles de construction et le savoir-faire artisanal.</p>
 				<figure>
 					<figcaption>Soutènement bois</figcaption>
 					<Img2 alt="Ouvrage de menuiserie" height="300" />
@@ -33,10 +33,10 @@ export default component$(() => {
 					<figcaption>Brise vue</figcaption>
 					<Img3 alt="Ouvrage de menuiserie" height="300" />
 				</figure>
-				<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus vitae officiis voluptate error molestias, quia harum atque a quibusdam quae odio, quidem saepe obcaecati accusamus perferendis minus molestiae commodi tenetur. Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor in illo sed obcaecati excepturi modi sequi, architecto voluptatem numquam molestias dolores esse, debitis nulla nam, similique consequatur amet incidunt iusto.</p>
+				<p>Je crée des brise-vue en bois sur mesure, du muret jusqu'au plafond, en prenant en compte des matériaux adaptés à vos budgets. Chaque réalisation s'adapte à votre espace, joue avec les lignes et les essences, et apporte une touche chaleureuse et contemporaine à votre habitat.</p>
 			</div>
 			<div class="slot" style="--index:4">
-				<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus vitae officiis voluptate error molestias, quia harum atque a quibusdam quae odio, quidem saepe obcaecati accusamus perferendis minus molestiae commodi tenetur. Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor in illo sed obcaecati excepturi modi sequi, architecto voluptatem numquam molestias dolores esse, debitis nulla nam, similique consequatur amet incidunt iusto.</p>
+				<p>Je conçois des terrasses et bardages en bois qui structurent et embellissent votre maison. Ces réalisations associent esthétique, protection et durabilité, tout en mettant en valeur les volumes existants et le caractère naturel du bois, travaillé avec précision et exigence.</p>
 				<figure>
 					<figcaption>Terrasse et bardage</figcaption>
 					<Img4 alt="Ouvrage de menuiserie" height="300" />
@@ -47,7 +47,7 @@ export default component$(() => {
 					<figcaption>Portail principal</figcaption>
 					<Img5 alt="Ouvrage de menuiserie" height="300" />
 				</figure>
-				<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus vitae officiis voluptate error molestias, quia harum atque a quibusdam quae odio, quidem saepe obcaecati accusamus perferendis minus molestiae commodi tenetur. Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor in illo sed obcaecati excepturi modi sequi, architecto voluptatem numquam molestias dolores esse, debitis nulla nam, similique consequatur amet incidunt iusto.</p>
+				<p>Je fabrique des portails principaux en bois à coupe naturelle, alliant caractère authentique et robustesse. Chaque pièce est unique, respectant le veinage et la matière, pour offrir une entrée forte en identité, durable et parfaitement intégrée à son environnement.</p>
 			</div>
 		</section>
 	)

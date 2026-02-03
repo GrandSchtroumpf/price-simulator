@@ -6,7 +6,7 @@ import { displayPrice } from "~/utils/price";
 import { isConditionValid } from "~/utils/conditions";
 import { DynamicControl } from "~/components/controls";
 import { cartContext } from "~/routes/simulateur/layout";
-import { unwrapStore, useAsyncComputed$, useId, useSignal, useStyles$, useVisibleTask$ } from "@qwik.dev/core/internal";
+import { useAsyncComputed$, useId, useSignal, useStyles$, useVisibleTask$ } from "@qwik.dev/core/internal";
 import styles from './index.css?inline';
 
 const convertControls = (data: FormData, form: DynamicForm) => {
@@ -63,7 +63,7 @@ const writeControls = (editItem: Item, controls: ControlTypes[]) => {
 export default component$(() => {
   useStyles$(styles);
   const id = useId();
-  const cart = useContext(cartContext);
+  const { cart, editIndex } = useContext(cartContext);
   const location = useLocation();
   const navigate = useNavigate();
   const index = useSignal<undefined | number>(undefined)
@@ -115,8 +115,7 @@ export default component$(() => {
   });
 
   useVisibleTask$(() => {
-    const editIndex = location.url.searchParams.get('index');
-    console.log(editIndex, location, location.params, cart, unwrapStore(cart));
+    console.log(location, location.params)
     if (typeof editIndex === 'string') {
       index.value = Number(editIndex);
       item.value = cart[index.value];

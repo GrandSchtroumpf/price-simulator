@@ -8,7 +8,7 @@ import { Logo } from "~/components/logo/Logo";
 
 export default component$(() => {
   useStyles$(styles);
-  const cart = useContext(cartContext);
+  const { cart } = useContext(cartContext);
 
 
   return (

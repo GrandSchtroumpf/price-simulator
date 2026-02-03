@@ -1,15 +1,20 @@
 import { component$, createContextId, Slot, useContextProvider, useStore, useVisibleTask$ } from "@qwik.dev/core";
-import { unwrapStore, useStyles$ } from "@qwik.dev/core/internal";
+import { unwrapStore, useSignal, useStyles$, Signal } from "@qwik.dev/core/internal";
 import { Item } from "~/types/simulator";
 import styles from './layout.css?inline';
 
+interface CartContext {
+  cart: Item[];
+  editIndex: Signal<number | undefined>;
+}
 
-export const cartContext = createContextId<Item[]>('cart');
+export const cartContext = createContextId<CartContext>('cart');
 
 export default component$(() => {
   useStyles$(styles);
   const cart = useStore<Item[]>([]);
-  useContextProvider(cartContext, cart);
+  const editIndex = useSignal<number>();
+  useContextProvider(cartContext, { cart, editIndex });
 
   useVisibleTask$(() => {
     const storedItem = localStorage.getItem('cart');

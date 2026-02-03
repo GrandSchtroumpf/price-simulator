@@ -114,13 +114,15 @@ export default component$(() => {
     return copy;
   });
 
-  useVisibleTask$(({ track }) => {
+  useVisibleTask$(({ track, cleanup }) => {
     track(editIndex);
-    console.log(location, location.url.searchParams, window.location)
     if (typeof editIndex.value === 'number') {
       index.value = editIndex.value;
       item.value = cart[editIndex.value];
     }
+    cleanup(() => {
+      editIndex.value = undefined;
+    })
   })
 
 

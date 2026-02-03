@@ -25,7 +25,11 @@ export default component$(() => {
     }
   });
 
-  const editItem = $((dynamicFormKey: string, i: number) => navigate(`/simulateur/${dynamicFormKey}?index=${i}`));
+  const editItem = $((dynamicFormKey: string, i: number) => {
+    if (!dynamicFormKey) return;
+    navigate(`/simulateur/${dynamicFormKey}?index=${i}`);
+  }
+  );
 
   const onSubmit = $(async (form: HTMLFormElement) => {
     const isValid = form.checkValidity();

@@ -41,7 +41,8 @@
       width: var(--thickness);
       position: relative;
       overflow: clip;
-      &::before, &::after {
+      &::before,
+      &::after {
         content: "";
         position: absolute;
         inset: 0;
@@ -54,7 +55,7 @@
         animation-name: transform;
         animation-duration: 1000ms;
         animation-delay: calc(var(--logo-duration) + 300ms);
-        animation-timing-function: (--ease-in-out); 
+        animation-timing-function: (--ease-in-out);
         animation-fill-mode: backwards;
       }
       &::after {
@@ -67,7 +68,7 @@
         animation-timeline: --scroll-indicator;
       }
     }
-    
+
     & .diamonds {
       width: var(--width);
       aspect-ratio: 1/1;
@@ -79,7 +80,8 @@
       animation-fill-mode: both;
       animation-timing-function: ease-out;
       animation-timeline: --scroll-indicator;
-      &::before, &::after {
+      &::before,
+      &::after {
         content: "";
         position: absolute;
         inset: 0;
@@ -88,7 +90,7 @@
         animation-name: transform, fade;
         animation-duration: 300ms;
         animation-delay: var(--logo-duration);
-        animation-timing-function: var(--ease-in-out); 
+        animation-timing-function: var(--ease-in-out);
         animation-fill-mode: backwards;
       }
       &::before {
@@ -98,7 +100,9 @@
       }
       &::after {
         transform: scale(0.5);
-        background-color: currentColor;
+        background-color: oklch(
+          var(--lightness-secondary) var(--neutral-chroma) var(--hue)
+        );
         box-shadow: 0 0 3px 3px var(--color-accent);
         animation-delay: calc(var(--logo-duration) + 300ms);
         --transform-in: scale(0.2);
@@ -106,61 +110,74 @@
       }
     }
   }
-
-  & figure {
+  .slot {
     display: grid;
-    grid-template-columns: 1fr min-content;
-    margin: 0;
-    width: 100%;
-    max-width: 450px;
+    grid-template-columns: 1fr 1fr;
     @supports (animation-timeline: view()) {
       --transform-in: translateY(calc(150px - var(--index) * 20px));
       --transform-out: translateY(calc(-150px + var(--index) * 20px));
       animation-name: transform;
       animation-timeline: view();
     }
-  }
-
-  & figure:nth-child(odd) {
-    justify-self: start;
-  }
-
-  & figure:nth-child(even) {
-    justify-self: end;
-  }
-
-  & figcaption {
-    font-size: 2rem;
-    display: flex;
-    align-items: center;
-  }
-
-  & figure:nth-child(even) figcaption {
-    flex-direction: row-reverse;
-  }
-
-  & figcaption::after {
-    content: "";
-    flex-grow: 1;
-    height: 2px;
-    background-color: currentColor;
-    margin-left: 10px;
-  }
-
-  & figure:nth-child(even) figcaption::after {
-    margin: 0 10px 0 0;
-  }
-
-  & img {
-    grid-column: 1 / 3;
-    width: 100%;
-    height: 300px;
-    object-fit: cover;
-    border-top-left-radius: 2rem;
-  }
-  @media (width < 768px) {
+    & figure {
+      display: grid;
+      grid-template-columns: 1fr min-content;
+      margin: 0;
+      width: 100%;
+      max-width: 450px;
+    }
+    & figure:nth-child(odd) {
+      justify-self: start;
+    }
+    & figure:nth-child(even) {
+      justify-self: end;
+    }
     & figcaption {
-      font-size: 1.4rem;
+      font-size: 2rem;
+      display: flex;
+      align-items: center;
+    }
+    & figure:nth-child(even) figcaption {
+      flex-direction: row-reverse;
+    }
+    & figcaption::after {
+      content: "";
+      flex-grow: 1;
+      height: 2px;
+      background-color: currentColor;
+      margin-left: 10px;
+    }
+    & figure:nth-child(even) figcaption::after {
+      margin: 0 10px 0 0;
+    }
+    & img {
+      grid-column: 1 / 3;
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+      border-top-left-radius: 2rem;
+    }
+    & p {
+      font-size: 1.5rem;
+      text-align: justify;
+      padding-top: 40px;
+    }
+    &:nth-child(odd) p {
+      padding-right: 48px;
+    }
+    &:nth-child(even) p {
+      padding-left: 48px;
+    }
+  }
+
+  @media (width < 768px) {
+    & .slot {
+      grid-template-columns: 1fr;
+      justify-items: center;
+    }
+
+    & p {
+      display: none;
     }
   }
 }

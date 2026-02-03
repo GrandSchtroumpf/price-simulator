@@ -4,10 +4,10 @@ import type { DynamicForm, Item, DynamicFormKey, ControlTypes } from "~/types/si
 import { dynamicFormRecord } from "~/routes/simulateur/forms";
 import { displayPrice } from "~/utils/price";
 import { isConditionValid } from "~/utils/conditions";
-import { DynamicControl } from "../controls";
+import { DynamicControl } from "~/components/controls";
 import { cartContext } from "~/routes/simulateur/layout";
 import { useAsyncComputed$, useId, useSignal, useStyles$, useVisibleTask$ } from "@qwik.dev/core/internal";
-import styles from './Form.css?inline';
+import styles from './index.css?inline';
 
 const convertControls = (data: FormData, form: DynamicForm) => {
   const formObj: Record<string, any> = {};
@@ -115,7 +115,7 @@ export default component$(() => {
   });
 
   useVisibleTask$(() => {
-    const editIndex = location.params['index'];
+    const editIndex = location.url.searchParams.get('index');
     if (typeof editIndex === 'string') {
       index.value = Number(editIndex);
       item.value = cart[index.value];

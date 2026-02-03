@@ -146,7 +146,6 @@ export const floor: DynamicForm = {
       legend: "Options",
       name: "options",
       kind: "checklist",
-      required: true,
       options: [
         {
           label: "Plinthe MDF",

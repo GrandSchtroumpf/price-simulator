@@ -55,8 +55,10 @@ export interface Input extends Control<'input'> {
 
 export interface CheckBox extends Control<'checkbox'> {
   label: string;
+  value: string;
   required?: boolean;
   checked?: boolean;
+  disabled?: boolean;
   priceData?: PriceData | PriceData[];
   dependsOn?: Conditions;
 }
@@ -83,6 +85,7 @@ export interface CheckList extends Control<'checklist'> {
     label: string;
     value: string;
     checked?: boolean;
+    required?: boolean;
     priceData?: PriceData | PriceData[];
     dependsOn?: Conditions;
     disabled?: boolean;

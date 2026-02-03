@@ -9,10 +9,9 @@ interface CheckListProps {
 export default component$<CheckListProps>(({ control }) => {
   useStyles$(styles)
   if (control.kind !== 'checkbox') return null;
-
   return (
     <div class="checkbox">
-      <input type="checkbox" id={control.name} name={control.name} checked={control.checked} required={control.required}/>
+      <input type="checkbox" id={control.name} name={control.name} value={control.value} checked={control.checked} required={control.required} disabled={control.disabled} />
       <label for={control.name}>
         <div class="svg-container">
           <svg width="20" height="20" focusable="false" viewBox="0 0 24 24" aria-hidden="true">

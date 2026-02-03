@@ -3,6 +3,8 @@ import { DocumentHead, Link } from "@qwik.dev/router";
 import { dynamicFormRecord } from "./forms/index";
 import { cartContext } from "./layout";
 import styles from "./index.css?inline";
+import { Logo } from "~/components/logo/Logo";
+
 
 export default component$(() => {
   useStyles$(styles);
@@ -11,10 +13,15 @@ export default component$(() => {
 
   return (
     <main id="simulator">
-      <hgroup>
-        <h1>Estimation de devis</h1>
-        <p>Il s'agit d'une estimation basé vos critères, une visite sera nécessaire pour créer un devis définitif</p>
-      </hgroup>
+      <header>
+        <a href="/" aria-label="Accueil">
+          <Logo />
+        </a>
+        <hgroup>
+          <h1>Estimation de devis</h1>
+          <p>Il s'agit d'une estimation basé vos critères, une visite sera nécessaire pour créer un devis définitif</p>
+        </hgroup>
+      </header>
       <nav aria-label="travaux à réaliser">
         {Object.entries(dynamicFormRecord).map(([key, form]) => (
           <Link key={key} href={`${key}`} data-key={key}>

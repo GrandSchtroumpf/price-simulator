@@ -180,6 +180,6 @@ export default component$(() => {
   )
 });
 
-// export const onStaticGenerate = async () => ({
-//   params: Object.keys(dynamicFormRecord).map((formKey) => ({ formKey })),
-// });
+export const onStaticGenerate = async () => ({
+  params: Object.keys(dynamicFormRecord).map((formKey) => ({ formKey })),
+});

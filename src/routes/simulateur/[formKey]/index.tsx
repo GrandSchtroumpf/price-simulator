@@ -115,7 +115,7 @@ export default component$(() => {
   });
 
   useVisibleTask$(() => {
-    const editIndex = location.params['index'];
+    const editIndex = location.url.searchParams.get('index');
     if (typeof editIndex === 'string') {
       index.value = Number(editIndex);
       item.value = cart[index.value];

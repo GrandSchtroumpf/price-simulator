@@ -162,7 +162,10 @@ export default component$(() => {
               <path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z" />
             </svg>
           </button>
-          <h1>{dynamicForm.label}</h1>
+          <hgroup>
+            <h1>{dynamicForm.label}</h1>
+            <p>{dynamicForm.subTitle}</p>
+          </hgroup>
           {itemPrice.value && <output form={id} aria-label="Prix total">{itemPrice.value}</output>}
         </header>
         <div class="step-price">

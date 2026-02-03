@@ -114,11 +114,12 @@ export default component$(() => {
     return copy;
   });
 
-  useVisibleTask$(() => {
-    console.log(location, location.params)
-    if (typeof editIndex === 'string') {
-      index.value = Number(editIndex);
-      item.value = cart[index.value];
+  useVisibleTask$(({ track }) => {
+    track(editIndex);
+    console.log(location, location.url.searchParams, window.location)
+    if (typeof editIndex.value === 'number') {
+      index.value = editIndex.value;
+      item.value = cart[editIndex.value];
     }
   })
 
@@ -179,6 +180,6 @@ export default component$(() => {
   )
 });
 
-export const onStaticGenerate = async () => ({
-  params: Object.keys(dynamicFormRecord).map((formKey) => ({ formKey })),
-});
+// export const onStaticGenerate = async () => ({
+//   params: Object.keys(dynamicFormRecord).map((formKey) => ({ formKey })),
+// });

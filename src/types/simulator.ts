@@ -21,6 +21,7 @@ export interface Item {
 export interface DynamicForm {
   controls: ControlTypes[];
   label: string;
+  subTitle?: string;
   price?: QRL<(cart: Item) => Range>;
 };
 

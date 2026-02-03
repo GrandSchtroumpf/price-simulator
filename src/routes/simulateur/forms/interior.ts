@@ -6,6 +6,7 @@ import { dynamicFormRecord } from ".";
 
 export const interior: DynamicForm = {
   label: "Aménagement intérieur",
+  subTitle: "Aménagement et isolation d'une pièce",
   price: $((item: Item) => getPrice(item, dynamicFormRecord)),
   controls: [
     inputNumber({

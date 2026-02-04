@@ -2,7 +2,7 @@
   --spacing: 0.0625rem; /* 1/16rem -> 1px */
   --font-sans: Josefin Sans, sans-serif;
   --color-accent: oklch(
-    var(--lightness-secondary) var(--accent-chroma) var(--hue)
+    var(--lightness-accent) var(--accent-chroma) var(--hue)
   );
   --color-on-accent: oklch(20% var(--accent-chroma) var(--hue));
   --color-secondary: oklch(
@@ -16,6 +16,9 @@
   --color-surface-2: oklch(var(--lightness-2) var(--neutral-chroma) var(--hue));
   --color-surface-3: oklch(var(--lightness-3) var(--neutral-chroma) var(--hue));
   --color-surface-4: oklch(var(--lightness-4) var(--neutral-chroma) var(--hue));
+  --color-surface-5: oklch(
+    var(--lightness-secondary) var(--accent-chroma) var(--hue)
+  );
   --color-outline: oklch(
     var(--lightness-outline) var(--neutral-chroma) var(--hue)
   );

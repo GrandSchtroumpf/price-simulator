@@ -176,8 +176,8 @@ export default component$(() => {
             return <DynamicControl key={control.name} control={control} />
           })}
           <footer>
-            <button name="redirect" value='more' type='submit'>Autres travaux</button>
-            <button name="redirect" value='finalise' type='submit'>Voir devis</button>
+            <button class="btn-outline" name="redirect" value='more' type='submit'>Autres travaux</button>
+            <button class="btn" name="redirect" value='finalise' type='submit'>Voir devis</button>
           </footer>
         </form>
       </div>

@@ -87,7 +87,9 @@ body:has(#form) {
     border-radius: 8px;
   }
   & button[type="submit"]:first-child {
-    background-color: var(--color-secondary);
+    background-color: transparent;
+    border: 1px solid var(--color-accent);
+    color: var(--color-contrast);
   }
   @media (width < 800px) {
     --radius: 0px;

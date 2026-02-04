@@ -19,7 +19,7 @@ export default component$(() => {
         </a>
         <hgroup>
           <h1>Estimation de devis</h1>
-          <p>Il s'agit d'une estimation basé vos critères, une visite sera nécessaire pour créer un devis définitif</p>
+          <p>Il s'agit d'une estimation basée sur vos critères. Une visite sera nécessaire pour créer un devis définitif.</p>
         </hgroup>
       </header>
       <nav aria-label="travaux à réaliser">

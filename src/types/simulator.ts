@@ -22,7 +22,6 @@ export interface DynamicForm {
   controls: ControlTypes[];
   label: string;
   subTitle?: string;
-  price?: QRL<(cart: Item) => Range>;
 };
 
 export interface FinalDynamicForm extends Omit<DynamicForm, 'price'> {

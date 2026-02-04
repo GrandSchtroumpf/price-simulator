@@ -2,11 +2,11 @@ import { component$, $, useContext, useComputed$ } from "@qwik.dev/core";
 import { useLocation, useNavigate } from "@qwik.dev/router";
 import type { DynamicForm, Item, DynamicFormKey, ControlTypes } from "~/types/simulator";
 import { dynamicFormRecord } from "~/routes/simulateur/forms";
-import { displayPrice } from "~/utils/price";
+import { displayPrice, getPrice } from "~/utils/price";
 import { isConditionValid } from "~/utils/conditions";
 import { DynamicControl } from "~/components/controls";
 import { cartContext } from "~/routes/simulateur/layout";
-import { useAsyncComputed$, useId, useSignal, useStyles$, useVisibleTask$ } from "@qwik.dev/core/internal";
+import { useId, useSignal, useStyles$, useVisibleTask$ } from "@qwik.dev/core/internal";
 import styles from './index.css?inline';
 
 const convertControls = (data: FormData, form: DynamicForm) => {
@@ -72,12 +72,11 @@ export default component$(() => {
   if (!(formKey in dynamicFormRecord)) return null;
   const dynamicForm = dynamicFormRecord[formKey as DynamicFormKey];
 
-  const itemPrice = useAsyncComputed$(({ track }) => {
-    track(item);
+  const itemPrice = useComputed$(() => {
     const next = item.value;
-    if (!next) return Promise.resolve('');
-    const dynamicFormPrice = dynamicFormRecord[next.dynamicFormKey].price?.(next);
-    return displayPrice(dynamicFormPrice);
+    if (!next) return '';
+    const nextPrice = getPrice(next, dynamicFormRecord);
+    return displayPrice(nextPrice);
   });
 
   const controls = useComputed$(() => {

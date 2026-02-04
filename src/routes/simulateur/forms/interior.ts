@@ -1,13 +1,10 @@
-import { $ } from "@qwik.dev/core";
-import type { DynamicForm, Item } from "~/types/simulator";
+import type { DynamicForm } from "~/types/simulator";
 import { inputNumber } from "~/utils/helpers";
-import { getPrice, writePriceData } from "~/utils/price";
-import { dynamicFormRecord } from ".";
+import { writePriceData } from "~/utils/price";
 
 export const interior: DynamicForm = {
   label: "Aménagement intérieur",
   subTitle: "Aménagement et isolation d'une pièce",
-  price: $((item: Item) => getPrice(item, dynamicFormRecord)),
   controls: [
     inputNumber({
       label: "Surface en m²",

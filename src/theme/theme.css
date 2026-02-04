@@ -1,9 +1,7 @@
 @theme {
   --spacing: 0.0625rem; /* 1/16rem -> 1px */
   --font-sans: Josefin Sans, sans-serif;
-  --color-accent: oklch(
-    var(--lightness-accent) var(--accent-chroma) var(--hue)
-  );
+  --color-accent: oklch(75% var(--accent-chroma) var(--hue));
   --color-on-accent: oklch(20% var(--accent-chroma) var(--hue));
   --color-secondary: oklch(
     var(--lightness-secondary) var(--secondary-chroma) var(--secondary-hue)

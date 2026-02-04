@@ -6,10 +6,10 @@ body:has(#form) {
 .step-price {
   padding-inline: 16px;
 
-  & p{
+  & p {
     font-size: 1.2rem;
   }
-} 
+}
 
 #form {
   --radius: 16px;
@@ -67,7 +67,6 @@ body:has(#form) {
     font-size: 1.5rem;
     --opacity-in: 0;
     animation: fade 300ms var(--ease-in);
-
   }
   & form {
     display: grid;
@@ -86,8 +85,9 @@ body:has(#form) {
     color: var(--color-on-accent);
     padding: 8px 16px;
     border-radius: 8px;
-  } & button[type="submit"]:first-child {
-    background-color: var(--color-surface-4);
+  }
+  & button[type="submit"]:first-child {
+    background-color: var(--color-secondary);
   }
   @media (width < 800px) {
     --radius: 0px;
@@ -95,10 +95,10 @@ body:has(#form) {
       font-size: 1.2rem;
     }
     & output {
-    font-size: 1.1rem;
+      font-size: 1.1rem;
     }
     & .step-price {
-      p{
+      p {
         font-size: 0.9rem;
       }
     }

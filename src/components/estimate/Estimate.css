@@ -10,9 +10,9 @@
     min-height: 70dvh;
   }
 
-  &.is-visible {
+  &.visited {
     & h2 {
-      --transform-in: translateX(150%) scale(0.8); 
+      --transform-in: translateX(150%) scale(0.8);
       @apply splitted-text;
     }
     & p {
@@ -20,7 +20,7 @@
       animation: fade 500ms 500ms var(--ease-out) backwards;
     }
   }
-  
+
   @supports (animation-timeline: view()) {
     & hgroup,
     & a {
@@ -30,7 +30,7 @@
       animation-fill-mode: backwards;
     }
   }
-  
+
   & hgroup h2 {
     display: flex;
     padding-block: 16px;
@@ -62,7 +62,7 @@
     }
 
     & a {
-      --transform-in: translateY(100px);    
+      --transform-in: translateY(100px);
     }
   }
 }

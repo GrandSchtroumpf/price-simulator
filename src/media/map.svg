@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 1920 1080">
   <style>
     svg {
-      color: oklch(10% 0.01 40deg);
+      color: oklch(20% 0.01 80deg);
     }
     @media (prefers-color-scheme: dark) {
       svg {

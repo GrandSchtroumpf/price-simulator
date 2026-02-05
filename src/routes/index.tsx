@@ -16,11 +16,11 @@ export default component$(() => {
   useOn('qvisible', sync$(() => {
     const observer = new IntersectionObserver((entries) => {
       for (const entry of entries) {
-        if (entry.intersectionRatio > 0.5) entry.target.classList.add('is-visible');
+        if (entry.intersectionRatio > 0.35) entry.target.classList.add('is-visible', 'visited');
         else entry.target.classList.remove('is-visible');
       }
     }, {
-      threshold: [0.5]
+      threshold: [0.35]
     });
     const sections = document.querySelectorAll('section');
     for (const section of sections) {

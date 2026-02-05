@@ -54,6 +54,9 @@ body:has(#form) {
       inset: 0;
       background-color: var(--background);
     }
+    & hgroup {
+      flex: 1;
+    }
   }
   & h1 {
     display: inline-block;

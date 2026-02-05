@@ -2,7 +2,7 @@ import { $, component$, useContext, useSignal, useStyles$ } from "@qwik.dev/core
 import { cartContext } from "../layout";
 import { dynamicFormRecord } from "../forms/index";
 import { finalForm } from "../forms/finalForm"
-import { displayPrice } from "~/utils/price";
+import { displayPrice, getPrice } from "~/utils/price";
 import { DynamicControl } from "../../../components/controls";
 import { getDynamicFormLabelList, parseDisplayValue, mailto } from "~/utils/helpers";
 import { Link, useLocation, useNavigate } from "@qwik.dev/router";
@@ -28,8 +28,8 @@ export default component$(() => {
   const onSubmit = $(async (form: HTMLFormElement) => {
     const isValid = form.checkValidity();
     if (!isValid) return;
-    const price = finalForm.finalPrice?.(cart);
-    finalEstimation.value = await displayPrice(price);
+    const price = await finalForm.finalPrice?.(cart);
+    if (price) finalEstimation.value = displayPrice(price);
   });
 
   return (
@@ -47,7 +47,7 @@ export default component$(() => {
           const { dynamicFormKey, data } = cart[i];
           const dynamicForm = dynamicFormRecord[dynamicFormKey];
           const labelList = getDynamicFormLabelList(dynamicFormKey, dynamicForm);
-          const price = dynamicForm.price?.(cart[i]);
+          const price = getPrice(cart[i], dynamicFormRecord);
           return (
             <details key={i} name="cart">
               <summary>

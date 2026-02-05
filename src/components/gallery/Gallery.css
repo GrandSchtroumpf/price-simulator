@@ -74,12 +74,20 @@
       aspect-ratio: 1/1;
       translate: 0 -50%;
       position: relative;
-      --transform-in: translateY(0) rotate(45deg);
-      --transform-out: translateY(100cqh) rotate(45deg);
-      animation-name: transform;
-      animation-fill-mode: both;
-      animation-timing-function: ease-out;
-      animation-timeline: --scroll-indicator;
+      
+      @supports not (animation-timeline: view()) {
+        rotate: -45deg;
+      }
+
+      @supports (animation-timeline: view()) {
+        --transform-in: translateY(0) rotate(-45deg);
+        --transform-out: translateY(100cqh) rotate(-45deg);
+        animation-name: transform;
+        animation-fill-mode: both;
+        animation-timing-function: ease-out;
+        animation-timeline: --scroll-indicator;
+      }
+
       &::before,
       &::after {
         content: "";

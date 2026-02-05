@@ -1,6 +1,9 @@
 body:has(#form) {
   display: grid;
   min-height: 100dvh;
+  @media (width > 768px) {
+    padding: 32px;
+  }
 }
 
 .step-price {

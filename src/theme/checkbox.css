@@ -1,11 +1,11 @@
-.checkbox {
+@utility checkbox {
   position: relative;
   & input[type="checkbox"] {
     position: absolute;
     opacity: 0;
   }
   &:has(:focus-visible) .svg-container {
-    border-color: var(--color-secondary);
+    border-color: var(--color-accent);
   }
   & .svg-container {
     position: relative;
@@ -18,7 +18,7 @@
       position: absolute;
       inset: 0;
       z-index: -1;
-      background-color: var(--color-secondary);
+      background-color: var(--color-accent);
       opacity: 0;
       transition: opacity 200ms var(--ease-out);
     }

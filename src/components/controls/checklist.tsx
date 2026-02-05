@@ -1,6 +1,6 @@
 import { component$, useId, useStyles$ } from '@qwik.dev/core';
 import type { ControlTypes } from '~/types/simulator';
-import styles from './checkbox.css?inline';
+import styles from './checklist.css?inline';
 
 interface CheckListProps {
   control: ControlTypes;
@@ -12,7 +12,7 @@ export default component$<CheckListProps>(({ control }) => {
   if (control.kind !== 'checklist') return null;
 
   return (
-    <div>
+    <div class="checklist">
       <p id={id}>{control.legend}</p>
       <div role='group' aria-labelledby={id}>
         {control.options.map((option) => (

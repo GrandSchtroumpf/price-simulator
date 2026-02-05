@@ -136,6 +136,7 @@
       font-size: 2rem;
       display: flex;
       align-items: center;
+      background-color: var(--color-surface-0);
     }
     & figure:nth-child(even) figcaption {
       flex-direction: row-reverse;

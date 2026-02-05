@@ -30,8 +30,8 @@ const getPriceData = (control: ControlTypes, value: InputTypes) => {
 
 const getRoundedRange = (range: Range) => {
   const roundNumber = (n: number) => {
-  const ordre = n < 100 ? 10 : 100;
-  return Math.floor(n / ordre) * ordre;
+    const ordre = n < 100 ? 10 : 100;
+    return Math.floor(n / ordre) * ordre;
   }
   const { min, max } = range;
   if (min !== 0 && min === max) {

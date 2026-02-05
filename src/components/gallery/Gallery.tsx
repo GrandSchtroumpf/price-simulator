@@ -5,6 +5,7 @@ import Img3 from '~/media/gallery/3.webp?jsx';
 import Img4 from '~/media/gallery/4.webp?jsx';
 import Img5 from '~/media/gallery/5.webp?jsx';
 import style from './Gallery.css?inline';
+import { SplittedText } from "../SplittedText";
 
 export default component$(() => {
 	useStyles$(style);
@@ -19,7 +20,7 @@ export default component$(() => {
 					<figcaption>Terrasse et garde corps</figcaption>
 					<Img1 alt="Ouvrage de menuiserie" height="300" />
 				</figure>
-				<p>Menuisier passionné, je conçois et réalise des terrasses en bois sur mesure, adaptées à votre espace et à vos usages. J'y associe des garde-corps sécurisés et esthétiques, pensés pour durer dans le temps, tout en valorisant l'architecture de votre extérieur.</p>
+				<p><SplittedText mode="word" text="Menuisier passionné, je conçois et réalise des terrasses en bois sur mesure, adaptées à votre espace et à vos usages. J'y associe des garde-corps sécurisés et esthétiques, pensés pour durer dans le temps, tout en valorisant l'architecture de votre extérieur." /></p>
 			</div>
 			<div class="slot" style="--index:2">
 				<p>Je réalise des ouvrages de soutènement en bois et des structures de charpente robustes, adaptés aux contraintes du terrain. Chaque projet est conçu pour garantir stabilité, longévité et intégration naturelle, tout en respectant les règles de construction et le savoir-faire artisanal.</p>

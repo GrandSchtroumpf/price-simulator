@@ -8,7 +8,6 @@
   max-width: 1920px;
   margin-inline: auto;
   position: relative;
-
   & .scroll-indicator {
     --delta-inline: 100px;
     --width: 40px;
@@ -159,15 +158,26 @@
       border-top-left-radius: 2rem;
     }
     & p {
+      --transform-in: translateY(10px);
+      --transform-out: translateY(0);
+      display: flex;
+      flex-wrap: wrap;
       font-size: 1.5rem;
-      text-align: justify;
       padding-top: 40px;
+      gap: 4px;
+      align-self: start;
     }
     &:nth-child(odd) p {
       padding-right: 48px;
     }
     &:nth-child(even) p {
       padding-left: 48px;
+    }
+  }
+
+  &.is-visible {
+    & .slot p {
+      @apply splitted-text;
     }
   }
 

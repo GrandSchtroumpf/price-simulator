@@ -28,6 +28,22 @@ const getPriceData = (control: ControlTypes, value: InputTypes) => {
   }
 };
 
+const getRoundedRange = (range: Range) => {
+  const roundNumber = (n: number) => {
+    const ordre = n < 100 ? 10 : 100;
+    return Math.floor(n / ordre) * ordre;
+  }
+  const { min, max } = range;
+  if (min !== 0 && min === max) {
+    range.min = min - (min * 0.10);
+    range.max = max + (max * 0.10);
+  }
+  return {
+    min: roundNumber(range.min),
+    max: roundNumber(range.max)
+  }
+}
+
 export const getPrice = (item: Item, dynamicFormRecord: Record<DynamicFormKey, DynamicForm>) => {
   const form: DynamicForm = dynamicFormRecord[item.dynamicFormKey];
   const addition = { min: 0, max: 0 };
@@ -39,9 +55,7 @@ export const getPrice = (item: Item, dynamicFormRecord: Record<DynamicFormKey, D
     const priceData = getPriceData(control, value);
     const prices = Array.isArray(priceData) ? priceData : [priceData];
     for (const price of prices) {
-      if (price?.conditions) {
-        if (!isConditionValid(item, price.conditions)) continue;
-      }
+      if (price?.conditions) if (!isConditionValid(item, price.conditions)) continue;
       if (!price?.value) continue;
       const { min, max } = price.value;
       if (price.type === 'fix') {
@@ -58,10 +72,11 @@ export const getPrice = (item: Item, dynamicFormRecord: Record<DynamicFormKey, D
       }
     }
   }
-  return {
+  const finalPrice = {
     min: Math.floor(addition.min * multiplier.min + fix.min),
     max: Math.floor(addition.max * multiplier.max + fix.max),
   };
+  return getRoundedRange(finalPrice);
 };
 
 const currency = new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });

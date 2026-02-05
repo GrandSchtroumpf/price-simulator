@@ -1,7 +1,7 @@
 @utility btn {
   padding: 8px 16px;
   border-radius: 8px;
-  background-color: var(--color-surface-5);
+  background-color: var(--color-accent-2);
   color: var(--color-on-accent);
   & svg {
     flex-shrink: 0;
@@ -15,7 +15,7 @@
 @utility btn-outline {
   @apply btn;
   background-color: transparent;
-  border: 1px solid var(--color-accent);
+  border: 1px solid var(--color-accent-1);
   color: var(--color-contrast);
   transition: border-color 50ms ease-out;
   &:hover {

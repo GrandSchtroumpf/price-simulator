@@ -86,7 +86,7 @@
     position: fixed;
     inset-inline-end: 16px;
     padding: 8px 16px;
-    background-color: var(--color-accent);
+    background-color: var(--color-accent-1);
     color: var(--color-on-accent);
     border-radius: 32px;
     z-index: 1;

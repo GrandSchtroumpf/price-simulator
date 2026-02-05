@@ -15,7 +15,7 @@ body:has(#cart) {
   gap: 16px;
   max-width: 800px;
   width: 100%;
-  
+
   @media (width >= 800px) {
     place-self: center;
     padding-block: 16px;
@@ -55,7 +55,8 @@ body:has(#cart) {
 
   & details table {
     width: 100%;
-    & th, & td {
+    & th,
+    & td {
       padding: 8px 16px;
     }
     & th {
@@ -105,17 +106,18 @@ body:has(#cart) {
     gap: 16px;
   }
 
-  & button[type="submit"], .mailto {
-    background-color: var(--color-accent);
+  & button[type="submit"],
+  .mailto {
+    background-color: var(--color-accent-1);
     color: var(--color-on-accent);
     padding: 8px 16px;
     font-size: 1.1rem;
     border-radius: 8px;
   }
-  
- #final-estimation {
-  display: grid;
-  gap: 8px;
-  justify-items: center;
- }
+
+  #final-estimation {
+    display: grid;
+    gap: 8px;
+    justify-items: center;
+  }
 }

@@ -46,7 +46,7 @@ main {
     inset: 0;
     z-index: -1;
     transform: translateX(-100%);
-    background-color: var(--color-accent-1);
+    background-color: var(--color-accent);
     opacity: 0.5;
   }
   &:hover::before {

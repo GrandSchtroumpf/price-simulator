@@ -106,15 +106,6 @@ body:has(#cart) {
     gap: 16px;
   }
 
-  & button[type="submit"],
-  .mailto {
-    background-color: var(--color-accent-1);
-    color: var(--color-on-accent);
-    padding: 8px 16px;
-    font-size: 1.1rem;
-    border-radius: 8px;
-  }
-
   #final-estimation {
     display: grid;
     gap: 8px;

@@ -157,7 +157,7 @@ export default component$(() => {
       <img src={`/imgs/simulator/${formKey}.webp`} width="1344" height="756" />
       <div class="card-content">
         <header>
-          <button onClick$={() => history.back()} aria-label="Retour à la liste sans enregistrer">
+          <button class="btn-icon" onClick$={() => history.back()} aria-label="Retour à la liste sans enregistrer">
             <svg width="24px" height="24px" viewBox="0 -960 960 960" fill="currentColor">
               <path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z" />
             </svg>
@@ -177,7 +177,7 @@ export default component$(() => {
           })}
           <footer>
             <button class="btn-outline" name="redirect" value='more' type='submit'>Autres travaux</button>
-            <button class="btn" name="redirect" value='finalise' type='submit'>Voir devis</button>
+            <button class="btn-fill" name="redirect" value='finalise' type='submit'>Voir devis</button>
           </footer>
         </form>
       </div>

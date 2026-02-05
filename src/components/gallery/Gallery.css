@@ -112,6 +112,8 @@
   .slot {
     display: grid;
     grid-template-columns: 1fr 1fr;
+    grid-template-areas: "start end";
+    --padding-inline: clamp(48px, 5dvw, 80px);
     @supports (animation-timeline: view()) {
       --transform-in: translateY(calc(150px - var(--index) * 20px));
       --transform-out: translateY(calc(-150px + var(--index) * 20px));
@@ -120,32 +122,18 @@
     }
     & figure {
       display: grid;
+      gap: 8px;
       grid-template-columns: 1fr min-content;
-      margin: 0;
-      width: 100%;
-      max-width: 450px;
-    }
-    & figure:nth-child(odd) {
-      justify-self: start;
-    }
-    & figure:nth-child(even) {
-      justify-self: end;
+      padding-block: 32px;
+      max-width: 500px;
+      box-sizing: content-box;
     }
     & figcaption {
       font-size: 2rem;
       display: flex;
+      gap: 8px;
       align-items: center;
       background-color: var(--color-surface-0);
-    }
-    & figure:nth-child(even) figcaption {
-      flex-direction: row-reverse;
-    }
-    & figcaption::after {
-      content: "";
-      flex-grow: 1;
-      height: 2px;
-      background-color: currentColor;
-      margin-left: 10px;
     }
     & figure:nth-child(even) figcaption::after {
       margin: 0 10px 0 0;
@@ -162,22 +150,44 @@
       --transform-out: translateY(0);
       display: flex;
       flex-wrap: wrap;
-      font-size: 1.5rem;
-      padding-top: 40px;
+      font-size: clamp(1rem, 1.5dvw, 1.5rem);
+      padding-block: 32px;
       gap: 4px;
-      align-self: start;
-    }
-    &:nth-child(odd) p {
-      padding-right: 48px;
-    }
-    &:nth-child(even) p {
-      padding-left: 48px;
+      align-self: center;
     }
   }
 
-  &.is-visible {
-    & .slot p {
-      @apply splitted-text;
+  @media (width > 768px) {
+    & .slot {
+      & figcaption::after {
+        content: "";
+        flex-grow: 1;
+        height: 2px;
+        background-color: currentColor;
+      }
+      &:nth-child(even) {
+        & figure {
+          justify-self: end;
+          padding-inline-end: var(--padding-inline);
+        }
+        & p {
+          justify-content: start;
+          padding-inline-start: var(--padding-inline);
+        }
+      }
+      &:nth-child(odd) {
+        & figure {
+          grid-area: end;
+          padding-inline-start: var(--padding-inline);
+        }
+        & figcaption {
+          flex-direction: row-reverse;
+        }
+        & p {
+          justify-content: end;
+          padding-inline-end: var(--padding-inline);
+        }
+      }
     }
   }
 
@@ -185,10 +195,11 @@
     & .slot {
       grid-template-columns: 1fr;
       justify-items: center;
+      --padding-inline: 0px;
+      & p {
+        display: none;
+      }
     }
 
-    & p {
-      display: none;
-    }
   }
 }

@@ -15,7 +15,7 @@
   }
 
   & [role="radiogroup"]:has(:focus-visible) {
-    border-color: var(--color-secondary);
+    border-color: var(--color-accent);
   }
 
   

@@ -7,15 +7,19 @@
   min-height: 90dvh;
   position: relative;
   isolation: isolate;
-  
-  &::after, &::before {
+
+  &::after,
+  &::before {
     content: "";
     position: absolute;
     inset: 0;
   }
   &::before {
     z-index: -2;
-    background-image: radial-gradient(transparent 20%, var(--color-accent) 90%);
+    background-image: radial-gradient(
+      transparent 20%,
+      oklch(var(--lightness-4) var(--accent-chroma) var(--hue)) 90%
+    );
     --opacity-in: 0;
     --opacity-out: 1;
     animation: fade 1000ms 100ms backwards;
@@ -28,7 +32,6 @@
     mask-mode: luminance;
     mask-position: center;
   }
-
 
   @supports (animation-timeline: view()) {
     --opacity-out: 0;
@@ -50,7 +53,7 @@
       text-transform: uppercase;
       @apply splitted-text;
       --base-delay: 600ms;
-      --transform-in: translateY(150%) scale(0.8); 
+      --transform-in: translateY(150%) scale(0.8);
     }
   }
   & .logo {
@@ -122,14 +125,14 @@
     display: flex;
     font-size: clamp(1.9rem, 4vw, 5rem);
     --base-delay: 200ms;
-    --transform-in: translateX(150%) scale(0.8); 
+    --transform-in: translateX(150%) scale(0.8);
     @apply splitted-text;
   }
   & h2 {
     display: flex;
     font-size: clamp(1.4rem, 2.5vw, 4rem);
     font-weight: 200;
-    --transform-in: translateX(150%) scale(0.8); 
+    --transform-in: translateX(150%) scale(0.8);
     @apply splitted-text;
   }
   .actions {

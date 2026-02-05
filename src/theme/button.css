@@ -1,14 +1,40 @@
 @utility btn {
+  --btn-background: transparent;
+  --btn-text: currentColor;
+  --btn-radius: 8px;
+  display: inline-flex;
+  justify-content: center;
+  gap: 8px;
   padding: 8px 16px;
-  border-radius: 24px;
-  background-color: oklch(var(--lightness-btn) var(--chroma) var(--hue));
-  text-align: center;
-  color: var(--color-white);
+  border-radius: var(--btn-radius);
+  background-color: var(--btn-background);
+  color: var(--btn-text);
+  &:hover {
+    background-color: color-mix(in oklch, var(--btn-background), var(--btn-text) 12%);
+  }
+  &:active {
+    background-color: color-mix(in oklch, var(--btn-background), var(--btn-text) 24%);
+  }
   & svg {
     flex-shrink: 0;
   }
 }
 
 @utility btn-fill {
-  @apply btn accent;
+  @apply btn;
+  --btn-background: var(--color-accent);
+  --btn-text: var(--color-on-accent);
+}
+
+
+@utility btn-outline {
+  @apply btn;
+  border: 1px solid var(--color-accent);
+}
+
+
+@utility btn-icon {
+  @apply btn;
+  --btn-radius: 50%;
+  padding: 8px;
 }

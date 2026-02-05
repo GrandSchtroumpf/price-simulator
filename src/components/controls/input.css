@@ -8,6 +8,6 @@
   }
   & input:focus-visible {
     outline: none;
-    border-color: var(--color-secondary);
+    border-color: var(--color-accent);
   }
 }

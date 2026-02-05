@@ -35,7 +35,7 @@ export default component$(() => {
   return (
     <main id="cart">
       <header>
-        <button onClick$={back} aria-label="Retour à la liste">
+        <button class="btn-icon" onClick$={back} aria-label="Retour à la liste">
           <svg width="24px" height="24px" viewBox="0 -960 960 960" fill="currentColor">
             <path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z" />
           </svg>
@@ -55,12 +55,12 @@ export default component$(() => {
                   <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
                 </svg>
                 <h3>{dynamicForm.label}</h3>
-                <Link onClick$={() => editIndex.value = i} href={`/simulateur/${dynamicFormKey}?index=${i}`} aria-label="modifier">
+                <Link class="btn-icon" onClick$={() => editIndex.value = i} href={`/simulateur/${dynamicFormKey}?index=${i}`} aria-label="modifier">
                   <svg aria-hidden height="24px" width="24px" viewBox="0 -960 960 960" fill="currentColor">
                     <path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z" />
                   </svg>
                 </Link>
-                <button onClick$={() => cart.splice(i, 1)} aria-label="supprimer">
+                <button class="btn-icon" onClick$={() => cart.splice(i, 1)} aria-label="supprimer">
                   <svg aria-hidden height="24px" width="24px" viewBox="0 -960 960 960" fill="currentColor">
                     <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
                   </svg>
@@ -95,13 +95,13 @@ export default component$(() => {
         {finalForm.controls.map((control) => (
           <DynamicControl key={control.name} control={control} />
         ))}
-        {!finalEstimation.value && <button type='submit'>Valider</button>}
+        {!finalEstimation.value && <button class="btn-fill" type='submit'>Valider</button>}
       </form>
       {finalEstimation.value && (
         <article id="final-estimation">
           <h2>Votre estimation est de {finalEstimation}</h2>
           <p>NB: Le prix affiché est un prix indicatif et ne constitue pas un devis ferme et définitif</p>
-          <a class="mailto" href={mailto(cart, dynamicFormRecord)}>Contacter Erwan Richard</a>
+          <a class="btn-fill" href={mailto(cart, dynamicFormRecord)}>Contacter Erwan Richard</a>
         </article>
       )}
     </main>

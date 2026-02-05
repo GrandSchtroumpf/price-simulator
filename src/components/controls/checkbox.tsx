@@ -1,13 +1,11 @@
-import { component$, useStyles$ } from '@qwik.dev/core';
+import { component$ } from '@qwik.dev/core';
 import type { ControlTypes } from '~/types/simulator';
-import styles from './checkbox.css?inline';
 
 interface CheckListProps {
   control: ControlTypes;
 }
 
 export default component$<CheckListProps>(({ control }) => {
-  useStyles$(styles)
   if (control.kind !== 'checkbox') return null;
   return (
     <div class="checkbox">

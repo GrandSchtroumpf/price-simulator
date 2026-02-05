@@ -1,6 +1,10 @@
 import { component$, createContextId, Slot, useContextProvider, useStore, useVisibleTask$ } from "@qwik.dev/core";
 import { unwrapStore, useSignal, useStyles$, Signal } from "@qwik.dev/core/internal";
 import { Item } from "~/types/simulator";
+import ImgDeck from "~/media/simulator/deck.webp";
+import ImgFloor from "~/media/simulator/floor.webp";
+import ImgInterior from "~/media/simulator/interior.webp";
+import ImgStairs from "~/media/simulator/stairs.webp";
 import styles from './layout.css?inline';
 
 interface CartContext {
@@ -9,6 +13,14 @@ interface CartContext {
 }
 
 export const cartContext = createContextId<CartContext>('cart');
+
+export const formImgs = {
+  deck: ImgDeck,
+  stairs: ImgStairs,
+  interior: ImgInterior,
+  floor: ImgFloor,
+}
+export type FormImg = keyof typeof formImgs;
 
 export default component$(() => {
   useStyles$(styles);

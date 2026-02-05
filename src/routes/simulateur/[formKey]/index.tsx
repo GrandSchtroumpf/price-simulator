@@ -5,7 +5,7 @@ import { dynamicFormRecord } from "~/routes/simulateur/forms";
 import { displayPrice, getPrice } from "~/utils/price";
 import { isConditionValid } from "~/utils/conditions";
 import { DynamicControl } from "~/components/controls";
-import { cartContext } from "~/routes/simulateur/layout";
+import { cartContext, FormImg, formImgs } from "~/routes/simulateur/layout";
 import { useId, useSignal, useStyles$, useVisibleTask$ } from "@qwik.dev/core/internal";
 import styles from './index.css?inline';
 
@@ -153,7 +153,7 @@ export default component$(() => {
 
   return (
     <main id="form">
-      <img src={`/imgs/simulator/${formKey}.webp`} width="1344" height="756" />
+      <img src={formImgs[formKey as FormImg]} width="1200" height="655" alt=""/>
       <div class="card-content">
         <header>
           <button class="btn-icon" onClick$={() => history.back()} aria-label="Retour à la liste sans enregistrer">

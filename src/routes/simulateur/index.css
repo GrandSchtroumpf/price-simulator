@@ -1,6 +1,9 @@
 #simulator {
   display: grid;
   gap: 32px;
+  margin: auto;
+  max-width: 1500px;
+  padding: 32px;
 
   & header {
     display: flex;
@@ -85,9 +88,6 @@
   .cart {
     position: fixed;
     inset-inline-end: 16px;
-    padding: 8px 16px;
-    background-color: var(--color-accent);
-    color: var(--color-on-accent);
     border-radius: 32px;
     z-index: 1;
     font-size: 1.2rem;

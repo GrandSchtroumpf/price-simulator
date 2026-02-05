@@ -1,9 +1,9 @@
 import { component$, useContext, useStyles$ } from "@qwik.dev/core";
 import { DocumentHead, Link } from "@qwik.dev/router";
 import { dynamicFormRecord } from "./forms/index";
-import { cartContext } from "./layout";
-import styles from "./index.css?inline";
+import { cartContext, FormImg, formImgs } from "./layout";
 import { Logo } from "~/components/logo/Logo";
+import styles from "./index.css?inline";
 
 
 export default component$(() => {
@@ -26,7 +26,7 @@ export default component$(() => {
         {Object.entries(dynamicFormRecord).map(([key, form]) => (
           <Link key={key} href={`${key}`} data-key={key}>
             <div class="img-container">
-              <img src={`/imgs/simulator/${key}.webp`} width="1344" height="756" />
+              <img src={formImgs[key as FormImg]} width="1200" height="655" alt=""/>
             </div>
             <div class="card-content">
               <p>{form.label}</p>
@@ -35,7 +35,7 @@ export default component$(() => {
         ))}
       </nav>
       {!!cart.length && (
-        <Link class="cart" href="cart" aria-label="Panier pour le devis">
+        <Link class="cart btn-fill" href="cart" aria-label="Panier pour le devis">
           <p>Voir le devis</p>
         </Link>
       )}

@@ -18,7 +18,7 @@
     z-index: -2;
     background-image: radial-gradient(
       transparent 20%,
-      oklch(var(--lightness-4) var(--accent-chroma) var(--hue)) 90%
+      oklch(var(--lightness-contrast) var(--accent-chroma) var(--hue)) 90%
     );
     --opacity-in: 0;
     --opacity-out: 1;

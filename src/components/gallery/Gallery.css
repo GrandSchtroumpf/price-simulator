@@ -63,7 +63,7 @@
         --transform-out: translateY(0);
         animation-name: transform;
         animation-fill-mode: both;
-        animation-timing-function: ease-out;
+        animation-timing-function: cubic-bezier(0.3, 0, 0.7, 1);
         animation-timeline: --scroll-indicator;
       }
     }
@@ -83,7 +83,7 @@
         --transform-out: translateY(100cqh) rotate(-45deg);
         animation-name: transform;
         animation-fill-mode: both;
-        animation-timing-function: ease-out;
+        animation-timing-function: cubic-bezier(0.3, 0, 0.7, 1);
         animation-timeline: --scroll-indicator;
       }
 

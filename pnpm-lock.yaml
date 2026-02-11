@@ -7,6 +7,10 @@ settings:
 importers:
 
   .:
+    dependencies:
+      '@rive-app/webgl2':
+        specifier: ^2.34.3
+        version: 2.34.3
     devDependencies:
       '@eslint/js':
         specifier: latest
@@ -618,6 +622,9 @@ packages:
     peerDependencies:
       '@qwik.dev/core': ^2.0.0-beta.18
       vite: '>=5 <8'
+
+  '@rive-app/webgl2@2.34.3':
+    resolution: {integrity: sha512-Q5OPmFB2Xj3dIbwxbEdDyConvEw2IEDFF25+GLVxODCsNAXEGWXPOUVCIw3Ri/ly8qRx08XXCvSd+rYBljIzEA==}
 
   '@rollup/pluginutils@5.3.0':
     resolution: {integrity: sha512-5EdhGZtnu3V88ces7s53hhfK5KSASnJZv8Lulpc04cWO3REESroJXg73DFsOmgbU2BhwV0E20bu2IDZb3VKW4Q==}
@@ -3634,6 +3641,8 @@ snapshots:
       - rollup
       - supports-color
       - typescript
+
+  '@rive-app/webgl2@2.34.3': {}
 
   '@rollup/pluginutils@5.3.0(rollup@4.57.1)':
     dependencies:

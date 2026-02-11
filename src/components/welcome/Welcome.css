@@ -138,10 +138,8 @@
   .actions {
     display: grid;
     justify-items: center;
-    position: relative;
     & a {
       align-self: start;
-      font-size: clamp(1.2rem, 1.5vw, 2rem);
       --transform-in: scale(0.9);
       --opacity-in: 0;
       --opacity-out: 1;
@@ -150,6 +148,10 @@
       animation-duration: 400ms;
       animation-timing-function: var(--ease-in-out);
       animation-delay: var(--logo-duration);
+    }
+    & canvas {
+      height: clamp(125px, 12vw, 150px);
+      aspect-ratio: 2/1;
     }
   }
 }

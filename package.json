@@ -44,5 +44,8 @@
   },
   "imports": {
     "#theme": "./src/theme/index.css"
+  },
+  "dependencies": {
+    "@rive-app/webgl2": "^2.34.3"
   }
 }

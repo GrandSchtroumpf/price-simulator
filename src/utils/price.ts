@@ -44,6 +44,34 @@ const getRoundedRange = (range: Range) => {
   }
 }
 
+const getControlRange = (
+  control: ControlTypes,
+  value: InputTypes,
+  item: Item,
+  ranges: { addition: Range, multiplier: Range, fix: Range }
+) => {
+  const { addition, multiplier, fix } = ranges;
+  const priceData = getPriceData(control, value);
+  const prices = Array.isArray(priceData) ? priceData : [priceData];
+  for (const price of prices) {
+    if (price?.conditions) if (!isConditionValid(item, price.conditions)) continue;
+    if (!price?.value) continue;
+    const { min, max } = price.value;
+    if (price.type === 'fix') {
+      fix.min += min ?? 0;
+      fix.max += max ?? 0;
+    }
+    if (price.type === 'addition') {
+      addition.min += min ?? 0;
+      addition.max += max ?? 0;
+    }
+    if (price.type === 'multiplier') {
+      multiplier.min *= min ?? 1;
+      multiplier.max *= max ?? 1;
+    }
+  }
+}
+
 export const getPrice = (item: Item, dynamicFormRecord: Record<DynamicFormKey, DynamicForm>) => {
   const form: DynamicForm = dynamicFormRecord[item.dynamicFormKey];
   const addition = { min: 0, max: 0 };
@@ -52,25 +80,7 @@ export const getPrice = (item: Item, dynamicFormRecord: Record<DynamicFormKey, D
   for (const [controlName, value] of Object.entries(item.data)) {
     const control = form.controls.find(c => c.name === controlName);
     if (!control) continue;
-    const priceData = getPriceData(control, value);
-    const prices = Array.isArray(priceData) ? priceData : [priceData];
-    for (const price of prices) {
-      if (price?.conditions) if (!isConditionValid(item, price.conditions)) continue;
-      if (!price?.value) continue;
-      const { min, max } = price.value;
-      if (price.type === 'fix') {
-        fix.min += min ?? 0;
-        fix.max += max ?? 0;
-      }
-      if (price.type === 'addition') {
-        addition.min += min ?? 0;
-        addition.max += max ?? 0;
-      }
-      if (price.type === 'multiplier') {
-        multiplier.min *= min ?? 1;
-        multiplier.max *= max ?? 1;
-      }
-    }
+    getControlRange(control, value, item, { addition, multiplier, fix });
   }
   const finalPrice = {
     min: Math.floor(addition.min * multiplier.min + fix.min),
@@ -89,10 +99,11 @@ export function displayPrice(price: Range): string {
 export const writePriceData = (
   type: PriceData['type'],
   range: number | Range,
-  conditions?: Conditions
+  conditions?: Conditions,
+  secondary?: string
 ): PriceData => {
   const value = typeof range === 'number'
     ? { min: range, max: range }
     : range;
-  return { type, value, conditions }
+  return { type, value, conditions, secondary }
 };

@@ -44,6 +44,13 @@ const getRoundedRange = (range: Range) => {
   }
 }
 
+const generatePriceTypes = () => {
+  const addition = { min: 0, max: 0 };
+  const multiplier = { min: 1, max: 1 };
+  const fix = { min: 0, max: 0 };
+  return { addition, multiplier, fix };
+}
+
 const getControlRange = (
   control: ControlTypes,
   value: InputTypes,
@@ -73,19 +80,21 @@ const getControlRange = (
 }
 
 export const getPrice = (item: Item, dynamicFormRecord: Record<DynamicFormKey, DynamicForm>) => {
+  const calcRange = (obj: { addition: Range, multiplier: Range, fix: Range }) => {
+    const { addition, multiplier, fix } = obj;
+    return {
+      min: Math.floor(addition.min * multiplier.min + fix.min),
+      max: Math.floor(addition.max * multiplier.max + fix.max),
+    }
+  }
   const form: DynamicForm = dynamicFormRecord[item.dynamicFormKey];
-  const addition = { min: 0, max: 0 };
-  const multiplier = { min: 1, max: 1 };
-  const fix = { min: 0, max: 0 };
+  const priceTypes = { primary: generatePriceTypes() };
   for (const [controlName, value] of Object.entries(item.data)) {
     const control = form.controls.find(c => c.name === controlName);
     if (!control) continue;
-    getControlRange(control, value, item, { addition, multiplier, fix });
+    getControlRange(control, value, item, priceTypes.primary);
   }
-  const finalPrice = {
-    min: Math.floor(addition.min * multiplier.min + fix.min),
-    max: Math.floor(addition.max * multiplier.max + fix.max),
-  };
+  const finalPrice = calcRange(priceTypes.primary);
   return getRoundedRange(finalPrice);
 };
 

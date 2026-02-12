@@ -1,8 +1,8 @@
-import { component$, useStyles$, useVisibleTask$ } from "@qwik.dev/core";
+import { component$, useStyles$ } from "@qwik.dev/core";
 import { AnimatedLogo } from "../logo/Logo";
 import { SplittedText } from "../SplittedText";
-import { Rive } from "@rive-app/webgl2";
-import RiveFile from '~/media/welcome/button.riv?url';
+// import { Rive } from "@rive-app/webgl2";
+// import RiveFile from '~/media/welcome/button.riv?url';
 
 import style from './Welcome.css?inline';
 
@@ -10,34 +10,33 @@ import style from './Welcome.css?inline';
 export const Welcome = component$(() => {
   useStyles$(style);
 
-  useVisibleTask$(() => {
-    const darkmode = matchMedia("(prefers-color-scheme:dark)");
-    const r = new Rive({
-      src: RiveFile,
-      canvas: document.getElementById("canvas") as HTMLCanvasElement,
-      autoplay: true,
-      stateMachines: "State Machine 1",
-      useOffscreenRenderer: true,
-      onLoad: () => {
-        r.resizeDrawingSurfaceToCanvas();
-        const vmi = r.viewModelByName("ViewModel1")?.instance();
-        if (!vmi) return;
-        r.bindViewModelInstance(vmi);
-        const color = vmi.color("GeneralColor");
-        if (!color) return;
-        color.value = darkmode.matches ? 0xFFFFFFFF : 0xFF000000;
-      },
-    });
-    const changeColor = () => {
-      const vmi = r.viewModelByName("ViewModel1")?.instance();
-      if (!vmi) return;
-      r.bindViewModelInstance(vmi);
-      const color = vmi.color("GeneralColor");
-      if (!color) return;
-      color.value = darkmode.matches ? 0xFFFFFFFF : 0xFF000000;
-    }
-    darkmode.addEventListener('change', changeColor);
-  });
+  // useVisibleTask$(() => {
+  //   const darkmode = matchMedia("(prefers-color-scheme:dark)");
+  //   const r = new Rive({
+  //     src: RiveFile,
+  //     canvas: document.getElementById("canvas") as HTMLCanvasElement,
+  //     autoplay: true,
+  //     useOffscreenRenderer: true,
+  //     onLoad: () => {
+  //       r.resizeDrawingSurfaceToCanvas();
+  //       const vmi = r.viewModelByName("ViewModel1")?.instance();
+  //       if (!vmi) return;
+  //       r.bindViewModelInstance(vmi);
+  //       const color = vmi.color("GeneralColor");
+  //       if (!color) return;
+  //       color.value = darkmode.matches ? 0xFFFFFFFF : 0xFF000000;
+  //     },
+  //   });
+  //   const changeColor = () => {
+  //     const vmi = r.viewModelByName("ViewModel1")?.instance();
+  //     if (!vmi) return;
+  //     r.bindViewModelInstance(vmi);
+  //     const color = vmi.color("GeneralColor");
+  //     if (!color) return;
+  //     color.value = darkmode.matches ? 0xFFFFFFFF : 0xFF000000;
+  //   }
+  //   darkmode.addEventListener('change', changeColor);
+  // });
 
   return (
     <section id="welcome">
@@ -60,7 +59,8 @@ export const Welcome = component$(() => {
       </div>
       <div class="actions">
         <a class="simulator-link" href="/simulateur" style="--index: 3">
-          <canvas id="canvas" width="250" height="125" aria-label="Simuler un devis"></canvas>
+          Simuler un devis
+          {/* <canvas id="canvas" width="250" height="125" aria-label="Simuler un devis"></canvas> */}
         </a>
       </div>
     </section>

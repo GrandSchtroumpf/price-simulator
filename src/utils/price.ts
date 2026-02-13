@@ -51,51 +51,71 @@ const generatePriceTypes = () => {
   return { addition, multiplier, fix };
 }
 
-const getControlRange = (
-  control: ControlTypes,
-  value: InputTypes,
+const writePriceTypes = (
   item: Item,
-  ranges: { addition: Range, multiplier: Range, fix: Range }
+  priceTypes: { addition: Range, multiplier: Range, fix: Range },
+  price: PriceData
 ) => {
-  const { addition, multiplier, fix } = ranges;
-  const priceData = getPriceData(control, value);
-  const prices = Array.isArray(priceData) ? priceData : [priceData];
-  for (const price of prices) {
-    if (price?.conditions) if (!isConditionValid(item, price.conditions)) continue;
-    if (!price?.value) continue;
-    const { min, max } = price.value;
-    if (price.type === 'fix') {
-      fix.min += min ?? 0;
-      fix.max += max ?? 0;
-    }
-    if (price.type === 'addition') {
-      addition.min += min ?? 0;
-      addition.max += max ?? 0;
-    }
-    if (price.type === 'multiplier') {
-      multiplier.min *= min ?? 1;
-      multiplier.max *= max ?? 1;
-    }
+  const { addition, multiplier, fix } = priceTypes;
+  if (price?.conditions) if (!isConditionValid(item, price.conditions)) return;
+  if (!price?.value) return;
+  const { min, max } = price.value;
+  if (price.type === 'fix') {
+    fix.min += min ?? 0;
+    fix.max += max ?? 0;
+  }
+  if (price.type === 'addition') {
+    addition.min += min ?? 0;
+    addition.max += max ?? 0;
+  }
+  if (price.type === 'multiplier') {
+    multiplier.min *= min ?? 1;
+    multiplier.max *= max ?? 1;
   }
 }
 
-export const getPrice = (item: Item, dynamicFormRecord: Record<DynamicFormKey, DynamicForm>) => {
-  const calcRange = (obj: { addition: Range, multiplier: Range, fix: Range }) => {
-    const { addition, multiplier, fix } = obj;
-    return {
-      min: Math.floor(addition.min * multiplier.min + fix.min),
-      max: Math.floor(addition.max * multiplier.max + fix.max),
-    }
+const calcRange = (obj: { addition: Range, multiplier: Range, fix: Range }) => {
+  const { addition, multiplier, fix } = obj;
+  return {
+    min: Math.floor(addition.min * multiplier.min + fix.min),
+    max: Math.floor(addition.max * multiplier.max + fix.max),
   }
+}
+export const getPrice = (item: Item, dynamicFormRecord: Record<DynamicFormKey, DynamicForm>) => {
   const form: DynamicForm = dynamicFormRecord[item.dynamicFormKey];
-  const priceTypes = { primary: generatePriceTypes() };
+  const priceTypes: Record<string, { addition: Range, multiplier: Range, fix: Range }> = { primary: generatePriceTypes() };
   for (const [controlName, value] of Object.entries(item.data)) {
     const control = form.controls.find(c => c.name === controlName);
     if (!control) continue;
-    getControlRange(control, value, item, priceTypes.primary);
+    const priceData = getPriceData(control, value);
+    const prices = Array.isArray(priceData) ? priceData : [priceData];
+    for (const price of prices) {
+      if (!price) continue;
+      if (!price.secondary) {
+        writePriceTypes(item, priceTypes.primary, price);
+      } else {
+        if (!priceTypes[price.secondary]) {
+          priceTypes[price.secondary] = generatePriceTypes();
+          const sControl = form.controls.find((control) => control.name === price?.secondary);
+          const sValue = item.data[price.secondary];
+          if (!sControl || !sValue) continue;
+          const sPrices = getPriceData(sControl, sValue);
+          if (!sPrices) continue;
+          for (const sPrice of sPrices) {
+            writePriceTypes(item, priceTypes[price.secondary], sPrice);
+          }
+        }
+        writePriceTypes(item, priceTypes[price.secondary], price);
+      }
+    }
   }
-  const finalPrice = calcRange(priceTypes.primary);
-  return getRoundedRange(finalPrice);
+  const finalRange = { min: 0, max: 0 };
+  for (const values of Object.values(priceTypes)) {
+    const range = calcRange(values);
+    finalRange.min += range.min;
+    finalRange.max += range.max;
+  }
+  return getRoundedRange(finalRange);
 };
 
 const currency = new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });

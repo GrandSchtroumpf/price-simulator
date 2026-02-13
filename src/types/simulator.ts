@@ -33,6 +33,7 @@ export interface PriceData {
   value: Range;
   time?: number;
   conditions?: Conditions;
+  secondary?: string;
 }
 
 export interface Control<T> {

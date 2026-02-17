@@ -60,19 +60,19 @@ export const floor: DynamicForm = {
           label: "Flottant",
           value: "floating",
           priceData: writePriceData('multiplier', 1),
-          dependsOn: ['materials', 'in', ['plastic', 'plasticPremium']]
+          conditions: ['materials', 'in', ['plastic', 'plasticPremium']]
         },
         {
           label: "Collé",
           value: "glued",
           priceData: writePriceData('multiplier', 1.15),
-          dependsOn: ['materials', 'in', ['hardOak', 'hardPremium', 'laminated', 'laminatedPremium']]
+          conditions: ['materials', 'in', ['hardOak', 'hardPremium', 'laminated', 'laminatedPremium']]
         },
         {
           label: "Cloué",
           value: "nailed",
           priceData: writePriceData('multiplier', 1.35),
-          dependsOn: ['materials', 'in', ['hardOak', 'hardPremium', 'laminatedPremium']]
+          conditions: ['materials', 'in', ['hardOak', 'hardPremium', 'laminatedPremium']]
         }
       ]
     },
@@ -106,13 +106,13 @@ export const floor: DynamicForm = {
           label: "Pointe de hongrie",
           value: "arrow",
           priceData: writePriceData('multiplier', 1.65),
-          dependsOn: ['materials', 'in', ['hardOak', 'hardPremium', 'laminated', 'laminatedPremium']]
+          conditions: ['materials', 'in', ['hardOak', 'hardPremium', 'laminated', 'laminatedPremium']]
         },
         {
           label: "Fougère",
           value: "fern",
           priceData: writePriceData('multiplier', 1.65),
-          dependsOn: ['materials', 'in', ['hardOak', 'hardPremium', 'laminated', 'laminatedPremium']]
+          conditions: ['materials', 'in', ['hardOak', 'hardPremium', 'laminated', 'laminatedPremium']]
         }
       ]
     },

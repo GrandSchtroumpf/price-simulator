@@ -199,7 +199,7 @@ export const interior: DynamicForm = {
         {
           label: "Ponçage des bandes",
           value: "bandSanding",
-          dependsOn: ['finish', 'in', ['bands']],
+          conditions: ['finish', 'in', ['bands']],
           priceData: [
             writePriceData('addition', 25, { column: 'surface' }),
             writePriceData('multiplier', 1.20, { conditions: ['ceilingType', 'out', ['straight']], column: 'surface' }),
@@ -208,7 +208,7 @@ export const interior: DynamicForm = {
         {
           label: "Peinture",
           value: "paint",
-          dependsOn: ['finish', 'array-contains', ['bands', 'bandSanding']],
+          conditions: ['finish', 'array-contains', ['bands', 'bandSanding']],
           priceData: [
             writePriceData('addition', 65, { column: 'surface' }),
             writePriceData('multiplier', 1.20, { conditions: ['ceilingType', 'out', ['straight']], column: 'surface' }),

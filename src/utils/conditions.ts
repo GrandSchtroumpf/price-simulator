@@ -1,11 +1,11 @@
 import type { Item, Conditions } from "~/types/simulator";
 import { isIn } from "./helpers";
 
-export const isConditionValid = (item?: Item, dependsOn?: Conditions) => {
-  if (!item && dependsOn) return false;
-  if (!dependsOn) return true;
+export const isConditionValid = (item?: Item, conditions?: Conditions) => {
+  if (!item && conditions) return false;
+  if (!conditions) return true;
   if (!item) return true;
-  const [key, operator, value] = dependsOn;
+  const [key, operator, value] = conditions;
   if (operator === '==') return item.data[key] === value;
   if (operator === '<') return item.data[key] < value;
   if (operator === '<=') return item.data[key] <= value;

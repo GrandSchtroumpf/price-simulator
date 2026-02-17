@@ -91,21 +91,21 @@ export const getPrice = (item: Item, dynamicFormRecord: Record<DynamicFormKey, D
     const prices = Array.isArray(priceData) ? priceData : [priceData];
     for (const price of prices) {
       if (!price) continue;
-      if (!price.secondary) {
+      if (!price.column) {
         writePriceTypes(item, priceTypes.primary, price);
       } else {
-        if (!priceTypes[price.secondary]) {
-          priceTypes[price.secondary] = generatePriceTypes();
-          const sControl = form.controls.find((control) => control.name === price?.secondary);
-          const sValue = item.data[price.secondary];
+        if (!priceTypes[price.column]) {
+          priceTypes[price.column] = generatePriceTypes();
+          const sControl = form.controls.find((control) => control.name === price?.column);
+          const sValue = item.data[price.column];
           if (!sControl || !sValue) continue;
           const sPrices = getPriceData(sControl, sValue);
           if (!sPrices) continue;
           for (const sPrice of sPrices) {
-            writePriceTypes(item, priceTypes[price.secondary], sPrice);
+            writePriceTypes(item, priceTypes[price.column], sPrice);
           }
         }
-        writePriceTypes(item, priceTypes[price.secondary], price);
+        writePriceTypes(item, priceTypes[price.column], price);
       }
     }
   }
@@ -128,11 +128,13 @@ export function displayPrice(price: Range): string {
 export const writePriceData = (
   type: PriceData['type'],
   range: number | Range,
-  conditions?: Conditions,
-  secondary?: string
+  options?: {
+    conditions?: Conditions,
+    column?: string
+  }
 ): PriceData => {
   const value = typeof range === 'number'
     ? { min: range, max: range }
     : range;
-  return { type, value, conditions, secondary }
+  return { type, value, conditions: options?.conditions, column: options?.column }
 };

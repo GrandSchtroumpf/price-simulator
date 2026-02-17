@@ -74,9 +74,9 @@ export const interior: DynamicForm = {
         label: `${mm} mm`,
         value: `wallThickness${mm}`,
         priceData: [
-          writePriceData('multiplier', 1 + 0.05 * i, ['materials', '==', 'glass']),
-          writePriceData('multiplier', 1.1 + 0.05 * i, ['materials', '==', 'stone']),
-          writePriceData('multiplier', 1.3 + 0.05 * i, ['materials', '==', 'wood']),
+          writePriceData('multiplier', 1 + 0.05 * i, { conditions: ['materials', '==', 'glass'] }),
+          writePriceData('multiplier', 1.1 + 0.05 * i, { conditions: ['materials', '==', 'stone'] }),
+          writePriceData('multiplier', 1.3 + 0.05 * i, { conditions: ['materials', '==', 'wood'] }),
         ]
       }))
     },
@@ -117,9 +117,9 @@ export const interior: DynamicForm = {
         label: `${mm} mm`,
         value: `ceilingThickness${mm}`,
         priceData: [
-          writePriceData('multiplier', 1 + 0.05 * i, ['materials', '==', 'glass']),
-          writePriceData('multiplier', 1.1 + 0.05 * i, ['materials', '==', 'stone']),
-          writePriceData('multiplier', 1.35 + 0.05 * i, ['materials', '==', 'wood']),
+          writePriceData('multiplier', 1 + 0.05 * i, { conditions: ['materials', '==', 'glass'] }),
+          writePriceData('multiplier', 1.1 + 0.05 * i, { conditions: ['materials', '==', 'stone'] }),
+          writePriceData('multiplier', 1.35 + 0.05 * i, { conditions: ['materials', '==', 'wood'] }),
         ]
       }))
     },
@@ -192,26 +192,26 @@ export const interior: DynamicForm = {
           label: "Bandes",
           value: "bands",
           priceData: [
-            writePriceData('addition', 40),
-            writePriceData('multiplier', 1.20, ['ceilingType', 'out', ['straight']]),
+            writePriceData('addition', 40, { column: 'surface' }),
+            writePriceData('multiplier', 1.20, { conditions: ['ceilingType', 'out', ['straight']], column: 'surface' }),
           ]
         },
         {
           label: "Ponçage des bandes",
           value: "bandSanding",
-          dependsOn: ['finish', 'in', ['bands']],
+          conditions: ['finish', 'in', ['bands']],
           priceData: [
-            writePriceData('addition', 25),
-            writePriceData('multiplier', 1.20, ['ceilingType', 'out', ['straight']]),
+            writePriceData('addition', 25, { column: 'surface' }),
+            writePriceData('multiplier', 1.20, { conditions: ['ceilingType', 'out', ['straight']], column: 'surface' }),
           ]
         },
         {
           label: "Peinture",
           value: "paint",
-          dependsOn: ['finish', 'array-contains', ['bands', 'bandSanding']],
+          conditions: ['finish', 'array-contains', ['bands', 'bandSanding']],
           priceData: [
-            writePriceData('addition', 65),
-            writePriceData('multiplier', 1.20, ['ceilingType', 'out', ['straight']]),
+            writePriceData('addition', 65, { column: 'surface' }),
+            writePriceData('multiplier', 1.20, { conditions: ['ceilingType', 'out', ['straight']], column: 'surface' }),
           ]
         }
       ]

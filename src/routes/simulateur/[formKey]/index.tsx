@@ -85,7 +85,7 @@ export default component$(() => {
     for (const control of copy) {
       if (control.kind === 'radiogroup') {
         for (const option of control.options) {
-          if (!isConditionValid(next, option.dependsOn)) {
+          if (!isConditionValid(next, option.conditions)) {
             option.disabled = true;
             option.checked = false;
           } else {
@@ -95,7 +95,7 @@ export default component$(() => {
       }
       if (control.kind === 'checklist') {
         for (const option of control.options) {
-          if (!isConditionValid(next, option.dependsOn)) {
+          if (!isConditionValid(next, option.conditions)) {
             option.disabled = true;
             option.checked = false;
           } else {
@@ -104,7 +104,7 @@ export default component$(() => {
         }
       }
       if (control.kind === 'input') {
-        control.disabled = !isConditionValid(next, control.dependsOn);
+        control.disabled = !isConditionValid(next, control.conditions);
       }
     };
     if (typeof index.value === 'number' && next) {

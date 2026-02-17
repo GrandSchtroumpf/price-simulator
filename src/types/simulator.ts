@@ -5,9 +5,9 @@ export type ControlTypes = CheckList | CheckBox | RadioGroup | InputNumber | Inp
 export type ControlKind = ControlTypes['kind'];
 export type DynamicFormKey = keyof typeof dynamicFormRecord;
 export type InputTypes = string | string[] | number | number[] | boolean;
-type DependsOperators = '<' | '>' | '<=' | '>=' | '==' | 'in' | 'out' | 'array-contains';
-type DependsValue = string | number | string[] | number[];
-export type Conditions = [string, DependsOperators, DependsValue];
+type ConditionsOperators = '<' | '>' | '<=' | '>=' | '==' | 'in' | 'out' | 'array-contains';
+type ConditionsValue = string | number | string[] | number[];
+export type Conditions = [string, ConditionsOperators, ConditionsValue];
 export interface Range {
   min: number;
   max: number;
@@ -33,6 +33,7 @@ export interface PriceData {
   value: Range;
   time?: number;
   conditions?: Conditions;
+  column?: string;
 }
 
 export interface Control<T> {
@@ -49,7 +50,7 @@ export interface Input extends Control<'input'> {
   readonly?: boolean
   placeholder?: string;
   priceData?: PriceData | PriceData[];
-  dependsOn?: Conditions;
+  conditions?: Conditions;
   disabled?: boolean;
 }
 
@@ -60,7 +61,7 @@ export interface CheckBox extends Control<'checkbox'> {
   checked?: boolean;
   disabled?: boolean;
   priceData?: PriceData | PriceData[];
-  dependsOn?: Conditions;
+  conditions?: Conditions;
 }
 
 export interface InputNumber extends Input {
@@ -87,7 +88,7 @@ export interface CheckList extends Control<'checklist'> {
     checked?: boolean;
     required?: boolean;
     priceData?: PriceData | PriceData[];
-    dependsOn?: Conditions;
+    conditions?: Conditions;
     disabled?: boolean;
   }[];
 }
@@ -100,7 +101,7 @@ export interface RadioGroup extends Control<'radiogroup'> {
     value: string;
     checked?: boolean;
     priceData?: PriceData | PriceData[];
-    dependsOn?: Conditions;
+    conditions?: Conditions;
     disabled?: boolean;
   }[];
 }

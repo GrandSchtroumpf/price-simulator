@@ -4,13 +4,21 @@ import { writePriceData } from "~/utils/price";
 
 export const interior: DynamicForm = {
   label: "Aménagement intérieur",
-  subTitle: "Aménagement et isolation d'une pièce",
   controls: [
     inputNumber({
       label: "Surface en m²",
       name: "surface",
       min: 1,
       priceData: writePriceData('multiplier', 1)
+    }),
+    inputNumber({
+      label: "Nombre de pièces à créer",
+      name: "numberOfRooms",
+      min: 0,
+      priceData: [
+        writePriceData('fix', 300),
+        writePriceData('multiplier', { min: 1.05, max: 1.10 }, { rangeOnly: true, conditions: ['numberOfRooms', '>', 0] }),
+      ]
     }),
     {
       legend: "Étage",
@@ -148,38 +156,6 @@ export const interior: DynamicForm = {
           label: "Au delà de 4m50",
           value: "heightMore",
           priceData: writePriceData('multiplier', 1.35)
-        }
-      ]
-    },
-    {
-      legend: "Création de pièce (avec pose de porte)",
-      name: "roomCreation",
-      kind: "radiogroup",
-      required: true,
-      options: [
-        {
-          label: "Chambre",
-          value: "bedroom",
-          priceData: [
-            writePriceData('multiplier', 1.05),
-            writePriceData('fix', 300)
-          ]
-        },
-        {
-          label: "Salle de bain",
-          value: "bathroom",
-          priceData: [
-            writePriceData('multiplier', 1.10),
-            writePriceData('fix', 300)
-          ]
-        },
-        {
-          label: "WC",
-          value: "lavatory",
-          priceData: [
-            writePriceData('multiplier', 1.05),
-            writePriceData('fix', 300)
-          ]
         }
       ]
     },

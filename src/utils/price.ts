@@ -8,10 +8,11 @@ const getPriceData = (control: ControlTypes, value: InputTypes) => {
     return prices.map((price) => ({
       ...price,
       value: {
-        min: Number(value) * price.value.min,
-        max: Number(value) * price.value.max,
+        min: price.rangeOnly ? price.value.min : Number(value) * price.value.min,
+        max: price.rangeOnly ? price.value.max : Number(value) * price.value.max,
       }
-    }))
+    })
+    )
   };
   if (control.kind === 'radiogroup') {
     const option = control.options.find((option) => option.value === value);
@@ -34,13 +35,10 @@ const getRoundedRange = (range: Range) => {
     return Math.floor(n / ordre) * ordre;
   }
   const { min, max } = range;
-  if (min !== 0 && min === max) {
-    range.min = min - (min * 0.10);
-    range.max = max + (max * 0.10);
-  }
+  const average = (min + max) / 2;
   return {
-    min: roundNumber(range.min),
-    max: roundNumber(range.max)
+    min: roundNumber(average - (average * 0.10)),
+    max: roundNumber(average + (average * 0.10))
   }
 }
 
@@ -130,11 +128,12 @@ export const writePriceData = (
   range: number | Range,
   options?: {
     conditions?: Conditions,
-    column?: string
+    column?: string,
+    rangeOnly?: boolean
   }
 ): PriceData => {
   const value = typeof range === 'number'
     ? { min: range, max: range }
     : range;
-  return { type, value, conditions: options?.conditions, column: options?.column }
+  return { type, value, conditions: options?.conditions, column: options?.column, rangeOnly: options?.rangeOnly }
 };

@@ -8,7 +8,9 @@ export const isConditionValid = (item?: Item, conditions?: Conditions) => {
   const [key, operator, value] = conditions;
   if (operator === '==') return item.data[key] === value;
   if (operator === '<') return item.data[key] < value;
+  if (operator === '>') return item.data[key] > value;
   if (operator === '<=') return item.data[key] <= value;
+  if (operator === '>=') return item.data[key] >= value;
   if (operator === 'in') {
     if (!Array.isArray(value)) throw 'Value should be an array with in operator';
     const itemValue = item.data[key];

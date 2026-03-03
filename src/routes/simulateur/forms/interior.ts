@@ -4,13 +4,21 @@ import { writePriceData } from "~/utils/price";
 
 export const interior: DynamicForm = {
   label: "Aménagement intérieur",
-  subTitle: "Aménagement et isolation d'une pièce",
   controls: [
     inputNumber({
       label: "Surface en m²",
       name: "surface",
       min: 1,
       priceData: writePriceData('multiplier', 1)
+    }),
+    inputNumber({
+      label: "Nombre de pièces à créer",
+      name: "numberOfRooms",
+      min: 0,
+      priceData: [
+        writePriceData('fix', 300),
+        writePriceData('multiplier', { min: 1.05, max: 1.10 }, { rangeOnly: true, conditions: ['numberOfRooms', '>', 0] }),
+      ]
     }),
     {
       legend: "Étage",
@@ -152,38 +160,6 @@ export const interior: DynamicForm = {
       ]
     },
     {
-      legend: "Création de pièce (avec pose de porte)",
-      name: "roomCreation",
-      kind: "radiogroup",
-      required: true,
-      options: [
-        {
-          label: "Chambre",
-          value: "bedroom",
-          priceData: [
-            writePriceData('multiplier', 1.05),
-            writePriceData('fix', 300)
-          ]
-        },
-        {
-          label: "Salle de bain",
-          value: "bathroom",
-          priceData: [
-            writePriceData('multiplier', 1.10),
-            writePriceData('fix', 300)
-          ]
-        },
-        {
-          label: "WC",
-          value: "lavatory",
-          priceData: [
-            writePriceData('multiplier', 1.05),
-            writePriceData('fix', 300)
-          ]
-        }
-      ]
-    },
-    {
       legend: "Finitions",
       name: "finish",
       kind: "checklist",
@@ -192,8 +168,8 @@ export const interior: DynamicForm = {
           label: "Bandes",
           value: "bands",
           priceData: [
-            writePriceData('addition', 40, { column: 'surface' }),
-            writePriceData('multiplier', 1.20, { conditions: ['ceilingType', 'out', ['straight']], column: 'surface' }),
+            writePriceData('addition', 40, { column: { control: 'surface' } }),
+            writePriceData('multiplier', 1.20, { conditions: ['ceilingType', 'out', ['straight']], column: { control: 'surface' } }),
           ]
         },
         {
@@ -201,8 +177,8 @@ export const interior: DynamicForm = {
           value: "bandSanding",
           conditions: ['finish', 'in', ['bands']],
           priceData: [
-            writePriceData('addition', 25, { column: 'surface' }),
-            writePriceData('multiplier', 1.20, { conditions: ['ceilingType', 'out', ['straight']], column: 'surface' }),
+            writePriceData('addition', 25, { column: { control: 'surface' } }),
+            writePriceData('multiplier', 1.20, { conditions: ['ceilingType', 'out', ['straight']], column: { control: 'surface' } }),
           ]
         },
         {
@@ -210,8 +186,8 @@ export const interior: DynamicForm = {
           value: "paint",
           conditions: ['finish', 'array-contains', ['bands', 'bandSanding']],
           priceData: [
-            writePriceData('addition', 65, { column: 'surface' }),
-            writePriceData('multiplier', 1.20, { conditions: ['ceilingType', 'out', ['straight']], column: 'surface' }),
+            writePriceData('addition', 65, { column: { control: 'surface' } }),
+            writePriceData('multiplier', 1.20, { conditions: ['ceilingType', 'out', ['straight']], column: { control: 'surface' } }),
           ]
         }
       ]

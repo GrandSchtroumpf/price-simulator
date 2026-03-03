@@ -45,6 +45,9 @@
   & input[type="checkbox"]:checked + label .svg-container::before {
     opacity: 1;
   }
+  & input[type="checkbox"]:disabled + label {
+    opacity: 0.3;
+  }
 
   &:hover label .svg-container::before {
     opacity: 12%;

@@ -8,10 +8,11 @@ const getPriceData = (control: ControlTypes, value: InputTypes) => {
     return prices.map((price) => ({
       ...price,
       value: {
-        min: Number(value) * price.value.min,
-        max: Number(value) * price.value.max,
+        min: price.rangeOnly ? price.value.min : Number(value) * price.value.min,
+        max: price.rangeOnly ? price.value.max : Number(value) * price.value.max,
       }
-    }))
+    })
+    )
   };
   if (control.kind === 'radiogroup') {
     const option = control.options.find((option) => option.value === value);
@@ -34,13 +35,10 @@ const getRoundedRange = (range: Range) => {
     return Math.floor(n / ordre) * ordre;
   }
   const { min, max } = range;
-  if (min !== 0 && min === max) {
-    range.min = min - (min * 0.10);
-    range.max = max + (max * 0.10);
-  }
+  const average = (min + max) / 2;
   return {
-    min: roundNumber(range.min),
-    max: roundNumber(range.max)
+    min: roundNumber(average - (average * 0.10)),
+    max: roundNumber(average + (average * 0.10))
   }
 }
 
@@ -94,18 +92,19 @@ export const getPrice = (item: Item, dynamicFormRecord: Record<DynamicFormKey, D
       if (!price.column) {
         writePriceTypes(item, priceTypes.primary, price);
       } else {
-        if (!priceTypes[price.column]) {
-          priceTypes[price.column] = generatePriceTypes();
-          const sControl = form.controls.find((control) => control.name === price?.column);
-          const sValue = item.data[price.column];
+        const column = price.column;
+        if (!priceTypes[column.name]) {
+          priceTypes[column.name] = generatePriceTypes();
+          const sControl = form.controls.find((control) => control.name === column.control);
+          const sValue = item.data[column.control];
           if (!sControl || !sValue) continue;
           const sPrices = getPriceData(sControl, sValue);
           if (!sPrices) continue;
           for (const sPrice of sPrices) {
-            writePriceTypes(item, priceTypes[price.column], sPrice);
+            writePriceTypes(item, priceTypes[column.name], sPrice);
           }
         }
-        writePriceTypes(item, priceTypes[price.column], price);
+        writePriceTypes(item, priceTypes[column.name], price);
       }
     }
   }
@@ -130,11 +129,20 @@ export const writePriceData = (
   range: number | Range,
   options?: {
     conditions?: Conditions,
-    column?: string
+    column?: {
+      control: string;
+      name?: string;
+    },
+    rangeOnly?: boolean
   }
 ): PriceData => {
+  const { conditions, column, rangeOnly } = options ?? {};
+  const normalizedColumn = column && {
+    control: column.control,
+    name: column.name ?? column.control
+  }
   const value = typeof range === 'number'
     ? { min: range, max: range }
     : range;
-  return { type, value, conditions: options?.conditions, column: options?.column }
+  return { type, value, conditions, column: normalizedColumn, rangeOnly }
 };

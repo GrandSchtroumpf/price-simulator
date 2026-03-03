@@ -92,18 +92,19 @@ export const getPrice = (item: Item, dynamicFormRecord: Record<DynamicFormKey, D
       if (!price.column) {
         writePriceTypes(item, priceTypes.primary, price);
       } else {
-        if (!priceTypes[price.column]) {
-          priceTypes[price.column] = generatePriceTypes();
-          const sControl = form.controls.find((control) => control.name === price?.column);
-          const sValue = item.data[price.column];
+        const column = price.column;
+        if (!priceTypes[column.name]) {
+          priceTypes[column.name] = generatePriceTypes();
+          const sControl = form.controls.find((control) => control.name === column.control);
+          const sValue = item.data[column.control];
           if (!sControl || !sValue) continue;
           const sPrices = getPriceData(sControl, sValue);
           if (!sPrices) continue;
           for (const sPrice of sPrices) {
-            writePriceTypes(item, priceTypes[price.column], sPrice);
+            writePriceTypes(item, priceTypes[column.name], sPrice);
           }
         }
-        writePriceTypes(item, priceTypes[price.column], price);
+        writePriceTypes(item, priceTypes[column.name], price);
       }
     }
   }
@@ -128,12 +129,20 @@ export const writePriceData = (
   range: number | Range,
   options?: {
     conditions?: Conditions,
-    column?: string,
+    column?: {
+      control: string;
+      name?: string;
+    },
     rangeOnly?: boolean
   }
 ): PriceData => {
+  const { conditions, column, rangeOnly } = options ?? {};
+  const normalizedColumn = column && {
+    control: column.control,
+    name: column.name ?? column.control
+  }
   const value = typeof range === 'number'
     ? { min: range, max: range }
     : range;
-  return { type, value, conditions: options?.conditions, column: options?.column, rangeOnly: options?.rangeOnly }
+  return { type, value, conditions, column: normalizedColumn, rangeOnly }
 };

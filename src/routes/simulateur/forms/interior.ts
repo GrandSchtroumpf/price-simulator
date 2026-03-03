@@ -168,8 +168,8 @@ export const interior: DynamicForm = {
           label: "Bandes",
           value: "bands",
           priceData: [
-            writePriceData('addition', 40, { column: 'surface' }),
-            writePriceData('multiplier', 1.20, { conditions: ['ceilingType', 'out', ['straight']], column: 'surface' }),
+            writePriceData('addition', 40, { column: { control: 'surface' } }),
+            writePriceData('multiplier', 1.20, { conditions: ['ceilingType', 'out', ['straight']], column: { control: 'surface' } }),
           ]
         },
         {
@@ -177,8 +177,8 @@ export const interior: DynamicForm = {
           value: "bandSanding",
           conditions: ['finish', 'in', ['bands']],
           priceData: [
-            writePriceData('addition', 25, { column: 'surface' }),
-            writePriceData('multiplier', 1.20, { conditions: ['ceilingType', 'out', ['straight']], column: 'surface' }),
+            writePriceData('addition', 25, { column: { control: 'surface' } }),
+            writePriceData('multiplier', 1.20, { conditions: ['ceilingType', 'out', ['straight']], column: { control: 'surface' } }),
           ]
         },
         {
@@ -186,8 +186,8 @@ export const interior: DynamicForm = {
           value: "paint",
           conditions: ['finish', 'array-contains', ['bands', 'bandSanding']],
           priceData: [
-            writePriceData('addition', 65, { column: 'surface' }),
-            writePriceData('multiplier', 1.20, { conditions: ['ceilingType', 'out', ['straight']], column: 'surface' }),
+            writePriceData('addition', 65, { column: { control: 'surface' } }),
+            writePriceData('multiplier', 1.20, { conditions: ['ceilingType', 'out', ['straight']], column: { control: 'surface' } }),
           ]
         }
       ]

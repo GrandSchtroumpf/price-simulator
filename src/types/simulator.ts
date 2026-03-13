@@ -46,6 +46,8 @@ export interface Control<T> {
   class?: string;
 }
 
+export type GetPriceData = PriceData | QRL<(item: Item) => PriceData>;
+
 export interface Input extends Control<'input'> {
   label?: string;
   required?: boolean;
@@ -53,7 +55,7 @@ export interface Input extends Control<'input'> {
   inputmode?: string;
   readonly?: boolean
   placeholder?: string;
-  priceData?: PriceData | PriceData[];
+  priceData?: GetPriceData | GetPriceData[];
   conditions?: Conditions;
   disabled?: boolean;
 }
@@ -64,7 +66,7 @@ export interface CheckBox extends Control<'checkbox'> {
   required?: boolean;
   checked?: boolean;
   disabled?: boolean;
-  priceData?: PriceData | PriceData[];
+  priceData?: GetPriceData | GetPriceData[];
   conditions?: Conditions;
 }
 
@@ -91,7 +93,7 @@ export interface CheckList extends Control<'checklist'> {
     value: string;
     checked?: boolean;
     required?: boolean;
-    priceData?: PriceData | PriceData[];
+    priceData?: GetPriceData | GetPriceData[];
     conditions?: Conditions;
     disabled?: boolean;
   }[];
@@ -104,7 +106,7 @@ export interface RadioGroup extends Control<'radiogroup'> {
     label: string;
     value: string;
     checked?: boolean;
-    priceData?: PriceData | PriceData[];
+    priceData?: GetPriceData | GetPriceData[];
     conditions?: Conditions;
     disabled?: boolean;
   }[];

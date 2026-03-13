@@ -1,18 +1,26 @@
-import type { ControlTypes, InputTypes, Item, PriceData, Conditions, Range, DynamicForm, DynamicFormKey } from "~/types/simulator";
+import type { ControlTypes, InputTypes, Item, PriceData, Conditions, Range, DynamicForm, DynamicFormKey, GetPriceData } from "~/types/simulator";
 import { isConditionValid } from "./conditions";
 import { toArray } from "./helpers";
 
-const getPriceData = (control: ControlTypes, value: InputTypes) => {
+const getPriceDataContent = (price: GetPriceData, item: Item) => {
+  if ('getHash' in price) return price(item);
+  return price;
+}
+
+const getPriceData = (control: ControlTypes, value: InputTypes, item: Item) => {
   if (control.kind === "input" && control.type === 'number') {
     const prices = toArray(control.priceData);
-    return prices.map((price) => ({
-      ...price,
-      value: {
-        min: price.rangeOnly ? price.value.min : Number(value) * price.value.min,
-        max: price.rangeOnly ? price.value.max : Number(value) * price.value.max,
+    const getPrices = prices.map(async (rawPrice) => {
+      const price = await getPriceDataContent(rawPrice, item);
+      return {
+        ...price,
+        value: {
+          min: price.rangeOnly ? price.value.min : Number(value) * price.value.min,
+          max: price.rangeOnly ? price.value.max : Number(value) * price.value.max,
+        }
       }
-    })
-    )
+    });
+    return Promise.all(getPrices);
   };
   if (control.kind === 'radiogroup') {
     const option = control.options.find((option) => option.value === value);
@@ -79,16 +87,19 @@ const calcRange = (obj: { addition: Range, multiplier: Range, fix: Range }) => {
     max: Math.floor(addition.max * multiplier.max + fix.max),
   }
 }
-export const getPrice = (item: Item, dynamicFormRecord: Record<DynamicFormKey, DynamicForm>) => {
+
+ 
+export const getPrice = async (item: Item, dynamicFormRecord: Record<DynamicFormKey, DynamicForm>) => {
   const form: DynamicForm = dynamicFormRecord[item.dynamicFormKey];
   const priceTypes: Record<string, { addition: Range, multiplier: Range, fix: Range }> = { primary: generatePriceTypes() };
   for (const [controlName, value] of Object.entries(item.data)) {
     const control = form.controls.find(c => c.name === controlName);
     if (!control) continue;
-    const priceData = getPriceData(control, value);
+    const priceData = await getPriceData(control, value, item);
     const prices = Array.isArray(priceData) ? priceData : [priceData];
-    for (const price of prices) {
-      if (!price) continue;
+    for (const rawPrice of prices) {
+      if (!rawPrice) continue;
+      const price = await getPriceDataContent(rawPrice, item);
       if (!price.column) {
         writePriceTypes(item, priceTypes.primary, price);
       } else {
@@ -98,9 +109,10 @@ export const getPrice = (item: Item, dynamicFormRecord: Record<DynamicFormKey, D
           const sControl = form.controls.find((control) => control.name === column.control);
           const sValue = item.data[column.control];
           if (!sControl || !sValue) continue;
-          const sPrices = getPriceData(sControl, sValue);
+          const sPrices = await getPriceData(sControl, sValue, item);
           if (!sPrices) continue;
-          for (const sPrice of sPrices) {
+          for (const sStuff of sPrices) {
+            const sPrice = await getPriceDataContent(sStuff, item);
             writePriceTypes(item, priceTypes[column.name], sPrice);
           }
         }

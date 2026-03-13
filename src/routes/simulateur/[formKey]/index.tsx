@@ -6,7 +6,7 @@ import { displayPrice, getPrice } from "~/utils/price";
 import { isConditionValid } from "~/utils/conditions";
 import { DynamicControl } from "~/components/controls";
 import { cartContext, FormImg, formImgs } from "~/routes/simulateur/layout";
-import { useId, useSignal, useStyles$, useVisibleTask$ } from "@qwik.dev/core/internal";
+import { useId, useSignal, useStyles$, useTask$, useVisibleTask$ } from "@qwik.dev/core/internal";
 import styles from './index.css?inline';
 
 const convertControls = (data: FormData, form: DynamicForm) => {
@@ -59,6 +59,19 @@ const writeControls = (editItem: Item, controls: ControlTypes[]) => {
   return controls;
 };
 
+function deepClone<T>(obj: T): T {
+  if (obj === null || typeof obj !== "object") return obj;
+  if (Array.isArray(obj)) return obj.map(deepClone) as T;
+
+  const clone = {} as any;
+  for (const key in obj) {
+    if (key in obj) {
+      clone[key] = deepClone(obj[key]);
+    }
+  }
+  return clone as T;
+} 
+
 
 export default component$(() => {
   useStyles$(styles);
@@ -72,16 +85,21 @@ export default component$(() => {
   if (!(formKey in dynamicFormRecord)) return null;
   const dynamicForm = dynamicFormRecord[formKey as DynamicFormKey];
 
-  const itemPrice = useComputed$(() => {
-    const next = item.value;
-    if (!next) return '';
-    const nextPrice = getPrice(next, dynamicFormRecord);
-    return displayPrice(nextPrice);
+
+  const itemPrice = useSignal('');
+  useTask$(async ({ track }) => {
+    const next = track(item);
+    if (!next) {
+      itemPrice.value = '';
+    } else {
+      const nextPrice = await getPrice(next, dynamicFormRecord);
+      itemPrice.value = displayPrice(nextPrice);
+    }
   });
 
   const controls = useComputed$(() => {
     const next = item.value;
-    const copy = structuredClone(dynamicForm.controls);
+    const copy = deepClone(dynamicForm.controls);
     for (const control of copy) {
       if (control.kind === 'radiogroup') {
         for (const option of control.options) {

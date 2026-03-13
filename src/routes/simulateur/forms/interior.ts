@@ -1,3 +1,4 @@
+import { $ } from "@qwik.dev/core";
 import type { DynamicForm } from "~/types/simulator";
 import { inputNumber } from "~/utils/helpers";
 import { writePriceData } from "~/utils/price";
@@ -168,8 +169,12 @@ export const interior: DynamicForm = {
           label: "Bandes",
           value: "bands",
           priceData: [
-            writePriceData('addition', 40, { column: { control: 'surface' } }),
-            writePriceData('multiplier', 1.20, { conditions: ['ceilingType', 'out', ['straight']], column: { control: 'surface' } }),
+            $((item) => {
+              const surface = item.data['surface'] as number;
+              const base = 40 * surface;
+              const value = (item.data['ceilingType'] !== 'straight') ? base * 1.2 : base;
+              return writePriceData('fix', value, { column: { control: 'surface' } });
+            }),
           ]
         },
         {
@@ -177,8 +182,12 @@ export const interior: DynamicForm = {
           value: "bandSanding",
           conditions: ['finish', 'in', ['bands']],
           priceData: [
-            writePriceData('addition', 25, { column: { control: 'surface' } }),
-            writePriceData('multiplier', 1.20, { conditions: ['ceilingType', 'out', ['straight']], column: { control: 'surface' } }),
+            $((item) => {
+              const surface = item.data['surface'] as number;
+              const base = 25 * surface;
+              const value = (item.data['ceilingType'] !== 'straight') ? base * 1.2 : base;
+              return writePriceData('fix', value, { column: { control: 'surface' } });
+            }),
           ]
         },
         {
@@ -186,8 +195,12 @@ export const interior: DynamicForm = {
           value: "paint",
           conditions: ['finish', 'array-contains', ['bands', 'bandSanding']],
           priceData: [
-            writePriceData('addition', 65, { column: { control: 'surface' } }),
-            writePriceData('multiplier', 1.20, { conditions: ['ceilingType', 'out', ['straight']], column: { control: 'surface' } }),
+           $((item) => {
+              const surface = item.data['surface'] as number;
+              const base = 65 * surface;
+              const value = (item.data['ceilingType'] !== 'straight') ? base * 1.2 : base;
+              return writePriceData('fix', value, { column: { control: 'surface' } });
+            }),
           ]
         }
       ]

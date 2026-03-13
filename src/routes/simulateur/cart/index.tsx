@@ -29,7 +29,7 @@ export default component$(() => {
     const isValid = form.checkValidity();
     if (!isValid) return;
     const price = await finalForm.finalPrice?.(cart);
-    if (price) finalEstimation.value = displayPrice(price);
+    if (price) finalEstimation.value = await displayPrice(price);
   });
 
   return (

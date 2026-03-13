@@ -130,10 +130,11 @@ export const getPrice = async (item: Item, dynamicFormRecord: Record<DynamicForm
 };
 
 const currency = new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
-export function displayPrice(price: Range): string {
-  if (!price) return '';
+export async function displayPrice(rawPrice: Range | Promise<Range>) {
+  if (!rawPrice) return '';
+  const price = await rawPrice;
   if (price.min === price.max) return currency.format(price.min);
-  return (currency as any).formatRange(price.min, price.max);
+  return (currency as any).formatRange(price.min, price.max) as string;
 }
 
 export const writePriceData = (

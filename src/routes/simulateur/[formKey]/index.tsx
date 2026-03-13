@@ -93,7 +93,7 @@ export default component$(() => {
       itemPrice.value = '';
     } else {
       const nextPrice = await getPrice(next, dynamicFormRecord);
-      itemPrice.value = displayPrice(nextPrice);
+      itemPrice.value = await displayPrice(nextPrice);
     }
   });
 

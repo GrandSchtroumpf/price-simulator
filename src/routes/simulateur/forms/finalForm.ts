@@ -9,7 +9,7 @@ export const finalForm: FinalDynamicForm = {
     let totalMinPrice = 0;
     let totalMaxPrice = 0;
     for (const item of cart) {
-      const itemPrice = getPrice(item, dynamicFormRecord);
+      const itemPrice = await getPrice(item, dynamicFormRecord);
       if (itemPrice?.min) {
         totalMinPrice += itemPrice.min;
         totalMaxPrice += itemPrice.max ?? itemPrice.min;

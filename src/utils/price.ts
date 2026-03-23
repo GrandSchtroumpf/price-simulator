@@ -2,16 +2,19 @@ import type { ControlTypes, InputTypes, Item, PriceData, Conditions, Range, Dyna
 import { isConditionValid } from "./conditions";
 import { toArray } from "./helpers";
 
-const getPriceDataContent = (price: GetPriceData, item: Item) => {
-  if ('getHash' in price) return price(item);
-  return price;
+const getPricesDataContent = async (item: Item, priceData?: GetPriceData) => {
+  if (!priceData) return;
+  if ('getHash' in priceData) {
+    return priceData(item);
+  }
+  return priceData;
 }
 
-const getPriceData = (control: ControlTypes, value: InputTypes, item: Item) => {
+const getPriceData = async (control: ControlTypes, value: InputTypes, item: Item) => {
   if (control.kind === "input" && control.type === 'number') {
-    const prices = toArray(control.priceData);
-    const getPrices = prices.map(async (rawPrice) => {
-      const price = await getPriceDataContent(rawPrice, item);
+    const rawPrices = await getPricesDataContent(item, control.priceData);
+    const prices = toArray(rawPrices);
+    const getPrices = prices.map((price) => {
       return {
         ...price,
         value: {
@@ -24,16 +27,22 @@ const getPriceData = (control: ControlTypes, value: InputTypes, item: Item) => {
   };
   if (control.kind === 'radiogroup') {
     const option = control.options.find((option) => option.value === value);
-    if (option?.priceData) return toArray(option.priceData);
+    const prices = await getPricesDataContent(item, option?.priceData);
+    if (option?.priceData) return toArray(prices);
   }
   if (control.kind === 'checklist') {
     const priceData = [];
     const values = Array.isArray(value) ? value : [value];
     for (const v of values) {
       const option = control.options.find((option) => option.value === v);
-      priceData.push(...toArray(option?.priceData));
+      const price = await getPricesDataContent(item, option?.priceData);
+      priceData.push(...toArray(price));
     }
-    return priceData;
+    return getPricesDataContent(item, priceData);
+  }
+  if (control.kind === 'multiples') {
+    const price = await getPricesDataContent(item, control.priceData);
+    return price;
   }
 };
 
@@ -88,18 +97,34 @@ const calcRange = (obj: { addition: Range, multiplier: Range, fix: Range }) => {
   }
 }
 
- 
+const getItemData = (item: Item) => {
+  const data: Record<string, InputTypes> = {};
+  for (const [name, value] of Object.entries(item.data)) {
+    if (name.includes('.')) {
+      const [mainName] = name.split('.');
+      if (!data[mainName]) {
+        data[mainName] = value;
+      } else {
+        data[mainName] = Number(data[mainName]) * Number(value);
+      }
+    }
+    data[name] = value;
+  }
+  return data;
+};
+
+
 export const getPrice = async (item: Item, dynamicFormRecord: Record<DynamicFormKey, DynamicForm>) => {
   const form: DynamicForm = dynamicFormRecord[item.dynamicFormKey];
   const priceTypes: Record<string, { addition: Range, multiplier: Range, fix: Range }> = { primary: generatePriceTypes() };
-  for (const [controlName, value] of Object.entries(item.data)) {
+  const itemData = getItemData(item);
+  for (const [controlName, value] of Object.entries(itemData)) {
     const control = form.controls.find(c => c.name === controlName);
     if (!control) continue;
     const priceData = await getPriceData(control, value, item);
     const prices = Array.isArray(priceData) ? priceData : [priceData];
-    for (const rawPrice of prices) {
-      if (!rawPrice) continue;
-      const price = await getPriceDataContent(rawPrice, item);
+    for (const price of prices) {
+      if (!price) continue;
       if (!price.column) {
         writePriceTypes(item, priceTypes.primary, price);
       } else {
@@ -109,11 +134,11 @@ export const getPrice = async (item: Item, dynamicFormRecord: Record<DynamicForm
           const sControl = form.controls.find((control) => control.name === column.control);
           const sValue = item.data[column.control];
           if (!sControl || !sValue) continue;
-          const sPrices = await getPriceData(sControl, sValue, item);
-          if (!sPrices) continue;
-          for (const sStuff of sPrices) {
-            const sPrice = await getPriceDataContent(sStuff, item);
-            writePriceTypes(item, priceTypes[column.name], sPrice);
+          const sPrice = await getPriceData(sControl, sValue, item);
+          if (!sPrice) continue;
+          const prices = Array.isArray(sPrice) ? sPrice : [sPrice];
+          for (const price of prices) {
+            writePriceTypes(item, priceTypes[column.name], price);
           }
         }
         writePriceTypes(item, priceTypes[column.name], price);

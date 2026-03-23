@@ -8,6 +8,9 @@ body:has(#form) {
 
 .step-price {
   padding-inline: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 
   & p {
     font-size: 1.2rem;

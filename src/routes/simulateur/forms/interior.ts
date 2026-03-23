@@ -168,40 +168,37 @@ export const interior: DynamicForm = {
         {
           label: "Bandes",
           value: "bands",
-          priceData: [
+          priceData:
             $((item) => {
               const surface = item.data['surface'] as number;
               const base = 40 * surface;
               const value = (item.data['ceilingType'] !== 'straight') ? base * 1.2 : base;
               return writePriceData('fix', value, { column: { control: 'surface' } });
             }),
-          ]
         },
         {
           label: "Ponçage des bandes",
           value: "bandSanding",
           conditions: ['finish', 'in', ['bands']],
-          priceData: [
+          priceData:
             $((item) => {
               const surface = item.data['surface'] as number;
               const base = 25 * surface;
               const value = (item.data['ceilingType'] !== 'straight') ? base * 1.2 : base;
               return writePriceData('fix', value, { column: { control: 'surface' } });
             }),
-          ]
         },
         {
           label: "Peinture",
           value: "paint",
           conditions: ['finish', 'array-contains', ['bands', 'bandSanding']],
-          priceData: [
-           $((item) => {
+          priceData:
+            $((item) => {
               const surface = item.data['surface'] as number;
               const base = 65 * surface;
               const value = (item.data['ceilingType'] !== 'straight') ? base * 1.2 : base;
               return writePriceData('fix', value, { column: { control: 'surface' } });
             }),
-          ]
         }
       ]
     }

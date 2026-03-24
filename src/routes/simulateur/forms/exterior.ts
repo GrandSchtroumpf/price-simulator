@@ -2,6 +2,15 @@ import { $ } from "@qwik.dev/core";
 import type { DynamicForm, Item, PriceData } from "~/types/simulator";
 import { writePriceData } from "~/utils/price";
 
+// const doAwesomeStuff = (start: number, step: number, indexes: number[], conditions: Record<number, Conditions>) => {
+//   const pricesDatas: PriceData[] = [];
+//   for (let i = start; i < indexes.length; i += step) {
+//     console.log(i);
+//   }
+// }
+
+const getPriceData = (coef: number, material: string) => writePriceData("multiplier", coef, { conditions: ['materials', '==', `${material}`] });
+
 const getSurfacePriceData = (type: string, surface: number): PriceData | PriceData[] => {
   switch (type) {
     case "window": {
@@ -9,32 +18,32 @@ const getSurfacePriceData = (type: string, surface: number): PriceData | PriceDa
       if (surface < 1.5) return writePriceData('multiplier', 1.20);
       if (surface < 2) {
         return [
-          writePriceData('multiplier', 1.42, { conditions: ['materials', '==', 'plastic'] }),
-          writePriceData('multiplier', 1.35, { conditions: ['materials', '==', 'aluminum'] }),
+          getPriceData(1.42, 'plastic'),
+          getPriceData(1.35, 'aluminum'),
         ]
       }
       if (surface < 2.5) {
         return [
-          writePriceData('multiplier', 2.06, { conditions: ['materials', '==', 'plastic'] }),
-          writePriceData('multiplier', 1.81, { conditions: ['materials', '==', 'aluminum'] }),
+          getPriceData(2.06, 'plastic'),
+          getPriceData(1.81, 'aluminum'),
         ]
       }
       if (surface < 3) {
         return [
-          writePriceData('multiplier', 2.56, { conditions: ['materials', '==', 'plastic'] }),
-          writePriceData('multiplier', 2.40, { conditions: ['materials', '==', 'aluminum'] }),
+          getPriceData(2.56, 'plastic'),
+          getPriceData(2.40, 'aluminum'),
         ]
       }
       if (surface < 3.5) {
         return [
-          writePriceData('multiplier', 2.90, { conditions: ['materials', '==', 'plastic'] }),
-          writePriceData('multiplier', 2.65, { conditions: ['materials', '==', 'aluminum'] }),
+          getPriceData(2.90, 'plastic'),
+          getPriceData(2.65, 'aluminum'),
         ]
       }
       if (surface <= 4) {
         return [
-          writePriceData('multiplier', 3.22, { conditions: ['materials', '==', 'plastic'] }),
-          writePriceData('multiplier', 2.87, { conditions: ['materials', '==', 'aluminum'] }),
+          getPriceData(3.22, 'plastic'),
+          getPriceData(2.87, 'aluminum'),
         ]
       };
       return writePriceData('multiplier', 1);
@@ -43,74 +52,74 @@ const getSurfacePriceData = (type: string, surface: number): PriceData | PriceDa
       if (surface < 1.5) return writePriceData('multiplier', 1);
       if (surface < 2) {
         return [
-          writePriceData('multiplier', 1.28, { conditions: ['materials', '==', 'plastic'] }),
-          writePriceData('multiplier', 1.08, { conditions: ['materials', '==', 'aluminum'] }),
+          getPriceData(1.28, 'plastic'),
+          getPriceData(1.08, 'aluminum'),
         ]
       }
       if (surface < 2.5) {
         return [
-          writePriceData('multiplier', 1.55, { conditions: ['materials', '==', 'plastic'] }),
-          writePriceData('multiplier', 1.16, { conditions: ['materials', '==', 'aluminum'] }),
+          getPriceData(1.56, 'plastic'),
+          getPriceData(1.16, 'aluminum'),
         ]
       }
       if (surface < 3) {
         return [
-          writePriceData('multiplier', 1.78, { conditions: ['materials', '==', 'plastic'] }),
-          writePriceData('multiplier', 1.24, { conditions: ['materials', '==', 'aluminum'] }),
+          getPriceData(1.78, 'plastic'),
+          getPriceData(1.24, 'aluminum'),
         ]
       }
       if (surface < 3.5) {
         return [
-          writePriceData('multiplier', 1.90, { conditions: ['materials', '==', 'plastic'] }),
-          writePriceData('multiplier', 1.32, { conditions: ['materials', '==', 'aluminum'] }),
+          getPriceData(1.90, 'plastic'),
+          getPriceData(1.32, 'aluminum'),
         ]
       }
       if (surface < 4) {
         return [
-          writePriceData('multiplier', 2.18, { conditions: ['materials', '==', 'plastic'] }),
-          writePriceData('multiplier', 1.42, { conditions: ['materials', '==', 'aluminum'] }),
+          getPriceData(2.18, 'plastic'),
+          getPriceData(1.42, 'aluminum'),
         ]
       }
       if (surface < 4.5) {
         return [
-          writePriceData('multiplier', 2.45, { conditions: ['materials', '==', 'plastic'] }),
-          writePriceData('multiplier', 1.56, { conditions: ['materials', '==', 'aluminum'] }),
+          getPriceData(2.45, 'plastic'),
+          getPriceData(1.56, 'aluminum'),
         ]
       }
       if (surface < 5) {
         return [
-          writePriceData('multiplier', 2.70, { conditions: ['materials', '==', 'plastic'] }),
-          writePriceData('multiplier', 1.70, { conditions: ['materials', '==', 'aluminum'] }),
+          getPriceData(2.70, 'plastic'),
+          getPriceData(1.70, 'aluminum'),
         ]
       }
       if (surface < 5.5) {
         return [
-          writePriceData('multiplier', 2.88, { conditions: ['materials', '==', 'plastic'] }),
-          writePriceData('multiplier', 1.84, { conditions: ['materials', '==', 'aluminum'] }),
+          getPriceData(2.88, 'plastic'),
+          getPriceData(1.84, 'aluminum'),
         ]
       }
       if (surface < 6) {
         return [
-          writePriceData('multiplier', 3.15, { conditions: ['materials', '==', 'plastic'] }),
-          writePriceData('multiplier', 1.98, { conditions: ['materials', '==', 'aluminum'] }),
+          getPriceData(3.15, 'plastic'),
+          getPriceData(1.98, 'aluminum'),
         ]
       }
       if (surface < 6.5) {
         return [
-          writePriceData('multiplier', 3.41, { conditions: ['materials', '==', 'plastic'] }),
-          writePriceData('multiplier', 2.19, { conditions: ['materials', '==', 'aluminum'] }),
+          getPriceData(3.41, 'plastic'),
+          getPriceData(2.19, 'aluminum'),
         ]
       }
       if (surface < 7) {
         return [
-          writePriceData('multiplier', 3.63, { conditions: ['materials', '==', 'plastic'] }),
-          writePriceData('multiplier', 2.44, { conditions: ['materials', '==', 'aluminum'] }),
+          getPriceData(3.63, 'plastic'),
+          getPriceData(2.44, 'aluminum'),
         ]
       }
       if (surface <= 7.5) {
         return [
-          writePriceData('multiplier', 3.85, { conditions: ['materials', '==', 'plastic'] }),
-          writePriceData('multiplier', 2.68, { conditions: ['materials', '==', 'aluminum'] }),
+          getPriceData(3.85, 'plastic'),
+          getPriceData(2.68, 'aluminum'),
         ]
       }
       return writePriceData('multiplier', 1);
@@ -172,26 +181,26 @@ const getOptionsPriceData = (type: string, width: number): PriceData | PriceData
     case 'window': {
       if (width < 1) {
         return [
-          writePriceData('multiplier', 2.3, { conditions: ['materials', '==', 'plastic'] }),
-          writePriceData('multiplier', 1.57, { conditions: ['materials', '==', 'aluminum'] }),
+          getPriceData(2.3, 'plastic'),
+          getPriceData(1.57, 'aluminum'),
         ]
       }
       if (width < 1.2) {
         return [
-          writePriceData('multiplier', 2.1, { conditions: ['materials', '==', 'plastic'] }),
-          writePriceData('multiplier', 1.47, { conditions: ['materials', '==', 'aluminum'] }),
+          getPriceData(2.1, 'plastic'),
+          getPriceData(1.47, 'aluminum'),
         ]
       }
       if (width < 1.8) {
         return [
-          writePriceData('multiplier', 1.88, { conditions: ['materials', '==', 'plastic'] }),
-          writePriceData('multiplier', 1.38, { conditions: ['materials', '==', 'aluminum'] }),
+          getPriceData(1.88, 'plastic'),
+          getPriceData(1.38, 'aluminum'),
         ]
       }
       if (width >= 1.8) {
         return [
-          writePriceData('multiplier', 1.68, { conditions: ['materials', '==', 'plastic'] }),
-          writePriceData('multiplier', 1.3, { conditions: ['materials', '==', 'aluminum'] }),
+          getPriceData(1.68, 'plastic'),
+          getPriceData(1.3, 'aluminum'),
         ]
       }
       return writePriceData('multiplier', 1);
@@ -199,38 +208,38 @@ const getOptionsPriceData = (type: string, width: number): PriceData | PriceData
     case 'windowDoor': {
       if (width < 1) {
         return [
-          writePriceData('multiplier', 1.98, { conditions: ['materials', '==', 'plastic'] }),
-          writePriceData('multiplier', 1.45, { conditions: ['materials', '==', 'aluminum'] }),
+          getPriceData(1.98, 'plastic'),
+          getPriceData(1.45, 'aluminum'),
         ]
       }
       if (width < 1.2) {
         return [
-          writePriceData('multiplier', 1.80, { conditions: ['materials', '==', 'plastic'] }),
-          writePriceData('multiplier', 1.32, { conditions: ['materials', '==', 'aluminum'] }),
+          getPriceData(1.80, 'plastic'),
+          getPriceData(1.32, 'aluminum'),
         ]
       }
       if (width < 1.8) {
         return [
-          writePriceData('multiplier', 1.75, { conditions: ['materials', '==', 'plastic'] }),
-          writePriceData('multiplier', 1.36, { conditions: ['materials', '==', 'aluminum'] }),
+          getPriceData(1.75, 'plastic'),
+          getPriceData(1.36, 'aluminum'),
         ]
       }
       if (width < 2.2) {
         return [
-          writePriceData('multiplier', 1.63, { conditions: ['materials', '==', 'plastic'] }),
-          writePriceData('multiplier', 1.3, { conditions: ['materials', '==', 'aluminum'] }),
+          getPriceData(1.63, 'plastic'),
+          getPriceData(1.3, 'aluminum'),
         ]
       }
       if (width < 2.7) {
         return [
-          writePriceData('multiplier', 1.60, { conditions: ['materials', '==', 'plastic'] }),
-          writePriceData('multiplier', 1.28, { conditions: ['materials', '==', 'aluminum'] }),
+          getPriceData(1.60, 'plastic'),
+          getPriceData(1.28, 'aluminum'),
         ]
       }
       if (width >= 2.7) {
         return [
-          writePriceData('multiplier', 1.55, { conditions: ['materials', '==', 'plastic'] }),
-          writePriceData('multiplier', 1.26, { conditions: ['materials', '==', 'aluminum'] }),
+          getPriceData(1.55, 'plastic'),
+          getPriceData(1.26, 'aluminum'),
         ]
       }
       return writePriceData('multiplier', 1);

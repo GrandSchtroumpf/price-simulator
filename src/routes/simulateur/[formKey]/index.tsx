@@ -86,7 +86,7 @@ function deepClone<T>(obj: T): T {
   return clone as T;
 }
 
-const hasErrors = $(async (controls: ControlTypes[], item: Item) => {
+async function getControlsErrors(controls: ControlTypes[], item: Item) {
   const flattenControls = [];
   for (const control of controls) {
     if (control.kind === 'multiples') {
@@ -105,8 +105,7 @@ const hasErrors = $(async (controls: ControlTypes[], item: Item) => {
     }
   }
   return errors;
-})
-
+}
 
 export default component$(() => {
   useStyles$(styles);
@@ -184,7 +183,6 @@ export default component$(() => {
     })
   })
 
-
   const onSubmit = $((event: SubmitEvent, form: HTMLFormElement) => {
     const isValid = form.checkValidity();
     if (!isValid) return;
@@ -213,7 +211,7 @@ export default component$(() => {
     if (!isValid) {
       errors.value = [];
     } else {
-      const controlErrors = await hasErrors(controls.value, dynamicFormItem);
+      const controlErrors = await getControlsErrors(controls.value, dynamicFormItem);
       if (controlErrors.length) {
         errors.value = [...controlErrors]
       } else {
@@ -244,7 +242,7 @@ export default component$(() => {
         </div>
         <form id={id} preventdefault:submit onSubmit$={onSubmit} onChange$={onInput} onInput$={onInput}>
           {controls.value.map((control) => {
-            return <DynamicControl key={control.name} control={control} />
+            return <DynamicControl key={control.name} control={control} item={item.value} />
           })}
           <footer>
             <button class="btn-outline" name="redirect" value='more' type='submit'>Autres travaux</button>

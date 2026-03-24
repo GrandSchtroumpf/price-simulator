@@ -113,19 +113,6 @@ const getSurfacePriceData = (type: string, surface: number): PriceData | PriceDa
           writePriceData('multiplier', 2.68, { conditions: ['materials', '==', 'aluminum'] }),
         ]
       }
-      if (surface < 8) return writePriceData('multiplier', 2.92, { conditions: ['materials', '==', 'aluminum'] });
-      if (surface < 8.5) return writePriceData('multiplier', 3.10, { conditions: ['materials', '==', 'aluminum'] });
-      if (surface < 9) return writePriceData('multiplier', 3.28, { conditions: ['materials', '==', 'aluminum'] });
-      if (surface < 9.5) return writePriceData('multiplier', 3.46, { conditions: ['materials', '==', 'aluminum'] });
-      if (surface < 10) return writePriceData('multiplier', 3.65, { conditions: ['materials', '==', 'aluminum'] });
-      if (surface < 10.5) return writePriceData('multiplier', 3.72, { conditions: ['materials', '==', 'aluminum'] });
-      if (surface < 11) return writePriceData('multiplier', 3.79, { conditions: ['materials', '==', 'aluminum'] });
-      if (surface < 11.5) return writePriceData('multiplier', 3.86, { conditions: ['materials', '==', 'aluminum'] });
-      if (surface < 12) return writePriceData('multiplier', 3.93, { conditions: ['materials', '==', 'aluminum'] });
-      if (surface < 12.5) return writePriceData('multiplier', 4, { conditions: ['materials', '==', 'aluminum'] });
-      if (surface < 13) return writePriceData('multiplier', 4.06, { conditions: ['materials', '==', 'aluminum'] });
-      if (surface < 13.5) return writePriceData('multiplier', 4.11, { conditions: ['materials', '==', 'aluminum'] });
-      if (surface <= 14) return writePriceData('multiplier', 4.15, { conditions: ['materials', '==', 'aluminum'] });
       return writePriceData('multiplier', 1);
     }
     case 'bay': {
@@ -180,6 +167,96 @@ const getSurfacePriceData = (type: string, surface: number): PriceData | PriceDa
   }
 }
 
+const getOptionsPriceData = (type: string, width: number): PriceData | PriceData[] => {
+  switch (type) {
+    case 'window': {
+      if (width < 1) {
+        return [
+          writePriceData('multiplier', 2.3, { conditions: ['materials', '==', 'plastic'] }),
+          writePriceData('multiplier', 1.57, { conditions: ['materials', '==', 'aluminum'] }),
+        ]
+      }
+      if (width < 1.2) {
+        return [
+          writePriceData('multiplier', 2.1, { conditions: ['materials', '==', 'plastic'] }),
+          writePriceData('multiplier', 1.47, { conditions: ['materials', '==', 'aluminum'] }),
+        ]
+      }
+      if (width < 1.8) {
+        return [
+          writePriceData('multiplier', 1.88, { conditions: ['materials', '==', 'plastic'] }),
+          writePriceData('multiplier', 1.38, { conditions: ['materials', '==', 'aluminum'] }),
+        ]
+      }
+      if (width >= 1.8) {
+        return [
+          writePriceData('multiplier', 1.68, { conditions: ['materials', '==', 'plastic'] }),
+          writePriceData('multiplier', 1.3, { conditions: ['materials', '==', 'aluminum'] }),
+        ]
+      }
+      return writePriceData('multiplier', 1);
+    }
+    case 'windowDoor': {
+      if (width < 1) {
+        return [
+          writePriceData('multiplier', 1.98, { conditions: ['materials', '==', 'plastic'] }),
+          writePriceData('multiplier', 1.45, { conditions: ['materials', '==', 'aluminum'] }),
+        ]
+      }
+      if (width < 1.2) {
+        return [
+          writePriceData('multiplier', 1.80, { conditions: ['materials', '==', 'plastic'] }),
+          writePriceData('multiplier', 1.32, { conditions: ['materials', '==', 'aluminum'] }),
+        ]
+      }
+      if (width < 1.8) {
+        return [
+          writePriceData('multiplier', 1.75, { conditions: ['materials', '==', 'plastic'] }),
+          writePriceData('multiplier', 1.36, { conditions: ['materials', '==', 'aluminum'] }),
+        ]
+      }
+      if (width < 2.2) {
+        return [
+          writePriceData('multiplier', 1.63, { conditions: ['materials', '==', 'plastic'] }),
+          writePriceData('multiplier', 1.3, { conditions: ['materials', '==', 'aluminum'] }),
+        ]
+      }
+      if (width < 2.7) {
+        return [
+          writePriceData('multiplier', 1.60, { conditions: ['materials', '==', 'plastic'] }),
+          writePriceData('multiplier', 1.28, { conditions: ['materials', '==', 'aluminum'] }),
+        ]
+      }
+      if (width >= 2.7) {
+        return [
+          writePriceData('multiplier', 1.55, { conditions: ['materials', '==', 'plastic'] }),
+          writePriceData('multiplier', 1.26, { conditions: ['materials', '==', 'aluminum'] }),
+        ]
+      }
+      return writePriceData('multiplier', 1);
+    }
+    case 'bay': {
+      if (width < 1.2) return writePriceData('multiplier', 1.39);
+      if (width < 1.6) return writePriceData('multiplier', 1.37);
+      if (width < 2) return writePriceData('multiplier', 1.35);
+      if (width < 2.4) return writePriceData('multiplier', 1.33);
+      if (width < 2.7) return writePriceData('multiplier', 1.31);
+      if (width >= 2.7) return writePriceData('multiplier', 1.30);
+      return writePriceData('multiplier', 1);
+    }
+    case 'gallandage': {
+      if (width < 1.2) return writePriceData('multiplier', 1.34);
+      if (width < 1.6) return writePriceData('multiplier', 1.32);
+      if (width < 2) return writePriceData('multiplier', 1.30);
+      if (width < 2.4) return writePriceData('multiplier', 1.27);
+      if (width < 2.7) return writePriceData('multiplier', 1.25);
+      if (width >= 2.7) return writePriceData('multiplier', 1.24);
+      return writePriceData('multiplier', 1);
+    }
+    default: throw new Error('Corresponding opening not found');
+  }
+}
+
 export const exterior: DynamicForm = {
   label: 'Aménagement extérieur',
   errors: "Les dimensions saisies sortent de la plage standard du simulateur. Valider le formulaire et cliquer sur 'contacter Erwan' pour un devis personnalisé",
@@ -219,16 +296,18 @@ export const exterior: DynamicForm = {
           value: "plastic",
           conditions: ['openings', 'in', ['window', 'windowDoor']],
           priceData: [
-            writePriceData('addition', 284, { conditions: ['openings', '==', 'window'] }),
-            writePriceData('addition', 420, { conditions: ['openings', '==', 'windowDoor'] }),
+            writePriceData('addition', 280, { conditions: ['openings', '==', 'window'] }),
+            writePriceData('addition', 390, { conditions: ['openings', '==', 'windowDoor'] }),
           ]
         },
         {
           label: "Alu",
           value: "aluminum",
           priceData: [
-            writePriceData('addition', 560, { conditions: ['openings', '==', 'window'] }),
-            writePriceData('addition', 850, { conditions: ['openings', '==', 'windowDoor'] }),
+            writePriceData('addition', 623, { conditions: ['openings', '==', 'window'] }),
+            writePriceData('addition', 768, { conditions: ['openings', '==', 'windowDoor'] }),
+            writePriceData('addition', 945, { conditions: ['openings', '==', 'bay'] }),
+            writePriceData('addition', 1056, { conditions: ['openings', '==', 'gallandage'] }),
           ]
         }
       ]
@@ -237,17 +316,15 @@ export const exterior: DynamicForm = {
       legend: "Surface",
       kind: "multiples",
       name: "surface",
-      priceData:
-        $((item: Item) => {
-          const type = String(item.data['openings']);
-          const width = Number(item.data['surface.width']);
-          const height = Number(item.data['surface.height']);
-          //Convert cm to m
-          const surface = (width / 100) * (height / 100);
-          const priceData = getSurfacePriceData(type, surface);
-          return priceData;
-        })
-      ,
+      priceData: $((item: Item) => {
+        const type = String(item.data['openings']);
+        const width = Number(item.data['surface.width']);
+        const height = Number(item.data['surface.height']);
+        //Convert cm to m
+        const surface = (width / 100) * (height / 100);
+        const priceData = getSurfacePriceData(type, surface);
+        return priceData;
+      }),
       inputs: [{
         label: "Largeur de l'ouverture (en cm)",
         kind: "input",
@@ -258,11 +335,11 @@ export const exterior: DynamicForm = {
           const errors: string[] = [];
           if (!item) return errors;
           const type = String(item.data['openings']);
-          const height = Number(item.data['surface.height']);
+          const width = Number(item.data['surface.width']);
           const minRefs: Record<string, number> = { window: 70, windowDoor: 70, bay: 80, gallandage: 80 };
-          const maxRefs: Record<string, number> = { window: 220, windowDoor: 300, bay: 600, gallandage: 300};
-          if (height < minRefs[type]) errors.push(`La hauteur est inférieur aux limites standard: ${minRefs[type]}cm`);
-          if (height > maxRefs[type]) errors.push(`La hauteur est supérieur aux limites standard: ${maxRefs[type]}cm`);
+          const maxRefs: Record<string, number> = { window: 220, windowDoor: 300, bay: 600, gallandage: 400 };
+          if (width < minRefs[type]) errors.push(`La largeur est inférieur aux limites standard: ${minRefs[type]}cm`);
+          if (width > maxRefs[type]) errors.push(`La largeur est supérieur aux limites standard: ${maxRefs[type]}cm`);
           return errors;
         }),
         required: true,
@@ -277,11 +354,11 @@ export const exterior: DynamicForm = {
           const errors: string[] = [];
           if (!item) return errors;
           const type = String(item.data['openings']);
-          const width = Number(item.data['surface.width']);
+          const height = Number(item.data['surface.height']);
           const minRefs: Record<string, number> = { window: 60, windowDoor: 155, bay: 170, gallandage: 170 };
-          const maxRefs: Record<string, number> = { window: 180, windowDoor: 235, bay: 235, gallandage: 235 };
-          if (width < minRefs[type]) errors.push(`La largeur est inférieur aux limites standard: ${minRefs[type]}cm`);
-          if (width > maxRefs[type]) errors.push(`La largeur est supérieur aux limites standard: ${maxRefs[type]}cm`);
+          const maxRefs: Record<string, number> = { window: 180, windowDoor: 235, bay: 235, gallandage: 220 };
+          if (height < minRefs[type]) errors.push(`La hauteur est inférieur aux limites standard: ${minRefs[type]}cm`);
+          if (height > maxRefs[type]) errors.push(`La hauteur est supérieur aux limites standard: ${maxRefs[type]}cm`);
           return errors;
         }),
         required: true,
@@ -295,18 +372,27 @@ export const exterior: DynamicForm = {
         {
           label: "Vitrage de sécurité",
           value: "safety",
-          priceData: [
-            writePriceData('multiplier', 0.20, { conditions: ['materials', '==', 'aluminum'], column: { control: 'materials', name: 'option-1' } }),
-            writePriceData('multiplier', 0.30, { conditions: ['materials', '==', 'plastic'], column: { control: 'materials', name: 'option-1' } }),
-          ]
+          priceData: $((item: Item) => {
+            const materials = String(item.data['materials']);
+            const width = Number(item.data['surface.width']);
+            const height = Number(item.data['surface.height']);
+            //Convert cm to m
+            const surface = (width / 100) * (height / 100);
+            const base = materials === 'plastic' ? 112 : 100;
+            const value = surface * base;
+            return writePriceData('fix', value);
+          })
         },
         {
           label: "Volet roulant",
           value: "store",
-          priceData: [
-            writePriceData('multiplier', 0.45, { conditions: ['materials', '==', 'aluminum'], column: { control: 'materials', name: 'option-2' } }),
-            writePriceData('multiplier', 0.80, { conditions: ['materials', '==', 'plastic'], column: { control: 'materials', name: 'option-2' } }),
-          ]
+          priceData: $((item: Item) => {
+            const type = String(item.data['openings']);
+            const width = Number(item.data['surface.width']);
+            const widthMeters = width / 100;
+            const priceData = getOptionsPriceData(type, widthMeters);
+            return priceData;
+          })
         },
       ]
     },

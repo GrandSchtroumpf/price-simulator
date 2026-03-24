@@ -173,7 +173,7 @@ export const interior: DynamicForm = {
               const surface = item.data['surface'] as number;
               const base = 40 * surface;
               const value = (item.data['ceilingType'] !== 'straight') ? base * 1.2 : base;
-              return writePriceData('fix', value, { column: { control: 'surface' } });
+              return writePriceData('fix', value);
             }),
         },
         {
@@ -185,7 +185,7 @@ export const interior: DynamicForm = {
               const surface = item.data['surface'] as number;
               const base = 25 * surface;
               const value = (item.data['ceilingType'] !== 'straight') ? base * 1.2 : base;
-              return writePriceData('fix', value, { column: { control: 'surface' } });
+              return writePriceData('fix', value);
             }),
         },
         {
@@ -197,7 +197,7 @@ export const interior: DynamicForm = {
               const surface = item.data['surface'] as number;
               const base = 65 * surface;
               const value = (item.data['ceilingType'] !== 'straight') ? base * 1.2 : base;
-              return writePriceData('fix', value, { column: { control: 'surface' } });
+              return writePriceData('fix', value);
             }),
         }
       ]

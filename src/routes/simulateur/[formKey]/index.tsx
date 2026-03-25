@@ -64,9 +64,8 @@ const writeControls = (editItem: Item, controls: ControlTypes[]) => {
       }
     }
     if (control?.kind === 'multiples') {
-      const inputName = key.includes('.') ? key.split('.')[1] : key;;
       for (const input of control.inputs) {
-        if (input.name === inputName) input.value = Number(value);
+        if (input.name === key) input.value = Number(value);
       }
     }
   }

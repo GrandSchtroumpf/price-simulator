@@ -47,7 +47,7 @@ export interface Control<T> {
   class?: string;
 }
 
-export type GetPriceData = PriceData | PriceData[] | QRL<(item: Item) => (PriceData | PriceData[])>;
+export type GetPriceData = PriceData | PriceData[] | QRL<(item: Item) => (PriceData | PriceData[] | undefined)>;
 
 export interface Input extends Control<'input'> {
   label?: string;

@@ -2,13 +2,6 @@ import { $ } from "@qwik.dev/core";
 import type { DynamicForm, Item, PriceData } from "~/types/simulator";
 import { writePriceData } from "~/utils/price";
 
-// const doAwesomeStuff = (start: number, step: number, indexes: number[], conditions: Record<number, Conditions>) => {
-//   const pricesDatas: PriceData[] = [];
-//   for (let i = start; i < indexes.length; i += step) {
-//     console.log(i);
-//   }
-// }
-
 const getPriceData = (coef: number, material: string) => writePriceData("multiplier", coef, { conditions: ['materials', '==', `${material}`] });
 
 const getSurfacePriceData = (type: string, surface: number): PriceData | PriceData[] => {
@@ -326,6 +319,7 @@ export const exterior: DynamicForm = {
       kind: "multiples",
       name: "surface",
       priceData: $((item: Item) => {
+        if (!item.data['openings']) return;
         const type = String(item.data['openings']);
         const width = Number(item.data['surface.width']);
         const height = Number(item.data['surface.height']);
@@ -396,6 +390,7 @@ export const exterior: DynamicForm = {
           label: "Volet roulant",
           value: "store",
           priceData: $((item: Item) => {
+            if (!item.data['openings']) return;
             const type = String(item.data['openings']);
             const width = Number(item.data['surface.width']);
             const widthMeters = width / 100;

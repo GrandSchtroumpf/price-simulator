@@ -1,6 +1,6 @@
 import { component$, useAsyncComputed$, useId, useStyles$ } from '@qwik.dev/core';
 import type { ControlTypes, Item } from '~/types/simulator';
-import styles from './input.css?inline';
+import styles from './multiples.css?inline';
 
 interface InputMultiplesProps {
   control: ControlTypes;
@@ -34,7 +34,7 @@ export default component$<InputMultiplesProps>(({ control, item }) => {
   const id = useId();
 
   return (
-    <div role="group">
+    <div role="group" class="multiples">
       {control.inputs.map((input) => {
         return (
           <div key={input.name} class="input-field">

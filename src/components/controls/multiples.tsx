@@ -14,13 +14,14 @@ const DynamicInput = component$((props: { control: ControlTypes, id: string, ite
   const errors = useAsyncComputed$(async ({ track }) => {
     track(() => control);
     if ('errors' in control && control.errors && item) {
-      return control.errors(item);
+      const itemValue = item.data[control.name];
+      if (itemValue !== undefined) return control.errors(item);
     }
     return [];
   });
   return (
     <>
-      <input id={id} {...props.control} />
+      <input id={id} {...control} />
       <ul>
         {errors.value.map((error, i) => <li key={i}>{error}</li>)}
       </ul>

@@ -338,8 +338,8 @@ export const exterior: DynamicForm = {
         label: "Largeur de l'ouverture (en cm)",
         kind: "input",
         type: "number",
-        name: "width",
-        min: 0,
+        name: "surface.width",
+        min: 1,
         errors: $((item) => {
           const errors: string[] = [];
           if (!item) return errors;
@@ -357,8 +357,8 @@ export const exterior: DynamicForm = {
         label: "Hauteur de l'ouverture (en cm)",
         kind: "input",
         type: "number",
-        name: "height",
-        min: 0,
+        name: "surface.height",
+        min: 1,
         errors: $((item) => {
           const errors: string[] = [];
           if (!item) return errors;

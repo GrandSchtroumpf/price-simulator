@@ -28,7 +28,7 @@ const convertControls = (data: FormData, form: DynamicForm) => {
       case 'multiples': {
         const names = control.inputs.map((input) => input.name);
         for (const name of names) {
-          formObj[`${control.name}.${name}`] = Number(data.get(name));
+          if (data.get(name)) formObj[name] = Number(data.get(name));
         }
         break;
       };

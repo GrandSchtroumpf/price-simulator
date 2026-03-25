@@ -4,10 +4,17 @@ import { dynamicFormRecord } from "../forms/index";
 import { finalForm } from "../forms/finalForm"
 import { displayPrice, getPrice } from "~/utils/price";
 import { DynamicControl } from "../../../components/controls";
-import { getDynamicFormLabelList, parseDisplayValue, mailto } from "~/utils/helpers";
+import { getDynamicFormLabelList, parseDisplayValue, mailto, getItemControlsErrors, } from "~/utils/helpers";
 import { Link, useLocation, useNavigate } from "@qwik.dev/router";
 import styles from './index.css?inline';
+import { DynamicForm, Item } from "~/types/simulator";
 
+const displayItemInfo = async (item: Item, dynamicForm: DynamicForm) => {
+  const errors = await getItemControlsErrors(item, dynamicForm);
+  if (errors.length) return "Étude personnalisée requise";
+  const price = await getPrice(item, dynamicForm);
+  return displayPrice(price);
+}
 
 export default component$(() => {
   useStyles$(styles);
@@ -44,10 +51,10 @@ export default component$(() => {
       </header>
       <div>
         {cart.map((_, i) => {
-          const { dynamicFormKey, data } = cart[i];
+          const item = cart[i];
+          const { dynamicFormKey, data } = item;
           const dynamicForm = dynamicFormRecord[dynamicFormKey];
           const labelList = getDynamicFormLabelList(dynamicFormKey, dynamicForm);
-          const price = getPrice(cart[i], dynamicFormRecord);
           return (
             <details key={i} name="cart">
               <summary>
@@ -78,7 +85,7 @@ export default component$(() => {
                 <tfoot>
                   <tr>
                     <th>Prix</th>
-                    <td>{displayPrice(price)}</td>
+                    <td>{displayItemInfo(item, dynamicForm)}</td>
                   </tr>
                 </tfoot>
               </table>

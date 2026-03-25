@@ -1,4 +1,4 @@
-import type { ControlTypes, InputTypes, Item, PriceData, Conditions, Range, DynamicForm, DynamicFormKey, GetPriceData } from "~/types/simulator";
+import type { ControlTypes, InputTypes, Item, PriceData, Conditions, Range, DynamicForm, GetPriceData } from "~/types/simulator";
 import { isConditionValid } from "./conditions";
 import { toArray } from "./helpers";
 
@@ -114,12 +114,11 @@ const getItemData = (item: Item) => {
 };
 
 
-export const getPrice = async (item: Item, dynamicFormRecord: Record<DynamicFormKey, DynamicForm>) => {
-  const form: DynamicForm = dynamicFormRecord[item.dynamicFormKey];
+export const getPrice = async (item: Item, dynamicForm: DynamicForm) => {
   const priceTypes: Record<string, { addition: Range, multiplier: Range, fix: Range }> = { primary: generatePriceTypes() };
   const itemData = getItemData(item);
   for (const [controlName, value] of Object.entries(itemData)) {
-    const control = form.controls.find(c => c.name === controlName);
+    const control = dynamicForm.controls.find(c => c.name === controlName);
     if (!control) continue;
     const priceData = await getPriceData(control, value, item);
     const prices = Array.isArray(priceData) ? priceData : [priceData];
@@ -131,7 +130,7 @@ export const getPrice = async (item: Item, dynamicFormRecord: Record<DynamicForm
         const column = price.column;
         if (!priceTypes[column.name]) {
           priceTypes[column.name] = generatePriceTypes();
-          const sControl = form.controls.find((control) => control.name === column.control);
+          const sControl = dynamicForm.controls.find((control) => control.name === column.control);
           const sValue = item.data[column.control];
           if (!sControl || !sValue) continue;
           const sPrice = await getPriceData(sControl, sValue, item);

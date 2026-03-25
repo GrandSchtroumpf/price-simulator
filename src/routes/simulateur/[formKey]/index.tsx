@@ -6,6 +6,7 @@ import { displayPrice, getPrice } from "~/utils/price";
 import { isConditionValid } from "~/utils/conditions";
 import { DynamicControl } from "~/components/controls";
 import { cartContext, FormImg, formImgs } from "~/routes/simulateur/layout";
+import { getItemControlsErrors } from "~/utils/helpers";
 import { useId, useSignal, useStyles$, useTask$, useVisibleTask$ } from "@qwik.dev/core/internal";
 import styles from './index.css?inline';
 
@@ -85,27 +86,6 @@ function deepClone<T>(obj: T): T {
   return clone as T;
 }
 
-async function getControlsErrors(controls: ControlTypes[], item: Item) {
-  const flattenControls = [];
-  for (const control of controls) {
-    if (control.kind === 'multiples') {
-      flattenControls.push(...control.inputs);
-    } else {
-      flattenControls.push(control);
-    }
-  }
-  const errors: string[] = [];
-  for (const control of flattenControls) {
-    if ("errors" in control && control.errors) {
-      const controlErrors = await control.errors(item);
-      for (const controlError of controlErrors) {
-        errors.push(controlError);
-      }
-    }
-  }
-  return errors;
-}
-
 export default component$(() => {
   useStyles$(styles);
   const id = useId();
@@ -162,7 +142,8 @@ export default component$(() => {
     if (!next) {
       itemPrice.value = '';
     } else {
-      const nextPrice = await getPrice(next, dynamicFormRecord);
+      const dynamicForm = dynamicFormRecord[next.dynamicFormKey];
+      const nextPrice = await getPrice(next, dynamicForm);
       if (errors.value.length) {
         itemPrice.value = "";
       } else {
@@ -210,7 +191,7 @@ export default component$(() => {
     if (!isValid) {
       errors.value = [];
     } else {
-      const controlErrors = await getControlsErrors(controls.value, dynamicFormItem);
+      const controlErrors = await getItemControlsErrors(dynamicFormItem, dynamicForm);
       if (controlErrors.length) {
         errors.value = [...controlErrors]
       } else {

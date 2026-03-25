@@ -36,7 +36,13 @@ export const getDynamicFormLabelList = (stepKey: string, dynamicForm: DynamicFor
         labelList[option.value] = option.label;
       }
     }
+    if (control.kind === 'multiples') {
+      for (const input of control.inputs) {
+        labelList[input.name] = input.label ?? input.name;
+      }
+    }
   }
+  console.log(labelList);
   return labelList;
 }
 
@@ -64,4 +70,26 @@ export const mailto = (cart: Item[], dynamicFormRecord: Record<DynamicFormKey, D
   const subject = encodeURIComponent('Estimation - Devis');
   const body = encodeURIComponent(list.join('\n'));
   return `mailto:${mailto}?subject=${subject}&body=${body}`;
+}
+
+export async function getItemControlsErrors(item: Item, dynamicForm: DynamicForm) {
+  const rawControls = dynamicForm.controls;
+  const flattenControls = [];
+  for (const control of rawControls) {
+    if (control.kind === 'multiples') {
+      flattenControls.push(...control.inputs);
+    } else {
+      flattenControls.push(control);
+    }
+  }
+  const errors: string[] = [];
+  for (const control of flattenControls) {
+    if ("errors" in control && control.errors) {
+      const controlErrors = await control.errors(item);
+      for (const controlError of controlErrors) {
+        errors.push(controlError);
+      }
+    }
+  }
+  return errors;
 }

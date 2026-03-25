@@ -102,6 +102,11 @@ export default component$(() => {
   const errors = useSignal<string[]>([]);
   const itemPrice = useSignal('');
 
+  const checkForErrors = $(async (item: Item, dynamicForm: DynamicForm) => {
+    const itemErrors = await getItemControlsErrors(item, dynamicForm);
+    if (itemErrors.length) return errors.value = [...itemErrors];
+  })
+
   const controls = useComputed$(() => {
     const next = item.value;
     const copy = deepClone(dynamicForm.controls);
@@ -131,6 +136,7 @@ export default component$(() => {
       }
     };
     if (typeof index.value === 'number' && next) {
+      checkForErrors(next, dynamicForm);
       return writeControls(next, copy);
     }
     return copy;

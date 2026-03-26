@@ -2,6 +2,7 @@ import { $ } from "@qwik.dev/core";
 import type { FinalDynamicForm, Item } from "~/types/simulator";
 import { dynamicFormRecord } from ".";
 import { getPrice } from "~/utils/price";
+import { getItemControlsErrors } from "~/utils/helpers";
 
 export const finalForm: FinalDynamicForm = {
   label: "Informations complémentaires",
@@ -10,6 +11,8 @@ export const finalForm: FinalDynamicForm = {
     let totalMaxPrice = 0;
     for (const item of cart) {
       const dynamicForm = dynamicFormRecord[item.dynamicFormKey];
+      const errors = await getItemControlsErrors(item, dynamicForm);
+      if (errors.length) continue;
       const itemPrice = await getPrice(item, dynamicForm);
       if (itemPrice?.min) {
         totalMinPrice += itemPrice.min;

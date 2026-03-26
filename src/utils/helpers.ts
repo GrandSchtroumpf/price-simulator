@@ -42,7 +42,6 @@ export const getDynamicFormLabelList = (stepKey: string, dynamicForm: DynamicFor
       }
     }
   }
-  console.log(labelList);
   return labelList;
 }
 

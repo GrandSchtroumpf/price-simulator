@@ -22,6 +22,7 @@ export default component$(() => {
   const navigate = useNavigate();
   const { cart, editIndex } = useContext(cartContext);
   const finalEstimation = useSignal<string>('');
+  const errors = useSignal<string[]>([]);
 
   const back = $(() => {
     const pathName = location.prevUrl?.pathname;
@@ -36,6 +37,11 @@ export default component$(() => {
     const isValid = form.checkValidity();
     if (!isValid) return;
     const price = await finalForm.finalPrice?.(cart);
+    for (const item of cart) {
+      const dynamicForm = dynamicFormRecord[item.dynamicFormKey];
+      const itemErrors = await getItemControlsErrors(item, dynamicForm);
+      if (itemErrors.length) errors.value = [...itemErrors];
+    }
     if (price) finalEstimation.value = await displayPrice(price);
   });
 
@@ -107,6 +113,12 @@ export default component$(() => {
       {finalEstimation.value && (
         <article id="final-estimation">
           <h2>Votre estimation est de {finalEstimation}</h2>
+          {errors.value.length && (
+            <div class="custom">
+              <p>⚠️<i>Certains éléments du devis nécessitent une fabrication sur mesure.</i></p>
+              <p><i>L'estimation finale ne tient pas compte de ces éléments. </i></p>
+            </div>
+          )}
           <p>NB: Le prix affiché est un prix indicatif et ne constitue pas un devis ferme et définitif</p>
           <a class="btn-fill" href={mailto(cart, dynamicFormRecord)}>Contacter Erwan Richard</a>
         </article>

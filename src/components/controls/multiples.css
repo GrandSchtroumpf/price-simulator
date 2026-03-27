@@ -1,0 +1,14 @@
+@import "./input.css";
+
+.multiples {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
+@media (width < 800px) {
+  .multiples {
+    grid-template-columns: auto;
+  }
+}

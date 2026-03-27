@@ -1,7 +1,7 @@
 import { QRL } from "@qwik.dev/core";
 import { dynamicFormRecord } from "../routes/simulateur/forms/index";
 
-export type ControlTypes = CheckList | CheckBox | RadioGroup | InputNumber | InputString;
+export type ControlTypes = CheckList | CheckBox | RadioGroup | InputNumber | InputString | InputMultiples;
 export type ControlKind = ControlTypes['kind'];
 export type DynamicFormKey = keyof typeof dynamicFormRecord;
 export type InputTypes = string | string[] | number | number[] | boolean;
@@ -22,6 +22,7 @@ export interface DynamicForm {
   controls: ControlTypes[];
   label: string;
   subTitle?: string;
+  errors?: string;
 };
 
 export interface FinalDynamicForm extends Omit<DynamicForm, 'price'> {
@@ -46,7 +47,7 @@ export interface Control<T> {
   class?: string;
 }
 
-export type GetPriceData = PriceData | QRL<(item: Item) => PriceData>;
+export type GetPriceData = PriceData | PriceData[] | QRL<(item: Item) => (PriceData | PriceData[] | undefined)>;
 
 export interface Input extends Control<'input'> {
   label?: string;
@@ -55,7 +56,7 @@ export interface Input extends Control<'input'> {
   inputmode?: string;
   readonly?: boolean
   placeholder?: string;
-  priceData?: GetPriceData | GetPriceData[];
+  priceData?: GetPriceData;
   conditions?: Conditions;
   disabled?: boolean;
 }
@@ -66,7 +67,7 @@ export interface CheckBox extends Control<'checkbox'> {
   required?: boolean;
   checked?: boolean;
   disabled?: boolean;
-  priceData?: GetPriceData | GetPriceData[];
+  priceData?: GetPriceData;
   conditions?: Conditions;
 }
 
@@ -75,6 +76,7 @@ export interface InputNumber extends Input {
   type: 'number';
   min?: number;
   max?: number;
+  errors?: QRL<(item: Item) => string[]>;
   step?: number | 'any';
 }
 
@@ -85,6 +87,12 @@ export interface InputString extends Input {
   minlength?: number;
 }
 
+export interface InputMultiples extends Control<'multiples'> {
+  legend: string;
+  inputs: InputNumber[];
+  priceData?: GetPriceData;
+}
+
 export interface CheckList extends Control<'checklist'> {
   legend: string;
   required?: boolean;
@@ -93,7 +101,7 @@ export interface CheckList extends Control<'checklist'> {
     value: string;
     checked?: boolean;
     required?: boolean;
-    priceData?: GetPriceData | GetPriceData[];
+    priceData?: GetPriceData;
     conditions?: Conditions;
     disabled?: boolean;
   }[];
@@ -106,7 +114,7 @@ export interface RadioGroup extends Control<'radiogroup'> {
     label: string;
     value: string;
     checked?: boolean;
-    priceData?: GetPriceData | GetPriceData[];
+    priceData?: GetPriceData;
     conditions?: Conditions;
     disabled?: boolean;
   }[];

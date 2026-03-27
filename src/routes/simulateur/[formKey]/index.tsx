@@ -6,6 +6,7 @@ import { displayPrice, getPrice } from "~/utils/price";
 import { isConditionValid } from "~/utils/conditions";
 import { DynamicControl } from "~/components/controls";
 import { cartContext, FormImg, formImgs } from "~/routes/simulateur/layout";
+import { getItemControlsErrors } from "~/utils/helpers";
 import { useId, useSignal, useStyles$, useTask$, useVisibleTask$ } from "@qwik.dev/core/internal";
 import styles from './index.css?inline';
 
@@ -24,7 +25,14 @@ const convertControls = (data: FormData, form: DynamicForm) => {
       case 'radiogroup': {
         formObj[control.name] = data.get(control.name);
         break;
-      }
+      };
+      case 'multiples': {
+        const names = control.inputs.map((input) => input.name);
+        for (const name of names) {
+          if (data.get(name)) formObj[name] = Number(data.get(name));
+        }
+        break;
+      };
       case 'input': {
         if ('type' in control) {
           formObj[control.name] = control.type === 'number'
@@ -41,7 +49,8 @@ const convertControls = (data: FormData, form: DynamicForm) => {
 const writeControls = (editItem: Item, controls: ControlTypes[]) => {
   if (!editItem) return controls;
   for (const [key, value] of Object.entries(editItem.data)) {
-    const control = controls.find(c => c.name === key);
+    const controlName = key.includes('.') ? key.split('.')[0] : key;
+    const control = controls.find(c => c.name === controlName);
     if (control?.kind === 'input') control.value = value as string;
     if (control?.kind === 'checkbox') control.checked = !!value; // TODO: verify
     if (control?.kind === 'checklist') {
@@ -53,6 +62,11 @@ const writeControls = (editItem: Item, controls: ControlTypes[]) => {
     if (control?.kind === 'radiogroup') {
       for (const option of control.options) {
         if (value === option.value) option.checked = true;
+      }
+    }
+    if (control?.kind === 'multiples') {
+      for (const input of control.inputs) {
+        if (input.name === key) input.value = Number(value);
       }
     }
   }
@@ -70,8 +84,7 @@ function deepClone<T>(obj: T): T {
     }
   }
   return clone as T;
-} 
-
+}
 
 export default component$(() => {
   useStyles$(styles);
@@ -86,16 +99,13 @@ export default component$(() => {
   const dynamicForm = dynamicFormRecord[formKey as DynamicFormKey];
 
 
+  const errors = useSignal<string[]>([]);
   const itemPrice = useSignal('');
-  useTask$(async ({ track }) => {
-    const next = track(item);
-    if (!next) {
-      itemPrice.value = '';
-    } else {
-      const nextPrice = await getPrice(next, dynamicFormRecord);
-      itemPrice.value = await displayPrice(nextPrice);
-    }
-  });
+
+  const checkForErrors = $(async (item: Item, dynamicForm: DynamicForm) => {
+    const itemErrors = await getItemControlsErrors(item, dynamicForm);
+    if (itemErrors.length) return errors.value = [...itemErrors];
+  })
 
   const controls = useComputed$(() => {
     const next = item.value;
@@ -126,9 +136,26 @@ export default component$(() => {
       }
     };
     if (typeof index.value === 'number' && next) {
+      checkForErrors(next, dynamicForm);
       return writeControls(next, copy);
     }
     return copy;
+  });
+
+
+  useTask$(async ({ track }) => {
+    const next = track(item);
+    if (!next) {
+      itemPrice.value = '';
+    } else {
+      const dynamicForm = dynamicFormRecord[next.dynamicFormKey];
+      const nextPrice = await getPrice(next, dynamicForm);
+      if (errors.value.length) {
+        itemPrice.value = "";
+      } else {
+        itemPrice.value = await displayPrice(nextPrice);
+      }
+    }
   });
 
   useVisibleTask$(({ track, cleanup }) => {
@@ -141,7 +168,6 @@ export default component$(() => {
       editIndex.value = undefined;
     })
   })
-
 
   const onSubmit = $((event: SubmitEvent, form: HTMLFormElement) => {
     const isValid = form.checkValidity();
@@ -167,11 +193,22 @@ export default component$(() => {
     const formObj = convertControls(formData, dynamicForm);
     const dynamicFormItem = { dynamicFormKey: formKey as DynamicFormKey, data: formObj };
     item.value = dynamicFormItem;
+    const isValid = form.checkValidity();
+    if (!isValid) {
+      errors.value = [];
+    } else {
+      const controlErrors = await getItemControlsErrors(dynamicFormItem, dynamicForm);
+      if (controlErrors.length) {
+        errors.value = [...controlErrors]
+      } else {
+        errors.value = [];
+      }
+    }
   })
 
   return (
     <main id="form">
-      <img src={formImgs[formKey as FormImg]} width="1200" height="655" alt=""/>
+      <img src={formImgs[formKey as FormImg]} width="1200" height="655" alt="" />
       <div class="card-content">
         <header>
           <button class="btn-icon" onClick$={() => history.back()} aria-label="Retour à la liste sans enregistrer">
@@ -186,11 +223,12 @@ export default component$(() => {
           {itemPrice.value && <output form={id} aria-label="Prix total">{itemPrice.value}</output>}
         </header>
         <div class="step-price">
-          <p>Estimation : Remplissez les informations ci-dessous pour obtenir un prix indicatif</p>
+          <p>Estimation : Remplissez les informations ci-dessous pour obtenir un prix indicatif.</p>
+          {errors.value.length > 0 && <p>⚠️ <i>{dynamicFormRecord[formKey as DynamicFormKey].errors}</i> ⚠️</p>}
         </div>
         <form id={id} preventdefault:submit onSubmit$={onSubmit} onChange$={onInput} onInput$={onInput}>
           {controls.value.map((control) => {
-            return <DynamicControl key={control.name} control={control} />
+            return <DynamicControl key={control.name} control={control} item={item.value} />
           })}
           <footer>
             <button class="btn-outline" name="redirect" value='more' type='submit'>Autres travaux</button>

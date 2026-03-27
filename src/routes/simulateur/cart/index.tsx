@@ -4,10 +4,17 @@ import { dynamicFormRecord } from "../forms/index";
 import { finalForm } from "../forms/finalForm"
 import { displayPrice, getPrice } from "~/utils/price";
 import { DynamicControl } from "../../../components/controls";
-import { getDynamicFormLabelList, parseDisplayValue, mailto } from "~/utils/helpers";
+import { getDynamicFormLabelList, parseDisplayValue, mailto, getItemControlsErrors, } from "~/utils/helpers";
 import { Link, useLocation, useNavigate } from "@qwik.dev/router";
 import styles from './index.css?inline';
+import { DynamicForm, Item } from "~/types/simulator";
 
+const displayItemInfo = async (item: Item, dynamicForm: DynamicForm) => {
+  const errors = await getItemControlsErrors(item, dynamicForm);
+  if (errors.length) return "Étude personnalisée requise";
+  const price = await getPrice(item, dynamicForm);
+  return displayPrice(price);
+}
 
 export default component$(() => {
   useStyles$(styles);
@@ -15,6 +22,7 @@ export default component$(() => {
   const navigate = useNavigate();
   const { cart, editIndex } = useContext(cartContext);
   const finalEstimation = useSignal<string>('');
+  const errors = useSignal<string[]>([]);
 
   const back = $(() => {
     const pathName = location.prevUrl?.pathname;
@@ -29,6 +37,11 @@ export default component$(() => {
     const isValid = form.checkValidity();
     if (!isValid) return;
     const price = await finalForm.finalPrice?.(cart);
+    for (const item of cart) {
+      const dynamicForm = dynamicFormRecord[item.dynamicFormKey];
+      const itemErrors = await getItemControlsErrors(item, dynamicForm);
+      if (itemErrors.length) errors.value = [...itemErrors];
+    }
     if (price) finalEstimation.value = await displayPrice(price);
   });
 
@@ -44,10 +57,10 @@ export default component$(() => {
       </header>
       <div>
         {cart.map((_, i) => {
-          const { dynamicFormKey, data } = cart[i];
+          const item = cart[i];
+          const { dynamicFormKey, data } = item;
           const dynamicForm = dynamicFormRecord[dynamicFormKey];
           const labelList = getDynamicFormLabelList(dynamicFormKey, dynamicForm);
-          const price = getPrice(cart[i], dynamicFormRecord);
           return (
             <details key={i} name="cart">
               <summary>
@@ -78,7 +91,7 @@ export default component$(() => {
                 <tfoot>
                   <tr>
                     <th>Prix</th>
-                    <td>{displayPrice(price)}</td>
+                    <td>{displayItemInfo(item, dynamicForm)}</td>
                   </tr>
                 </tfoot>
               </table>
@@ -100,6 +113,12 @@ export default component$(() => {
       {finalEstimation.value && (
         <article id="final-estimation">
           <h2>Votre estimation est de {finalEstimation}</h2>
+          {errors.value.length && (
+            <div class="custom">
+              <p>⚠️<i>Certains éléments du devis nécessitent une fabrication sur mesure.</i></p>
+              <p><i>L'estimation finale ne tient pas compte de ces éléments. </i></p>
+            </div>
+          )}
           <p>NB: Le prix affiché est un prix indicatif et ne constitue pas un devis ferme et définitif</p>
           <a class="btn-fill" href={mailto(cart, dynamicFormRecord)}>Contacter Erwan Richard</a>
         </article>

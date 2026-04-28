@@ -259,6 +259,45 @@ const getOptionsPriceData = (type: string, width: number): PriceData | PriceData
   }
 }
 
+const getLeavesNumber = (type: string, width: number, { min, max }: { min: number, max: number }) => {
+  switch (type) {
+    case 'window': {
+      if (width < min) return;
+      if (width < 120) return 1;
+      if (width <= 180) return 2;
+      if (width > 180) return 3;
+      if (width > max) return;
+      return;
+    }
+    case 'windowDoor': {
+      if (width < min) return;
+      if (width < 100) return 1;
+      if (width < 180) return 2;
+      if (width <= 270) return 3;
+      if (width > 270) return 4;
+      if (width > max) return;
+      return;
+    }
+    case 'bay': {
+      if (width < min) return;
+      if (width < 300) return 2;
+      if (width <= 450) return 3;
+      if (width > 450) return 4;
+      if (width > max) return;
+      return;
+    }
+    case 'gallandage': {
+      if (width < min) return;
+      if (width < 150) return 2;
+      if (width <= 300) return 3;
+      if (width > 300) return 4;
+      if (width > max) return;
+      return;
+    }
+    default: return;
+  }
+}
+
 export const exterior: DynamicForm = {
   label: 'Aménagement extérieur',
   errors: "Les dimensions saisies sortent de la plage standard du simulateur. Valider le formulaire et cliquer sur 'contacter Erwan' pour un devis personnalisé",
@@ -318,6 +357,18 @@ export const exterior: DynamicForm = {
       legend: "Surface",
       kind: "multiples",
       name: "surface",
+      hints: $((item: Item) => {
+        const type = String(item.data['openings']);
+        const width = Number(item.data['surface.width']);
+        if (!width || !type) return;
+        const minRefs: Record<string, number> = { window: 70, windowDoor: 70, bay: 80, gallandage: 80 };
+        const maxRefs: Record<string, number> = { window: 220, windowDoor: 300, bay: 600, gallandage: 400 };
+        const min = minRefs[type];
+        const max = maxRefs[type];
+        const leavesNumber = getLeavesNumber(type, width, { min, max });
+        if (!leavesNumber) return;
+        return `Votre ouverture nécessite un minimum de ${leavesNumber} vantaux`;
+      }),
       priceData: $((item: Item) => {
         if (!item.data['openings']) return;
         const type = String(item.data['openings']);

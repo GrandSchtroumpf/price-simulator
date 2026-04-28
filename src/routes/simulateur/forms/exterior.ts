@@ -265,8 +265,7 @@ const getLeavesNumber = (type: string, width: number, { min, max }: { min: numbe
       if (width < min) return;
       if (width < 120) return 1;
       if (width <= 180) return 2;
-      if (width > 180) return 3;
-      if (width > max) return;
+      if (width > 180 && width < max) return 3;
       return;
     }
     case 'windowDoor': {
@@ -274,24 +273,21 @@ const getLeavesNumber = (type: string, width: number, { min, max }: { min: numbe
       if (width < 100) return 1;
       if (width < 180) return 2;
       if (width <= 270) return 3;
-      if (width > 270) return 4;
-      if (width > max) return;
+      if (width > 270 && width < max) return 4;
       return;
     }
     case 'bay': {
       if (width < min) return;
       if (width < 300) return 2;
       if (width <= 450) return 3;
-      if (width > 450) return 4;
-      if (width > max) return;
+      if (width > 450 && width < max) return 4;
       return;
     }
     case 'gallandage': {
       if (width < min) return;
       if (width < 150) return 2;
       if (width <= 300) return 3;
-      if (width > 300) return 4;
-      if (width > max) return;
+      if (width > 300 && width < max) return 4;
       return;
     }
     default: return;
@@ -357,7 +353,8 @@ export const exterior: DynamicForm = {
       legend: "Surface",
       kind: "multiples",
       name: "surface",
-      hints: $((item: Item) => {
+      hints: $((item?: Item) => {
+        if (!item) return;
         const type = String(item.data['openings']);
         const width = Number(item.data['surface.width']);
         if (!width || !type) return;

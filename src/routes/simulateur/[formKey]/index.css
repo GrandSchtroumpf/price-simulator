@@ -91,6 +91,15 @@ body:has(#form) {
   & button[type="submit"] {
     flex: 1;
   }
+  & .informations {
+    border: solid 1px var(--color-secondary);
+    border-radius: var(--radius);
+    padding: 8px 16px;
+
+    ul {
+      list-style: inside;
+    }
+  }
   @media (width < 800px) {
     --radius: 0px;
     & h1 {

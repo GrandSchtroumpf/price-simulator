@@ -3,10 +3,12 @@ import { deck } from "./deck";
 import { stairs } from "./stairs";
 import { exterior } from "./exterior";
 import { floor } from "./floor";
+import { doors } from "./doors";
 
 export const dynamicFormRecord = {
   interior,
   exterior,
+  doors,
   deck,
   stairs,
   floor

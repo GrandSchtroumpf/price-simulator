@@ -157,7 +157,7 @@ export const doors: DynamicForm = {
   controls: [
     {
       legend: "Type de porte",
-      name: "doors",
+      name: "openings",
       kind: "radiogroup",
       required: true,
       options: [
@@ -212,7 +212,7 @@ export const doors: DynamicForm = {
         const height = Number(item.data['surface.height']);
         //Convert cm to m
         const surface = (width / 100) * (height / 100);
-        const priceData = getSurfacePrice(type, surface);
+        const priceData = getSurfacePrice(type, width, surface);
         return priceData;
       }),
       inputs: [{
@@ -224,12 +224,11 @@ export const doors: DynamicForm = {
         errors: $((item) => {
           const errors: string[] = [];
           if (!item) return errors;
-          const type = String(item.data['openings']);
           const width = Number(item.data['surface.width']);
-          const minRefs: Record<string, number> = { window: 70, windowDoor: 70, bay: 80, gallandage: 80 };
-          const maxRefs: Record<string, number> = { window: 220, windowDoor: 300, bay: 600, gallandage: 400 };
-          if (width < minRefs[type]) errors.push(`La largeur est inférieur aux limites standard: ${minRefs[type]}cm`);
-          if (width > maxRefs[type]) errors.push(`La largeur est supérieur aux limites standard: ${maxRefs[type]}cm`);
+          const minWidth = 80;
+          const maxWidth = 160;
+          if (width < minWidth) errors.push(`La largeur est inférieur aux limites standard: ${minWidth}cm`);
+          if (width >maxWidth) errors.push(`La largeur est supérieur aux limites standard: ${maxWidth}cm`);
           return errors;
         }),
         required: true,
@@ -243,12 +242,11 @@ export const doors: DynamicForm = {
         errors: $((item) => {
           const errors: string[] = [];
           if (!item) return errors;
-          const type = String(item.data['openings']);
           const height = Number(item.data['surface.height']);
-          const minRefs: Record<string, number> = { window: 60, windowDoor: 155, bay: 170, gallandage: 170 };
-          const maxRefs: Record<string, number> = { window: 180, windowDoor: 235, bay: 235, gallandage: 220 };
-          if (height < minRefs[type]) errors.push(`La hauteur est inférieur aux limites standard: ${minRefs[type]}cm`);
-          if (height > maxRefs[type]) errors.push(`La hauteur est supérieur aux limites standard: ${maxRefs[type]}cm`);
+          const minHeight = 200;
+          const maxHeight = 230;
+          if (height < minHeight) errors.push(`La hauteur est inférieur aux limites standard: ${minHeight}cm`);
+          if (height > maxHeight) errors.push(`La hauteur est supérieur aux limites standard: ${maxHeight}cm`);
           return errors;
         }),
         required: true,

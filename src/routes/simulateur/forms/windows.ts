@@ -294,8 +294,8 @@ const getLeavesNumber = (type: string, width: number, { min, max }: { min: numbe
   }
 }
 
-export const exterior: DynamicForm = {
-  label: 'Aménagement extérieur',
+export const windows: DynamicForm = {
+  label: 'Fenêtres',
   errors: "Les dimensions saisies sortent de la plage standard du simulateur. Valider le formulaire et cliquer sur 'contacter Erwan' pour un devis personnalisé",
   controls: [
     {
@@ -364,7 +364,8 @@ export const exterior: DynamicForm = {
         const max = maxRefs[type];
         const leavesNumber = getLeavesNumber(type, width, { min, max });
         if (!leavesNumber) return;
-        return `Votre ouverture nécessite un minimum de ${leavesNumber} vantaux`;
+        const leaveString = leavesNumber === 1 ? "vatail" : "vantaux";
+        return `Votre ouverture nécessite un minimum de ${leavesNumber} ${leaveString}`;
       }),
       priceData: $((item: Item) => {
         if (!item.data['openings']) return;

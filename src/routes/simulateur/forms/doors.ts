@@ -95,8 +95,11 @@ const getSurfacePrice = (type: string, width: number, surface: number) => {
         ]
       }
     }
-    if (surface < 4) {
+    if (surface <= 4) {
       if (width > 105) return getSurfacePriceData(1.22, 'aluminum')
+    }
+    if (surface > 4) {
+      return writePriceData('multiplier', 1);
     }
   } else if (type === "modern" || type === "traditional") {
     if (surface < 1.75) {
@@ -142,17 +145,20 @@ const getSurfacePrice = (type: string, width: number, surface: number) => {
         return getSurfacePriceData(1.15, 'plastic')
       }
     }
-    if (surface < 4) {
+    if (surface <= 4) {
       if (width > 105) {
         return getSurfacePriceData(1.13, 'aluminum')
       }
+    }
+    if (surface > 4) {
+      return writePriceData('multiplier', 1);
     }
   }
 }
 
 
 export const doors: DynamicForm = {
-  label: 'Portes extérieur',
+  label: 'Portes extérieures',
   errors: "Les dimensions saisies sortent de la plage standard du simulateur. Valider le formulaire et cliquer sur 'contacter Erwan' pour un devis personnalisé",
   controls: [
     {
@@ -228,7 +234,7 @@ export const doors: DynamicForm = {
           const minWidth = 80;
           const maxWidth = 160;
           if (width < minWidth) errors.push(`La largeur est inférieur aux limites standard: ${minWidth}cm`);
-          if (width >maxWidth) errors.push(`La largeur est supérieur aux limites standard: ${maxWidth}cm`);
+          if (width > maxWidth) errors.push(`La largeur est supérieur aux limites standard: ${maxWidth}cm`);
           return errors;
         }),
         required: true,

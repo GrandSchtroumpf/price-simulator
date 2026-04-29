@@ -1,12 +1,14 @@
 import { interior } from "./interior";
 import { deck } from "./deck";
 import { stairs } from "./stairs";
-import { exterior } from "./exterior";
+import { windows } from "./windows";
 import { floor } from "./floor";
+import { doors } from "./doors";
 
 export const dynamicFormRecord = {
   interior,
-  exterior,
+  windows,
+  doors,
   deck,
   stairs,
   floor

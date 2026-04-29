@@ -10,6 +10,17 @@ import { getItemControlsErrors } from "~/utils/helpers";
 import { useId, useSignal, useStyles$, useTask$, useVisibleTask$ } from "@qwik.dev/core/internal";
 import styles from './index.css?inline';
 
+const getHints = async (controls: ControlTypes[], item?: Item) => {
+  const hints: string[] = [];
+  for (const control of controls) {
+    if ('hints' in control) {
+      const controlHints = await control.hints?.(item);
+      if (controlHints) hints.push(controlHints);
+    }
+  }
+  return hints;
+}
+
 const convertControls = (data: FormData, form: DynamicForm) => {
   const formObj: Record<string, any> = {};
   for (const control of form.controls) {
@@ -100,6 +111,7 @@ export default component$(() => {
 
 
   const errors = useSignal<string[]>([]);
+  const hints = useSignal<string[]>([]);
   const itemPrice = useSignal('');
 
   const checkForErrors = $(async (item: Item, dynamicForm: DynamicForm) => {
@@ -150,10 +162,16 @@ export default component$(() => {
     } else {
       const dynamicForm = dynamicFormRecord[next.dynamicFormKey];
       const nextPrice = await getPrice(next, dynamicForm);
+      const controlsHints = await getHints(dynamicForm.controls, next);
       if (errors.value.length) {
         itemPrice.value = "";
       } else {
         itemPrice.value = await displayPrice(nextPrice);
+      }
+      if (controlsHints.length) {
+        hints.value = controlsHints;
+      } else {
+        hints.value = [];
       }
     }
   });
@@ -230,6 +248,17 @@ export default component$(() => {
           {controls.value.map((control) => {
             return <DynamicControl key={control.name} control={control} item={item.value} />
           })}
+          {hints.value.length > 0 && (
+            <div class="informations">
+              <p>ℹ️ Informations:</p>
+              <ul>
+                {hints.value.map((hint, i) => (
+                  <li key={i}>{hint}</li>
+                ))}
+              </ul>
+            </div>
+          )
+          }
           <footer>
             <button class="btn-outline" name="redirect" value='more' type='submit'>Autres travaux</button>
             <button class="btn-fill" name="redirect" value='finalise' type='submit'>Voir devis</button>

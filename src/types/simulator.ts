@@ -91,6 +91,7 @@ export interface InputMultiples extends Control<'multiples'> {
   legend: string;
   inputs: InputNumber[];
   priceData?: GetPriceData;
+  hints?: QRL<(item?: Item) => string | undefined>;
 }
 
 export interface CheckList extends Control<'checklist'> {

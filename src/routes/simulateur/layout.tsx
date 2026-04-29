@@ -5,7 +5,8 @@ import ImgDeck from "~/media/simulator/deck.webp";
 import ImgFloor from "~/media/simulator/floor.webp";
 import ImgInterior from "~/media/simulator/interior.webp";
 import ImgStairs from "~/media/simulator/stairs.webp";
-import ImgExterior from "~/media/simulator/exterior.webp";
+import ImgWindows from "~/media/simulator/windows.webp";
+import ImgDoors from "~/media/simulator/doors.webp";
 import styles from './layout.css?inline';
 
 interface CartContext {
@@ -20,7 +21,8 @@ export const formImgs = {
   stairs: ImgStairs,
   interior: ImgInterior,
   floor: ImgFloor,
-  exterior: ImgExterior
+  windows: ImgWindows,
+  doors: ImgDoors,
 }
 export type FormImg = keyof typeof formImgs;
 
